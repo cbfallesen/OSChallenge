@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 
 int main (int argc, char *argv[]) {
-    int serverSock, binder, port, listener, accepting;
+    int serverSock, binder, port, listener, accepting, clientLength;
     struct sockaddr_in serverAddr, clientAddr;
 
     port = atoi(argv[1]);
@@ -39,7 +39,8 @@ int main (int argc, char *argv[]) {
     //Initialise listener.
     listener = listen(serverSock, 5);
 
-    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, sizeof(clientAddr));
+    clientLength = sizeof(clientAddr);
+    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, clientLength);
 
     if (accepting < 0) {
         printf("Error accepting client address");
