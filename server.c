@@ -37,7 +37,7 @@ int main (int argc, char *argv[]) {
     }
 
     //Initialise listener.
-    listener = listen(serverSock, 4);
+    listener = listen(serverSock, 5);
 
     accepting = accept(serverSock, (struct socketAddr *) &clientAddr, sizeof(clientAddr));
 
