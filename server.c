@@ -40,7 +40,7 @@ int main (int argc, char *argv[]) {
     listener = listen(serverSock, 5);
 
     clientLength = sizeof(clientAddr);
-    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, clientLength);
+    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, &clientLength);
 
     if (accepting < 0) {
         printf("Error accepting client address");
