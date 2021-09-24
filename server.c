@@ -9,7 +9,7 @@ int main (int argc, char *argv[]) {
     int serverSock, binder, port, listener, accepting;
     struct sockaddr_in serverAddr, clientAddr;
 
-    port = argv[1];
+    port = atoi(argv[1]);
 
     //Initialise the server address.
     serverAddr.sin_family = AF_INET;
@@ -27,7 +27,7 @@ int main (int argc, char *argv[]) {
 
     //bzero?
     bzero((char * ) &serverAddr, sizeof(serverAddr));
-    
+
     //Initialise the binder for the host address.
     binder = bind(serverSock, (struct socketAddr *) &serverAddr, sizeof(serverAddr));
 
