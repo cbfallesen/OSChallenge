@@ -17,14 +17,14 @@ int main (int argc, char *argv[]) {
 
     //Initializing input parameters
     hostname = argv[1];
-    port = argv[2];
-    seed = argv[3];
-    total = argv[4];
-    start = argv[5];
-    difficulty = argv[6];
-    rep = argv[7];
-    delay = argv[8];
-    lambda = argv[9];
+    port = atoi(argv[2]);
+    // seed = argv[3];
+    // total = argv[4];
+    // start = argv[5];
+    // difficulty = argv[6];
+    // rep = argv[7];
+    // delay = argv[8];
+    // lambda = argv[9];
 
     //Initializes the socket, using IPv4 adress, stream socket, and system default protocol.
     clientSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -42,7 +42,7 @@ int main (int argc, char *argv[]) {
 
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = port;
-    
+
 
     return 0;
 }
