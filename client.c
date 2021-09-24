@@ -7,8 +7,9 @@
 #include <netdb.h>
 
 int main (int argc, char *argv[]) {
-    int clientSock, connection, server;
+    int clientSock, connection;
     struct sockaddr_in serverAddr;
+    struct hostent *server;
 
     //Input parameters    
     char hostname;
@@ -40,7 +41,9 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
+    bzero((char *) &serverAddr, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
+    bcopy((char *)server->h_addr, (char *)&serverAddr.sin_addr.s_addr, server->h_length);
     serverAddr.sin_port = port;
 
     //Connect to server
