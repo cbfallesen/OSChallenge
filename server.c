@@ -29,7 +29,7 @@ int main (int argc, char *argv[]) {
     bzero((char * ) &serverAddr, sizeof(serverAddr));
 
     //Initialise the binder for the host address.
-    binder = bind(serverSock, (struct socketAddr *) &serverAddr, sizeof(serverAddr));
+    binder = bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
 
     if (binder < 0) {
         printf("Error binding the host address");
@@ -39,7 +39,7 @@ int main (int argc, char *argv[]) {
     //Initialise listener.
     listener = listen(serverSock, 5);
 
-    accepting = accept(serverSock, (struct socketAddr *) &clientAddr, sizeof(clientAddr));
+    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, sizeof(clientAddr));
 
     if (accepting < 0) {
         printf("Error accepting client address");

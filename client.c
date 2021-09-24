@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
     serverAddr.sin_port = port;
 
     //Connect to server
-    connection = connect(clientSock, (struct sockAddr*) &serverAddr, sizeof(serverAddr));
+    connection = connect(clientSock, (struct sockaddr*) &serverAddr, sizeof(serverAddr));
     if(connection < 0) {
         printf("Error connecting to server");
         return 1;
