@@ -5,11 +5,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-int main (int args) {
+int main (int argc, char *argv[]) {
     int serverSock, binder, port, listener, accepting;
     struct sockaddr_in serverAddr, clientAddr;
 
-    port = args;
+    port = argv[1];
 
     //Initialise the server address.
     serverAddr.sin_family = AF_INET;
@@ -26,7 +26,8 @@ int main (int args) {
     }
 
     //bzero?
-
+    bzero((char * ) &serverAddr, sizeof(serverAddr));
+    
     //Initialise the binder for the host address.
     binder = bind(serverSock, (struct socketAddr *) &serverAddr, sizeof(serverAddr));
 
