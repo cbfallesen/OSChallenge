@@ -10,6 +10,7 @@ int main (int argc, char *argv[]) {
     int serverSock, binder, port, listener, accepting, clientLength;
     struct sockaddr_in serverAddr, clientAddr;
 
+    //Comment
     port = atoi(argv[1]);
 
     char *ip = "127.0.0.1";
