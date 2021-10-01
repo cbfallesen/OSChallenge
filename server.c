@@ -3,22 +3,17 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-// #include <netinet/in.h>
-#include <arpa/inet.h>
+#include <netinet/in.h>
 
 int main (int argc, char *argv[]) {
     int serverSock, binder, port, listener, accepting, clientLength;
     struct sockaddr_in serverAddr, clientAddr;
 
     //Comment
-    port = atoi(argv[1]);
+    // port = atoi(argv[1]);
 
     char *ip = "127.0.0.1";
-    //Initialise the server address.
-    serverAddr.sin_family = AF_INET;
-    // serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_addr.s_addr = inet_addr(ip);
-    serverAddr.sin_port = port;
+    
     //Initialise server socket, using IPv4, stream socket and system default protocol.
     serverSock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -30,6 +25,15 @@ int main (int argc, char *argv[]) {
 
     //bzero?
     bzero((char * ) &serverAddr, sizeof(serverAddr));
+    port = 5151;
+
+
+    //Initialise the server address.
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    // serverAddr.sin_addr.s_addr = inet_addr(ip);
+    serverAddr.sin_port = htons(port);
+    // serverAddr.sin_port = port;
 
     //Initialise the binder for the host address.
     binder = bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
@@ -40,7 +44,7 @@ int main (int argc, char *argv[]) {
     }
 
     //Initialise listener.
-    listener = listen(serverSock, 5);
+    listen(serverSock, 5);
 
     clientLength = sizeof(clientAddr);
     accepting = accept(serverSock, (struct sockaddr *) &clientAddr, &clientLength);
