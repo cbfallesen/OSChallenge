@@ -13,12 +13,6 @@ int main (int argc, char *argv[]) {
     //Comment
     port = atoi(argv[1]);
 
-    char *ip = "127.0.0.1";
-    //Initialise the server address.
-    serverAddr.sin_family = AF_INET;
-    // serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_addr.s_addr = inet_addr(ip);
-    serverAddr.sin_port = port;
     //Initialise server socket, using IPv4, stream socket and system default protocol.
     serverSock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -30,6 +24,11 @@ int main (int argc, char *argv[]) {
 
     //bzero?
     bzero((char * ) &serverAddr, sizeof(serverAddr));
+    
+    //Initialise the server address.
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_port = port;
 
     //Initialise the binder for the host address.
     binder = bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
