@@ -5,7 +5,7 @@
 #include <string.h>
 
 int main (int argc, char *argv[]) {
-    int serverSock, binder, portNum, listener, accepting, clientLength;
+    int serverSock, binder, portNum, accepting, clientLength;
     struct sockaddr_in serverAddr, clientAddr;
 
     //Comment
@@ -17,7 +17,7 @@ int main (int argc, char *argv[]) {
     //If socket returns -1, there is an error.
     if (serverSock < 0) {
         printf("Error connecting to socket");
-        return 1;
+        exit(1);
     }
 
     //bzero?
@@ -34,7 +34,7 @@ int main (int argc, char *argv[]) {
 
     if (binder < 0) {
         printf("Error binding the host address");
-        return 1;
+        exit(1);
     }
 
     //Initialise listener.
@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
 
     if (accepting < 0) {
         printf("Error accepting client address");
-        return 1;
+        exit(1);
     }
 
     char buffer[256];
@@ -57,12 +57,11 @@ int main (int argc, char *argv[]) {
       exit(1);
     }
     
-    for (int i = 0; i < sizeof(buffer); i++)
-    {
-        printf(buffer[i]);
-    }
+    // for (int i = 0; i < sizeof(buffer); i++)
+    // {
+    //     printf(buffer[i]);
+    // }
     
-
     //Respond
     n = write(serverSock,"I got your message",18);
    
