@@ -9,7 +9,7 @@ int main (int argc, char *argv[]) {
     struct sockaddr_in serverAddr, clientAddr;
 
     //Comment
-    port = atoi(argv[1]);
+    // port = atoi(argv[1]);
 
     //Initialise server socket, using IPv4, stream socket and system default protocol.
     serverSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -47,9 +47,9 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
-    char buffer[49];
-    bzero(buffer,49);
-    int n = read( serverSock,buffer,48 );
+    char buffer[256];
+    bzero(buffer,256);
+    int n = read( serverSock,buffer,256 );
     
     if (n < 0) {
       perror("ERROR reading from socket");
