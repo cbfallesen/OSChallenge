@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
 
     //bzero?
     bzero((char * ) &serverAddr, sizeof(serverAddr));
-    int portNum = 5001;
+    portNum = 5001;
 
     //Initialise the server address.
     serverAddr.sin_family = AF_INET;
@@ -38,7 +38,7 @@ int main (int argc, char *argv[]) {
     }
 
     //Initialise listener.
-    listener = listen(serverSock, 5);
+    listen(serverSock, 5);
 
     clientLength = sizeof(clientAddr);
     accepting = accept(serverSock, (struct sockaddr *) &clientAddr, &clientLength);
