@@ -58,7 +58,7 @@ int main( int argc, char *argv[] ) {
    
    printf("Message: %s \n",buffer);
    for (int i = 0; i < 49; ++i) {
-        printf("%c, ", buffer[i]);
+        printf("%c", buffer[i]);
     }
    
 
