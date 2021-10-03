@@ -1,74 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <netdb.h>
 #include <netinet/in.h>
+
 #include <string.h>
 
-int main (int argc, char *argv[]) {
-    int serverSock, binder, portNum, accepting, clientLength;
-    struct sockaddr_in serverAddr, clientAddr;
+int main( int argc, char *argv[] ) {
+   int serverSock, newsockfd, portNum, clientLen;
+   char buffer[256];
+   struct sockaddr_in serv_addr, cli_addr;
+   int  n;
+   
+   //Call the socket
+   serverSock = socket(AF_INET, SOCK_STREAM, 0);
+   
+   //Handling missing sockets
+   if (serverSock < 0) {
+      perror("ERROR opening socket");
+      exit(1);
+   }
+   
+   //Initialising the socket structures
+   bzero((char *) &serv_addr, sizeof(serv_addr));
+   portNum = 5001;
+   
+   serv_addr.sin_family = AF_INET;
+   serv_addr.sin_addr.s_addr = INADDR_ANY;
+   serv_addr.sin_port = htons(portNum);
+   
+   //Binding to the host address + error handling
+   if (bind(serverSock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+      perror("ERROR on binding");
+      exit(1);
+   }
 
-    //Comment
-    // port = atoi(argv[1]);
+   listen(serverSock,5);
+   clientLen = sizeof(cli_addr);
+   
+   //Accept connection from the client
+   newsockfd = accept(serverSock, (struct sockaddr *)&cli_addr, &clientLen);
 
-    //Initialise server socket, using IPv4, stream socket and system default protocol.
-    serverSock = socket(AF_INET, SOCK_STREAM, 0);
-
-    //If socket returns -1, there is an error.
-    if (serverSock < 0) {
-        printf("Error connecting to socket");
-        exit(1);
-    }
-
-    //bzero?
-    bzero((char * ) &serverAddr, sizeof(serverAddr));
-    portNum = 5001;
-
-    //Initialise the server address.
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_port = portNum;
-
-    //Initialise the binder for the host address.
-    binder = bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
-
-    if (binder < 0) {
-        printf("Error binding the host address");
-        exit(1);
-    }
-
-    //Initialise listener.
-    listen(serverSock, 5);
-
-    clientLength = sizeof(clientAddr);
-    accepting = accept(serverSock, (struct sockaddr *) &clientAddr, &clientLength);
-
-    if (accepting < 0) {
-        printf("Error accepting client address");
-        exit(1);
-    }
-
-    char buffer[256];
-    bzero(buffer,256);
-    int n = read( serverSock,buffer,256 );
-    
-    if (n < 0) {
+    //Handling missing connection from the client
+   if (newsockfd < 0) {
+      perror("ERROR on accept");
+      exit(1);
+   }
+   
+   //Start communicating, first read input from client
+   bzero(buffer,256);
+   n = read( newsockfd,buffer,255 );
+   
+   if (n < 0) {
       perror("ERROR reading from socket");
       exit(1);
-    }
-    
-    // for (int i = 0; i < sizeof(buffer); i++)
-    // {
-    //     printf(buffer[i]);
-    // }
-    
-    //Respond
-    n = write(serverSock,"I got your message",18);
+   }
    
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
-
-    return 0;
+   printf("Here is the message: %s\n",buffer);
+   
+   //Then write a response
+   n = write(newsockfd,"I got your message",18);
+   
+   if (n < 0) {
+      perror("ERROR writing to socket");
+      exit(1);
+   }
+      
+   return 0;
 }
