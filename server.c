@@ -58,14 +58,11 @@ int main (int argc, char *argv[]) {
       exit(1);
     }
     
-    uint8_t hash[] = (uint8_t) (buffer[0]);
-    uint64_t start = (uint64_t) (buffer[32]);
-    uint64_t end = (uint64_t) (buffer[40]);
-    uint8_t p = (uint8_t) (buffer[48]);
-    printf("Hash: %u \n", hash);
-    printf("Start: %u \n", start);
-    printf("End: %u \n", end);
-    printf("P: %u \n", p);
+    for (int i = 0; i < sizeof(buffer); i++)
+    {
+        printf(buffer[i]);
+    }
+    
 
     return 0;
 }
