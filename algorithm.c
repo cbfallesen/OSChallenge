@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <openssl/sha.h>
 
 #define PACKET_REQUEST_SIZE           (SHA256_DIGEST_LENGTH + 8 + 8 + 1)
 #define PACKET_REQUEST_HASH_OFFSET    0
@@ -13,4 +12,5 @@
 
 int main (int argc, char *argv[]) {
     int inputPacket = argv[1];
+    
 }
