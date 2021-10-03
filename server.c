@@ -64,5 +64,13 @@ int main (int argc, char *argv[]) {
     }
     
 
+    //Respond
+    n = write(serverSock,"I got your message",18);
+   
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        exit(1);
+    }
+
     return 0;
 }
