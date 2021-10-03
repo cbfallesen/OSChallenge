@@ -9,7 +9,7 @@ int main (int argc, char *argv[]) {
     struct sockaddr_in serverAddr, clientAddr;
 
     //Comment
-    // port = atoi(argv[1]);
+    port = atoi(argv[1]);
 
     //Initialise server socket, using IPv4, stream socket and system default protocol.
     serverSock = socket(AF_INET, SOCK_STREAM, 0);
