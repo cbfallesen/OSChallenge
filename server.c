@@ -57,7 +57,17 @@ int main( int argc, char *argv[] ) {
    }
    
    printf("Message: %s \n",buffer);
+   for (int i = 0; i < sizeof(buffer); i++)
+   {
+       printf(buffer[i]);
+   }
+   for (int i = 0; i < sizeof(buffer); i++)
+   {
+       printf("%c",buffer[i]);
+   }
    
+
+
    //Then write a response
    n = write(newsockfd,"I got your message",18);
    
