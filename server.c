@@ -8,7 +8,7 @@
 
 int main( int argc, char *argv[] ) {
    int serverSock, newsockfd, portNum, clientLen;
-   char buffer[256];
+   char buffer[49];
    struct sockaddr_in serv_addr, cli_addr;
    int  n;
    
@@ -48,8 +48,8 @@ int main( int argc, char *argv[] ) {
    }
    
    //Start communicating, first read input from client
-   bzero(buffer,256);
-   n = read( newsockfd,buffer,255 );
+   bzero(buffer,49);
+   n = read( newsockfd,buffer,48 );
    
    if (n < 0) {
       perror("ERROR reading from socket");
