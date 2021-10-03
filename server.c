@@ -5,11 +5,11 @@
 #include <string.h>
 
 int main (int argc, char *argv[]) {
-    int serverSock, binder, port, listener, accepting, clientLength;
+    int serverSock, binder, portNum, listener, accepting, clientLength;
     struct sockaddr_in serverAddr, clientAddr;
 
     //Comment
-    port = atoi(argv[1]);
+    // port = atoi(argv[1]);
 
     //Initialise server socket, using IPv4, stream socket and system default protocol.
     serverSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -22,11 +22,12 @@ int main (int argc, char *argv[]) {
 
     //bzero?
     bzero((char * ) &serverAddr, sizeof(serverAddr));
-    
+    int portNum = 5001;
+
     //Initialise the server address.
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_port = port;
+    serverAddr.sin_port = portNum;
 
     //Initialise the binder for the host address.
     binder = bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
