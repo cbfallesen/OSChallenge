@@ -58,11 +58,20 @@ int main( int argc, char *argv[] ) {
     
     printf("Message received: \n");
     uint8_t hash[32];
+    uint64_t start = (uint64_t) (buffer[32]);
+    uint64_t end = (uint64_t) (buffer[40]);
 
     for (int i = 0; i < 32; i++)
     {
         hash[i] = buffer[i];
     }
+    for (int i = 0; i < 32; i++)
+    {
+        printf("%u",hash[i]);
+    }
+    printf("\n");
+    printf("%u\n",start);
+    printf("%u\n",end);
     for (int i = 0; i < 32; i++)
     {
         printf("%u",hash[i]);
