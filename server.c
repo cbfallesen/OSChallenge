@@ -72,17 +72,7 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     printf("%u\n",start);
     printf("%u\n",end);
-    for (int i = 0; i < 32; i++)
-    {
-        printf("%u",hash[i]);
-    }
     
-
-    // for (int i = 0; i < 49; ++i) {
-    //         printf("%c", buffer[i]);
-    //     }
-    
-
 
     //Then write a response
     n = write(newsockfd,"I got your message",18);
