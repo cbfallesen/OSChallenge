@@ -65,14 +65,12 @@ int main( int argc, char *argv[] ) {
     }
     printf("\n");
     
-
     char startArray[8];
 
-    for (int i = 32, j = 0; i < 40; i++, j++) {
-        startArray[j] = buffer[i];
-        printf("%u", startArray[j]);
+    for (int i = 32; i < 40; i++) {
+        startArray[i - 32] = buffer[i];
     }
-    printf("\n");
+    
     uint64_t start = atoi(startArray);
 
     printf("%u", start);
@@ -80,16 +78,14 @@ int main( int argc, char *argv[] ) {
 
     char endArray[8];
 
-    for (int i = 40, j = 0; i < 48; i++, j++) {
-        endArray[j] = buffer[i];
-        printf("%u", endArray[j]);
+    for (int i = 40; i < 48; i++) {
+        endArray[i - 40] = buffer[i];
     }
-    printf("\n");
     
     uint64_t end = atoi(endArray);
 
     printf("%u", end);
-    printf("\n");
+    
 
 
     //Then write a response
