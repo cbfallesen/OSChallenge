@@ -74,6 +74,7 @@ int main( int argc, char *argv[] ) {
     uint64_t start = atoi(startArray);
 
     printf("%u", start);
+    printf("\n");
 
     char endArray[8];
 
@@ -84,6 +85,7 @@ int main( int argc, char *argv[] ) {
     uint64_t end = atoi(endArray);
 
     printf("%u", end);
+    printf("\n");
 
 
     //Then write a response
