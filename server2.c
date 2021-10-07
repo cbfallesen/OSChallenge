@@ -3,19 +3,18 @@
 
 #include <netdb.h>
 #include <netinet/in.h>
-
 #include <string.h>
 
 int main( int argc, char *argv[] ) {
-   int serverSock, newsockfd, portno, clilen;
+   int sockfd, newsockfd, portno, clilen;
    char buffer[256];
    struct sockaddr_in serv_addr, cli_addr;
    int  n;
    
    /* First call to socket() function */
-   serverSock = socket(AF_INET, SOCK_STREAM, 0);
+   sockfd = socket(AF_INET, SOCK_STREAM, 0);
    
-   if (serverSock < 0) {
+   if (sockfd < 0) {
       perror("ERROR opening socket");
       exit(1);
    }
@@ -29,7 +28,7 @@ int main( int argc, char *argv[] ) {
    serv_addr.sin_port = htons(portno);
    
    /* Now bind the host address using bind() call.*/
-   if (bind(serverSock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+   if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
       perror("ERROR on binding");
       exit(1);
    }
@@ -38,11 +37,11 @@ int main( int argc, char *argv[] ) {
       * go in sleep mode and will wait for the incoming connection
    */
    
-   listen(serverSock,5);
+   listen(sockfd,5);
    clilen = sizeof(cli_addr);
    
    /* Accept actual connection from the client */
-   newsockfd = accept(serverSock, (struct sockaddr *)&cli_addr, &clilen);
+   newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
 	
    if (newsockfd < 0) {
       perror("ERROR on accept");

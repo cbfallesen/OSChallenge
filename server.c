@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <netdb.h>
 #include <netinet/in.h>
-
 #include <string.h>
 
 int main( int argc, char *argv[] ) {
@@ -58,21 +56,36 @@ int main( int argc, char *argv[] ) {
     
     printf("Message received: \n");
     uint8_t hash[32];
-    uint64_t start = (uint64_t) (buffer[32]);
     uint64_t end = (uint64_t) (buffer[40]);
 
-    for (int i = 0; i < 32; i++)
-    {
+    for (int i = 0; i < 32; i++) {
         hash[i] = buffer[i];
     }
-    for (int i = 0; i < 32; i++)
-    {
+    for (int i = 0; i < 32; i++) {
         printf("%u",hash[i]);
     }
     printf("\n");
-    printf("%u\n",start);
-    printf("%u\n",end);
     
+    char startArray[] = malloc((8)*sizeof(char));
+
+    for (int i = 32, j = 0; i < 40; i++, j++) {
+        startArray[j] = buffer[i];
+    }
+    
+    uint64_t start = ToUint64(startArray, 0);
+
+    printf("%u", start);
+
+    char endArray[] = malloc((8)*sizeof(char));
+
+    for (int i = 40, j = 0; i < 48; i++, j++) {
+        endArray[j] = buffer[i];
+    }
+    
+    uint64_t end = ToUint64(endArray, 0);
+
+    printf("%u", end);
+
 
     //Then write a response
     n = write(newsockfd,"I got your message",18);
