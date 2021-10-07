@@ -56,7 +56,7 @@ int main( int argc, char *argv[] ) {
     
     printf("Message received: \n");
     uint8_t hash[32];
-    
+
     for (int i = 0; i < 32; i++) {
         hash[i] = buffer[i];
     }
@@ -65,7 +65,7 @@ int main( int argc, char *argv[] ) {
     }
     printf("\n");
     
-    char startArray[] = malloc((8)*sizeof(char));
+    char startArray[8];
 
     for (int i = 32, j = 0; i < 40; i++, j++) {
         startArray[j] = buffer[i];
@@ -75,7 +75,7 @@ int main( int argc, char *argv[] ) {
 
     printf("%u", start);
 
-    char endArray[] = malloc((8)*sizeof(char));
+    char endArray[8];
 
     for (int i = 40, j = 0; i < 48; i++, j++) {
         endArray[j] = buffer[i];
