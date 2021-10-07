@@ -71,7 +71,7 @@ int main( int argc, char *argv[] ) {
         startArray[i - 32] = buffer[i];
     }
     
-    uint64_t start = atoi(startArray);
+    uint64_t start = atoi(&startArray);
 
     printf("%u", start);
     printf("\n");
@@ -82,7 +82,7 @@ int main( int argc, char *argv[] ) {
         endArray[i - 40] = buffer[i];
     }
     
-    uint64_t end = atoi(endArray);
+    uint64_t end = atoi(&endArray);
 
     printf("%u", end);
     
