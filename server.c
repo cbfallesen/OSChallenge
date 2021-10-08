@@ -80,7 +80,7 @@ int communicate (int sockfd) {
 
     for (int i = 0; i < 32; i++)
     {
-        packet1->hashvalue;
+        hashR[i] = (uint8_t)buffer[i];
         // hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
         printf("%02x", hashR[i]);
     }
