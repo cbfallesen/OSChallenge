@@ -72,7 +72,7 @@ int communicate (int sockfd) {
     
     printf("Message received: \n");
     //Input from client
-    uint8_t hashR[32];
+    uint8_t *hashR[32];
     uint64_t startR;
     uint64_t endR;
 
@@ -84,7 +84,7 @@ int communicate (int sockfd) {
     endR = be64toh(packet1 -> end);
     printf("flipped byte order\n");
 
-    printf("%ld", reverse(startR, endR, hashR));
+    printf("%ld", reverse(startR, endR, &hashR));
     
     //Then write a response
     n = write(sockfd,"I got your message",18);
@@ -94,6 +94,7 @@ int communicate (int sockfd) {
         exit(1);
     }
 }
+
 
 int main( int argc, char *argv[] ) {
     int serverSock, newsockfd, portNum, clientLen;
