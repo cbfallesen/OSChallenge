@@ -24,13 +24,15 @@ uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
     unsigned char *targetHash = argv;
     printf("Target");
     for (uint64_t i = start; i < end; i++) {
+
+        i = htole64(i);
         printf("  i: %ld",i);
         
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
         static unsigned char digest[SHA256_DIGEST_LENGTH];
         SHA256_Init(&shactx);
-        SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
+        SHA256_Update(&shactx, &i, SHA256_DIGEST_LENGTH);
         SHA256_Final(digest, &shactx);
         unsigned char *newHash = digest;
 
@@ -109,23 +111,19 @@ int main( int argc, char *argv[] ) {
     printf("Message received: \n");
     
     //Input from client
-    char hashR[32];
-    uint64_t startR;
-    uint64_t endR;
+    unsigned char *hashArr = buffer;
+    uint64_t startR = be64toh(packet.start);
+    uint64_t endR = be64toh(packet.end);
 
-    for (int i = 0; i < 32; i++)
-    {
-        hashR[i] = packet.hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
-        printf("%02x", hashR[i]);
-    }
-    printf("\n");
-    
-    startR = be64toh(packet.start);
-    endR = be64toh(packet.end);
-    //hashR = packet.hashvalue;
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     ha[i] = packet.hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
+    //     printf("%02x", hashR[i]);
+    // }
+    // printf("\n");
 
     printf("flipped byte order\n");
-    uint64_t ans = reverse(startR, endR, packet.hashvalue);
+    uint64_t ans = reverse(startR, endR, hashArr);
     uint64_t ansR = htobe64(ansR);
     printf("Made it out\n");
     printf("%ld", ans);
