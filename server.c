@@ -34,7 +34,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
             }
         }
 
-        if(j == SHA256_DIGEST_LENGTH) {
+        if(j == SHA256_DIGEST_LENGTH - 1) {
             return i;
         }
         
@@ -68,6 +68,7 @@ int communicate (int sockfd) {
     for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
         hashR[i] = be64toh(packet1 -> hashvalue[j]);
+        printf("%02x", hashR[i]);
     }
     startR = be64toh(packet1 -> start);
     endR = be64toh(packet1 -> end);
