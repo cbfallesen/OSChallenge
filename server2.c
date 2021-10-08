@@ -37,13 +37,6 @@ void func(int sockfd)
 		read(sockfd, buff, sizeof(buff));
         Packet1 = (packet*)buff;
 
-		// const char *s = "Rosetta code";
-		// unsigned char *d = SHA256(s, strlen(s), 0);
-		// int i;
-		// for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
-		// 	printf("%02x", &d);
-		// putchar('\n');
-
 		// print buffer which contains the client contents
 		printf("From client: %li\t To client : ", be64toh(Packet1->start));
 		bzero(buff, MAX);

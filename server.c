@@ -4,50 +4,21 @@
 #include <netinet/in.h>
 #include <string.h>
 
-int main( int argc, char *argv[] ) {
-    int serverSock, newsockfd, portNum, clientLen;
-    char buffer[49];
-    struct sockaddr_in serv_addr, cli_addr;
+typedef struct { 
+    uint8_t hashvalue[32]; 
+    uint64_t start; 
+    uint64_t end;
+    uint8_t p;
+} packet;
+
+int communicate (int sockfd) {
     int  n;
-    
-    //Call the socket
-    serverSock = socket(AF_INET, SOCK_STREAM, 0);
-    
-    //Handling missing sockets
-    if (serverSock < 0) {
-        perror("ERROR opening socket");
-        exit(1);
-    }
-    
-    //Initialising the socket structures
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    portNum = 5001;
-    
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(portNum);
-    
-    //Binding to the host address + error handling
-    if (bind(serverSock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-        perror("ERROR on binding");
-        exit(1);
-    }
+    char buffer[49];
+    packet *packet1;
 
-    listen(serverSock,5);
-    clientLen = sizeof(cli_addr);
-    
-    //Accept connection from the client
-    newsockfd = accept(serverSock, (struct sockaddr *)&cli_addr, &clientLen);
-
-        //Handling missing connection from the client
-    if (newsockfd < 0) {
-        perror("ERROR on accept");
-        exit(1);
-    }
-    
     //Start communicating, first read input from client
     bzero(buffer,49);
-    n = read( newsockfd,buffer,48 );
+    n = read(sockfd,buffer,48 );
     
     if (n < 0) {
         perror("ERROR reading from socket");
@@ -82,7 +53,7 @@ int main( int argc, char *argv[] ) {
     uint64_t start;
     memcpy(&start, startArray, 4);
 
-    printf("%u", &start);
+    printf(be64toh(packet1->start));
     printf("\n");
 
     char endArray[8];
@@ -103,12 +74,54 @@ int main( int argc, char *argv[] ) {
 
 
     //Then write a response
-    n = write(newsockfd,"I got your message",18);
+    n = write(sockfd,"I got your message",18);
     
     if (n < 0) {
         perror("ERROR writing to socket");
         exit(1);
     }
+}
+
+int main( int argc, char *argv[] ) {
+    int serverSock, newsockfd, portNum, clientLen;
+    struct sockaddr_in serv_addr, cli_addr;
+    
+    //Call the socket
+    serverSock = socket(AF_INET, SOCK_STREAM, 0);
+    
+    //Handling missing sockets
+    if (serverSock < 0) {
+        perror("ERROR opening socket");
+        exit(1);
+    }
+    
+    //Initialising the socket structures
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    portNum = 5001;
+    
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(portNum);
+    
+    //Binding to the host address + error handling
+    if (bind(serverSock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        perror("ERROR on binding");
+        exit(1);
+    }
+
+    listen(serverSock,5);
+    clientLen = sizeof(cli_addr);
+    
+    //Accept connection from the client
+    newsockfd = accept(serverSock, (struct sockaddr *)&cli_addr, &clientLen);
+
+    //Handling missing connection from the client
+    if (newsockfd < 0) {
+        perror("ERROR on accept");
+        exit(1);
+    }
+
+    communicate(newsockfd);
         
     return 0;
 }
