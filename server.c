@@ -92,6 +92,7 @@ int communicate (int sockfd) {
     printf("flipped byte order\n");
     uint64_t ans = reverse(startR, endR, packet1 -> hashvalue);
     uint64_t ansR = htobe64(ansR);
+    printf("Made it out\n");
     printf("%ld", ans);
     
     //Then write a response
