@@ -122,24 +122,23 @@ int main( int argc, char *argv[] ) {
     // }
     // printf("\n");
 
+    uint8_t outBuff[8];
+    bzero(outBuff, sizeof(outBuff)); 
+
     printf("flipped byte order\n");
     uint64_t ans = reverse(startR, endR, hashArr);
-    uint64_t ansR = htobe64(ansR);
+    uint64_t ansR = htobe64(ans);
+    memcpy(outBuff, &ansR, (size_t) 8);
     printf("Made it out\n");
     printf("%ld", ans);
     
     //Then write a response
-    n = write(newsockfd, ans, 64);
+    n = write(newsockfd, outBuff, 8);
     
     if (n < 0) {
         perror("ERROR writing to socket");
         exit(1);
     }
-
-
-
-
-
 
     return 0;
 }
