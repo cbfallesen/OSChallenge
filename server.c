@@ -12,7 +12,7 @@ typedef struct {
     uint8_t p;
 } packet;
 
-uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
+uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     printf("Entered reverse - ");
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
@@ -21,18 +21,17 @@ uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
     }
     printf("\n");
 
-    char *targetHash = hash;
-    printf("Target");
+    unsigned char *targetHash = hash;
     for (uint64_t i = start; i < end; i++) {
         printf("  i: %ld",i);
         
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
-        char digest[SHA256_DIGEST_LENGTH];
+        static unsigned char digest[SHA256_DIGEST_LENGTH];
         SHA256_Init(&shactx);
         SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
         SHA256_Final(digest, &shactx);
-        char *newHash = digest;
+        unsigned char *newHash = digest;
 
         //Iterate through 
         int j;
