@@ -32,7 +32,7 @@ int communicate (int sockfd) {
         hash[i] = buffer[i];
     }
     for (int i = 0; i < 32; i++) {
-        printf("%u",hash[i]);
+        printf("%02x",hash[i]);
         printf(" ");
     }
     printf("\n");

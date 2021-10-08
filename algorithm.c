@@ -15,7 +15,7 @@ int algoritm (uint8_t hash[], uint64_t start, uint64_t end) {
         char *s;
         sprintf(s, "%d", i);
 	    unsigned char *d = SHA256(s, strlen(s), 0);
-        printf("%c", s);
+        printf("%s", s);
 
         for (int j = 0; j < SHA256_DIGEST_LENGTH; j++) {
             if (d[j] != hash[j]) {
