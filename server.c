@@ -64,7 +64,7 @@ int main( int argc, char *argv[] ) {
         printf("%u",hash[i]);
     }
     printf("\n");
-    printf("%u", hash);
+    printf("%u", &hash);
     
     unsigned char *startArray[8];
 
@@ -78,9 +78,9 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     
     
-    uint64_t start = (uint64_t) &startArray;
+    uint64_t *start = (uint64_t*) startArray;
 
-    printf("%u", start);
+    printf("%u", &start);
     printf("\n");
 
     char endArray[8];
