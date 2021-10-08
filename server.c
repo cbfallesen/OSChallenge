@@ -76,9 +76,9 @@ int communicate (int sockfd) {
     uint64_t startR;
     uint64_t endR;
 
-    for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
+    for (int i = 0; i < 32; i++)
     {
-        hashR[i] = (uint8_t)buffer[i] | (uint8_t)buffer[i] << 8;
+        hashR[i] = (uint8_t)buffer[i] | (uint8_t)buffer[31-i] << 8;
         printf("%02x", hashR[i]);
     }
     printf("\n");
