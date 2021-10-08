@@ -12,21 +12,12 @@ struct Packet {
     uint8_t p;
 } packet;
 
-uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
-    printf("Entered reverse - ");
-    printf("  hash: ");
-    for (int i = 0; i < 32; i++)
-    {   
-        printf("%02x",*(argv + i));
-    }
-    printf("\n");
-
-    unsigned char *targetHash = argv;
-    printf("Target");
-    for (uint64_t i = start; i < end; i++) {
+uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
+    unsigned char *targetHash = hash;
+    
+    for (uint8_t i = start; i < end; i++) {
 
         i = htole64(i);
-        printf("  i: %ld",i);
         
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
@@ -40,7 +31,6 @@ uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
         int j;
         for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
         {
-            printf("     %d\n",j);
             if(*(targetHash+j) != *(newHash+j)) {
                 break;
             }
@@ -49,7 +39,6 @@ uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
         if(j == SHA256_DIGEST_LENGTH - 1) {
             return i;
         }
-        printf("\n");
 
     }
 
@@ -115,31 +104,20 @@ int main( int argc, char *argv[] ) {
     uint64_t startR = be64toh(packet.start);
     uint64_t endR = be64toh(packet.end);
 
-    // for (int i = 0; i < 32; i++)
-    // {
-    //     ha[i] = packet.hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
-    //     printf("%02x", hashR[i]);
-    // }
-    // printf("\n");
+    uint8_t outBuff[8];
+    bzero(outBuff, sizeof(outBuff)); 
 
-    printf("flipped byte order\n");
     uint64_t ans = reverse(startR, endR, hashArr);
-    uint64_t ansR = htobe64(ansR);
-    printf("Made it out\n");
-    printf("%ld", ans);
+    uint64_t ansR = htobe64(ans);
+    memcpy(outBuff, &ansR, (size_t) 8);
     
     //Then write a response
-    n = write(newsockfd, ans, 64);
+    n = write(newsockfd, outBuff, 8);
     
     if (n < 0) {
         perror("ERROR writing to socket");
         exit(1);
     }
-
-
-
-
-
 
     return 0;
 }
