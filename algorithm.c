@@ -12,7 +12,7 @@ int algoritm (uint8_t hash[], uint64_t start, uint64_t end) {
     int similar = 1;
     for (i = start; i < end; i++) {
 
-        const char *s;
+        char *s;
         sprintf(s, "%d", i);
 	    unsigned char *d = SHA256(s, strlen(s), 0);
         printf("%s", s);
