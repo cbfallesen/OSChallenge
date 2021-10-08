@@ -13,8 +13,8 @@ typedef struct {
 } packet;
 
 uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
+    printf("Entered reverse\n");
     char *targetHash = hash;
-    
     for (uint64_t i = start; i < end; i++) {
 
         //Generates a SHA256 hash for the current iteration
@@ -29,6 +29,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
         int j;
         for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
         {
+            printf("   %d\n",j);
             if(*(targetHash+j) != *(newHash+j)) {
                 break;
             }
@@ -45,6 +46,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
 }
 
 int communicate (int sockfd) {
+    printf("Entered\n");
     int  n;
     char buffer[49];
     packet *packet1;
@@ -53,11 +55,11 @@ int communicate (int sockfd) {
     bzero(buffer,49);
     n = read(sockfd,buffer,48 );
     packet1 = (packet*) buffer;
-    
     if (n < 0) {
         perror("ERROR reading from socket");
         exit(1);
     }
+    printf("Read\n");
     
     printf("Message received: \n");
     //Input from client
@@ -68,11 +70,10 @@ int communicate (int sockfd) {
     for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
         hashR[i] = be64toh(packet1 -> hashvalue[j]);
-        printf("%02x", hashR[i]);
     }
     startR = be64toh(packet1 -> start);
     endR = be64toh(packet1 -> end);
-    
+    printf("flipped byte order\n");
 
     printf("%d", reverse(startR, endR, hashR));
     
