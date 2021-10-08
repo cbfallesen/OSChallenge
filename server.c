@@ -5,34 +5,36 @@
 #include <string.h>
 #include "messages.h"
 
-typedef struct { 
-    uint8_t hashvalue[32]; 
+struct Packet { 
+    char hashvalue[32]; 
     uint64_t start; 
     uint64_t end;
     uint8_t p;
 } packet;
 
-uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
+uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
     printf("Entered reverse - ");
-    printf(" start:%ld",start);
-    printf("  end:%ld",end);
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
-    {
-        printf("%d",hash[i]);
+    {   
+        printf("%02x",*(argv + i));
     }
     printf("\n");
 
-    char *targetHash = hash;
+    unsigned char *targetHash = argv;
+    printf("Target");
     for (uint64_t i = start; i < end; i++) {
+
+        i = htole64(i);
         printf("  i: %ld",i);
+        
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
-        char digest[SHA256_DIGEST_LENGTH];
+        static unsigned char digest[SHA256_DIGEST_LENGTH];
         SHA256_Init(&shactx);
-        SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
+        SHA256_Update(&shactx, &i, SHA256_DIGEST_LENGTH);
         SHA256_Final(digest, &shactx);
-        char *newHash = digest;
+        unsigned char *newHash = digest;
 
         //Iterate through 
         int j;
@@ -53,51 +55,6 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
 
     return -1;
 }
-
-int communicate (int sockfd) {
-    printf("Entered\n");
-    int  n;
-    char buffer[49];
-    packet *packet1;
-
-    //Start communicating, first read input from client
-    bzero(buffer,49);
-    n = read(sockfd,buffer,48 );
-    packet1 = (packet*) buffer;
-    if (n < 0) {
-        perror("ERROR reading from socket");
-        exit(1);
-    }
-    printf("Read\n");
-    
-    printf("Message received: \n");
-    //Input from client
-    uint8_t hashR[32];
-    uint64_t startR;
-    uint64_t endR;
-
-    for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
-    {
-        // hashR[i] = be64toh(packet1 -> hashvalue[j]);
-        hashR[i] = (uint8_t)buffer[j] | (uint8_t)buffer[j];
-        printf("%02x", hashR[i]);
-    }
-    printf("\n");
-    startR = be64toh(packet1 -> start);
-    endR = be64toh(packet1 -> end);
-    printf("flipped byte order\n");
-
-    printf("%ld", reverse(startR, endR, hashR));
-    
-    //Then write a response
-    n = write(sockfd,"I got your message",18);
-    
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
-}
-
 
 int main( int argc, char *argv[] ) {
     int serverSock, newsockfd, portNum, clientLen;
@@ -138,7 +95,51 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
-    communicate(newsockfd);
-        
+    printf("Entered\n");
+    int  n;
+    char buffer[49];
+
+    //Start communicating, first read input from client
+    bzero(buffer,49);
+    n = read(newsockfd,buffer,48 );
+    if (n < 0) {
+        perror("ERROR reading from socket");
+        exit(1);
+    }
+    printf("Read\n");
+    
+    printf("Message received: \n");
+    
+    //Input from client
+    unsigned char *hashArr = buffer;
+    uint64_t startR = be64toh(packet.start);
+    uint64_t endR = be64toh(packet.end);
+
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     ha[i] = packet.hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
+    //     printf("%02x", hashR[i]);
+    // }
+    // printf("\n");
+
+    printf("flipped byte order\n");
+    uint64_t ans = reverse(startR, endR, hashArr);
+    uint64_t ansR = htobe64(ansR);
+    printf("Made it out\n");
+    printf("%ld", ans);
+    
+    //Then write a response
+    n = write(newsockfd, ans, 64);
+    
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        exit(1);
+    }
+
+
+
+
+
+
     return 0;
 }
