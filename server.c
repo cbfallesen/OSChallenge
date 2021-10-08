@@ -84,21 +84,13 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
-    printf("Entered\n");
-    int  n;
-    char buffer[49];
 
+    char buffer[49];
     //Start communicating, first read input from client
     bzero(buffer,49);
-    n = read(newsockfd,buffer,48 );
-    if (n < 0) {
-        perror("ERROR reading from socket");
-        exit(1);
-    }
-    printf("Read\n");
+    read(newsockfd,buffer,48 );
     
-    printf("Message received: \n");
-    
+
     //Input from client
     unsigned char *hashArr = buffer;
     uint64_t startR = be64toh(packet.start);
@@ -112,12 +104,7 @@ int main( int argc, char *argv[] ) {
     memcpy(outBuff, &ansR, (size_t) 8);
     
     //Then write a response
-    n = write(newsockfd, outBuff, 8);
-    
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
+    write(newsockfd, outBuff, 8);
 
     return 0;
 }
