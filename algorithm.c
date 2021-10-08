@@ -20,6 +20,7 @@ int algoritm (uint8_t hash[], uint64_t start, uint64_t end) {
         for (int j = 0; j < SHA256_DIGEST_LENGTH; j++) {
             if (d[j] != hash[j]) {
                 similar = 0;
+                break;
             }
         }
 
