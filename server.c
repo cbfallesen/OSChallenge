@@ -78,15 +78,15 @@ int communicate (int sockfd) {
 
     for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
-        // hashR[i] = be64toh(packet1 -> hashvalue[j]);
-        hashR[i] = (uint8_t)buffer[j] | (uint8_t)buffer[j];
+        hashR[i] = (uint8_t)buffer[i] | (uint8_t)buffer[i] << 8;
         printf("%02x", hashR[i]);
     }
     printf("\n");
+    
     startR = be64toh(packet1 -> start);
     endR = be64toh(packet1 -> end);
-    printf("flipped byte order\n");
 
+    printf("flipped byte order\n");
     printf("%ld", reverse(startR, endR, hashR));
     
     //Then write a response
