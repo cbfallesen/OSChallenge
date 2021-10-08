@@ -51,7 +51,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
 
     }
 
-    return 0;
+    return -1;
 }
 
 int communicate (int sockfd) {
@@ -79,7 +79,7 @@ int communicate (int sockfd) {
     for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
         // hashR[i] = be64toh(packet1 -> hashvalue[j]);
-        hashR[i] = (uint8_t)buffer[j] | (uint8_t)buffer[j] << 8;
+        hashR[i] = (uint8_t)buffer[j] | (uint8_t)buffer[j];
         printf("%02x", hashR[i]);
     }
     printf("\n");
