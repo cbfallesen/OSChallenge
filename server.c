@@ -80,7 +80,7 @@ int communicate (int sockfd) {
     {
 
         hashR[i] = be64toh(packet1 -> hashvalue[j]);
-        printf("c", hashR[i]);
+        printf("%02x", hashR[i]);
     }
     printf("\n");
     startR = be64toh(packet1 -> start);
