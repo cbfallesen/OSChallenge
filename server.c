@@ -19,7 +19,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {
-        printf("%d",hash[i]);
+        printf("%02x",hash[i]);
     }
     printf("\n");
 
@@ -54,6 +54,8 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     return -1;
 }
 
+
+
 int communicate (int sockfd) {
     printf("Entered\n");
     int  n;
@@ -87,7 +89,7 @@ int communicate (int sockfd) {
     endR = be64toh(packet1 -> end);
 
     printf("flipped byte order\n");
-    printf("%ld", reverse(startR, endR, hashR));
+    printf("%ld", reverse(startR, endR, packet1 -> hashvalue));
     
     //Then write a response
     n = write(sockfd,"I got your message",18);
@@ -97,6 +99,7 @@ int communicate (int sockfd) {
         exit(1);
     }
 }
+
 
 
 int main( int argc, char *argv[] ) {
