@@ -77,9 +77,9 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     
     
-    uint64_t *start = (uint64_t) &startArray;
+    uint64_t start = (uint64_t) &startArray;
 
-    printf("%u", &start);
+    printf("%u", start);
     printf("\n");
 
     char endArray[8];
