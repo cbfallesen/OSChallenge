@@ -142,7 +142,7 @@ int main( int argc, char *argv[] ) {
     printf("%ld", ans);
     
     //Then write a response
-    n = write(newsockfd,"ans",18);
+    n = write(newsockfd,"ans",8);
     
     if (n < 0) {
         perror("ERROR writing to socket");
