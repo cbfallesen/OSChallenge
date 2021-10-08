@@ -3,6 +3,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <string.h>
+#include "messages.h"
 
 typedef struct { 
     uint8_t hashvalue[32]; 
@@ -10,6 +11,38 @@ typedef struct {
     uint64_t end;
     uint8_t p;
 } packet;
+
+uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
+    char *targetHash = hash;
+
+    for (uint64_t i = start; i < end; i++) {
+
+        //Generates a SHA256 hash for the current iteration
+        SHA256_CTX shactx;
+        char digest[SHA256_DIGEST_LENGTH];
+        SHA256_Init(&shactx);
+        SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
+        SHA256_Final(digest, &shactx);
+        char *newHash = digest;
+
+        //Iterate through 
+        int j;
+        for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
+        {
+            if(*(targetHash+j) != *(newHash+j)) {
+                break;
+            }
+        }
+
+        if(j == SHA256_DIGEST_LENGTH - 1) {
+            return i;
+        }
+        
+
+    }
+
+    return -1;
+}
 
 int communicate (int sockfd) {
     int  n;
@@ -19,6 +52,7 @@ int communicate (int sockfd) {
     //Start communicating, first read input from client
     bzero(buffer,49);
     n = read(sockfd,buffer,48 );
+    packet1 = (packet*) buffer;
     
     if (n < 0) {
         perror("ERROR reading from socket");
@@ -26,52 +60,21 @@ int communicate (int sockfd) {
     }
     
     printf("Message received: \n");
-    uint8_t hash[32];
+    //Input from client
+    uint8_t hashR[32];
+    uint64_t startR;
+    uint64_t endR;
 
-    for (int i = 0; i < 32; i++) {
-        hash[i] = buffer[i];
-    }
-    for (int i = 0; i < 32; i++) {
-        printf("%02x",hash[i]);
-    }
-    printf("\n");
-    
-    unsigned char *startArray[8];
-
-    for (int i = 32; i < 40; i++) {
-        startArray[i - 32] = buffer[i];
-    }
-    for (int i = 0; i < 8; i++)
+    for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
-        printf("%u",startArray[i]);
+        hashR[i] = be64toh(packet1 -> hashvalue[j]);
     }
-    printf("\n");
-    
-    
-    uint64_t start;
-    memcpy(&start, startArray, 4);
-
-    // be64toh(packet1->start);
-    printf("%u", start);
-    printf("\n");
-
-    char endArray[8];
-
-    for (int i = 40; i < 48; i++) {
-        endArray[i - 40] = buffer[i];
-    }
-    for (int i = 0; i < 8; i++)
-    {
-        printf("%u",endArray[i]);
-    }
-    printf("\n");
-    
-    uint64_t end = atoi(&endArray);
-
-    printf("%u", end);
+    startR = be64toh(packet1 -> start);
+    endR = be64toh(packet1 -> end);
     
 
-
+    printf("%d", reverse(startR, endR, hashR));
+    
     //Then write a response
     n = write(sockfd,"I got your message",18);
     
