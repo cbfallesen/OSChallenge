@@ -21,7 +21,7 @@ uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
     }
     printf("\n");
 
-    char *targetHash = hash;
+    // char *targetHash = hash;
     for (uint64_t i = start; i < end; i++) {
         printf("  i: %ld",i);
         
@@ -38,9 +38,9 @@ uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
         for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
         {
             printf("     %d\n",j);
-            if(*(targetHash+j) != *(newHash+j)) {
-                break;
-            }
+            // if(*(targetHash+j) != *(newHash+j)) {
+            //     break;
+            // }
         }
 
         if(j == SHA256_DIGEST_LENGTH - 1) {
