@@ -26,6 +26,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     char *targetHash = hash;
     for (uint64_t i = start; i < end; i++) {
         printf("  i: %ld",i);
+        
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
         char digest[SHA256_DIGEST_LENGTH];
@@ -80,8 +81,7 @@ int communicate (int sockfd) {
 
     for (int i = 0; i < 32; i++)
     {
-        hashR[i] = (uint8_t)buffer[i];
-        // hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
+        hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
         printf("%02x", hashR[i]);
     }
     printf("\n");
