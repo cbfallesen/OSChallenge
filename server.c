@@ -56,50 +56,7 @@ uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
 
 
 int communicate (int sockfd) {
-    printf("Entered\n");
-    int  n;
-    char buffer[49];
-    packet *packet1;
-
-    //Start communicating, first read input from client
-    bzero(buffer,49);
-    n = read(sockfd,buffer,48 );
-    packet1 = (packet*) buffer;
-    if (n < 0) {
-        perror("ERROR reading from socket");
-        exit(1);
-    }
-    printf("Read\n");
     
-    printf("Message received: \n");
-    //Input from client
-    uint8_t hashR[32];
-    uint64_t startR;
-    uint64_t endR;
-
-    for (int i = 0; i < 32; i++)
-    {
-        hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
-        printf("%02x", hashR[i]);
-    }
-    printf("\n");
-    
-    startR = be64toh(packet1 -> start);
-    endR = be64toh(packet1 -> end);
-
-    printf("flipped byte order\n");
-    uint64_t ans = reverse(startR, endR, packet1 -> hashvalue);
-    uint64_t ansR = htobe64(ansR);
-    printf("Made it out\n");
-    printf("%ld", ans);
-    
-    //Then write a response
-    n = write(sockfd,ans,7);
-    
-    if (n < 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
 }
 
 
@@ -143,8 +100,59 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
-    write(newsockfd,"htobe64((uint64_t) 10)",7);
-    communicate(newsockfd);
+
+
+
+
+    printf("Entered\n");
+    int  n;
+    char buffer[49];
+    packet *packet1;
+
+    //Start communicating, first read input from client
+    bzero(buffer,49);
+    n = read(newsockfd,buffer,48 );
+    packet1 = (packet*) buffer;
+    if (n < 0) {
+        perror("ERROR reading from socket");
+        exit(1);
+    }
+    printf("Read\n");
+    
+    printf("Message received: \n");
+    //Input from client
+    uint8_t hashR[32];
+    uint64_t startR;
+    uint64_t endR;
+
+    for (int i = 0; i < 32; i++)
+    {
+        hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
+        printf("%02x", hashR[i]);
+    }
+    printf("\n");
+    
+    startR = be64toh(packet1 -> start);
+    endR = be64toh(packet1 -> end);
+
+    printf("flipped byte order\n");
+    uint64_t ans = reverse(startR, endR, packet1 -> hashvalue);
+    uint64_t ansR = htobe64(ansR);
+    printf("Made it out\n");
+    printf("%ld", ans);
+    
+    //Then write a response
+    n = write(newsockfd,ans,7);
+    
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        exit(1);
+    }
+
+
+
+
+
 
     return 0;
 }
