@@ -33,6 +33,7 @@ int communicate (int sockfd) {
     }
     for (int i = 0; i < 32; i++) {
         printf("%u",hash[i]);
+        printf(" ");
     }
     printf("\n");
     printf("%u", &hash);
