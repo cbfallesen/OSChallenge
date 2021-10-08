@@ -79,7 +79,8 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     
     
-    uint64_t *start = (uint64_t*) startArray;
+    uint64_t start;
+    memcpy(&start, startArray, 4);
 
     printf("%u", &start);
     printf("\n");
