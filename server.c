@@ -19,7 +19,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {   
-        printf("%02x",(hash +i));
+        printf("%02x",*(hash + i));
     }
     printf("\n");
 
