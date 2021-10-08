@@ -75,7 +75,7 @@ int communicate (int sockfd) {
     endR = be64toh(packet1 -> end);
     printf("flipped byte order\n");
 
-    printf("%d", reverse(startR, endR, hashR));
+    printf("%ld", reverse(startR, endR, hashR));
     
     //Then write a response
     n = write(sockfd,"I got your message",18);
