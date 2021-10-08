@@ -12,14 +12,14 @@ typedef struct {
     uint8_t p;
 } packet;
 
-uint64_t reverse(uint64_t start, uint64_t end, char hash[]) {
+uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     printf("Entered reverse - ");
     printf(" start:%ld",start);
     printf("  end:%ld",end);
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {   
-        printf("%02x",*(hash +i));
+        printf("%02x",(hash +i));
     }
     printf("\n");
 
