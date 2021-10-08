@@ -72,14 +72,15 @@ int communicate (int sockfd) {
     
     printf("Message received: \n");
     //Input from client
-    uint8_t *hashR[32];
+    uint8_t hashR[32];
     uint64_t startR;
     uint64_t endR;
 
     for (int i = 0, j=31; i < 32, j >= 0; i++, j--)
     {
-        hashR[i] = be64toh(packet1.hashvalue[j]);
-        printf("%02x", hashR[i]);
+
+        hashR[i] = be64toh(packet1 -> hashvalue[j]);
+        printf("c", hashR[i]);
     }
     printf("\n");
     startR = be64toh(packet1 -> start);
