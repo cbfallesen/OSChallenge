@@ -17,7 +17,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {   
-        printf("%d",*(argv + i));
+        printf("%s",*(argv + i));
     }
     printf("\n");
 
