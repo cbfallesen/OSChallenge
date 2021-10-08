@@ -90,10 +90,12 @@ int communicate (int sockfd) {
     endR = be64toh(packet1 -> end);
 
     printf("flipped byte order\n");
-    printf("%ld", reverse(startR, endR, packet1 -> hashvalue));
+    uint64_t ans = reverse(startR, endR, packet1 -> hashvalue);
+    uint64_t ansR = htobe64(ansR);
+    printf("%ld", ans);
     
     //Then write a response
-    n = write(sockfd,"I got your message",18);
+    n = write(sockfd,ans,7);
     
     if (n < 0) {
         perror("ERROR writing to socket");
