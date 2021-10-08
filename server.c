@@ -13,10 +13,19 @@ typedef struct {
 } packet;
 
 uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
-    printf("Entered reverse\n");
+    printf("Entered reverse - ");
+    printf(" start:%ld",start);
+    printf("  end:%ld",end);
+    printf("  hash: ");
+    for (int i = 0; i < 32; i++)
+    {
+        printf("%d",hash[i]);
+    }
+    printf("\n");
+
     char *targetHash = hash;
     for (uint64_t i = start; i < end; i++) {
-
+        printf("  i: %ld",i);
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
         char digest[SHA256_DIGEST_LENGTH];
@@ -29,7 +38,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
         int j;
         for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
         {
-            printf("   %d\n",j);
+            printf("     %d\n",j);
             if(*(targetHash+j) != *(newHash+j)) {
                 break;
             }
@@ -38,7 +47,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
         if(j == SHA256_DIGEST_LENGTH - 1) {
             return i;
         }
-        
+        printf("\n");
 
     }
 
