@@ -61,9 +61,10 @@ int main( int argc, char *argv[] ) {
         hash[i] = buffer[i];
     }
     for (int i = 0; i < 32; i++) {
-        printf("%c",hash[i]);
+        printf("%u",hash[i]);
     }
     printf("\n");
+    printf("%u", hash);
     
     unsigned char *startArray[8];
 
