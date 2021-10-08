@@ -61,7 +61,7 @@ int main( int argc, char *argv[] ) {
         hash[i] = buffer[i];
     }
     for (int i = 0; i < 32; i++) {
-        printf("%u",hash[i]);
+        printf("%c",hash[i]);
     }
     printf("\n");
     
@@ -77,9 +77,9 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     
     
-    uint64_t start = (uint64_t) &startArray;
+    uint64_t *start = (uint64_t) startArray;
 
-    printf("%u", start);
+    printf("%u", &start);
     printf("\n");
 
     char endArray[8];
