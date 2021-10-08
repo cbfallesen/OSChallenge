@@ -14,7 +14,7 @@ typedef struct {
 
 uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     char *targetHash = hash;
-
+    
     for (uint64_t i = start; i < end; i++) {
 
         //Generates a SHA256 hash for the current iteration
@@ -34,7 +34,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
             }
         }
 
-        if(j == SHA256_DIGEST_LENGTH - 1) {
+        if(j == SHA256_DIGEST_LENGTH) {
             return i;
         }
         
