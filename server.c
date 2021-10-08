@@ -143,7 +143,7 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
-    write(newsockfd,htobe64((uint64_t) 10),7);
+    write(newsockfd,"htobe64((uint64_t) 10)",7);
     communicate(newsockfd);
 
     return 0;
