@@ -5,23 +5,23 @@
 #include <string.h>
 #include "messages.h"
 
-typedef struct { 
-    uint8_t hashvalue[32]; 
+struct Packet { 
+    char hashvalue[32]; 
     uint64_t start; 
     uint64_t end;
     uint8_t p;
 } packet;
 
-uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
+uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
     printf("Entered reverse - ");
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {   
-        printf("%02x",*(hash + i));
+        printf("%02x",*(argv + i));
     }
     printf("\n");
 
-    unsigned char *targetHash = hash;
+    unsigned char *targetHash = argv;
     printf("Target");
     for (uint64_t i = start; i < end; i++) {
         printf("  i: %ld",i);
@@ -53,14 +53,6 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
 
     return -1;
 }
-
-
-
-int communicate (int sockfd) {
-    
-}
-
-
 
 int main( int argc, char *argv[] ) {
     int serverSock, newsockfd, portNum, clientLen;
@@ -101,19 +93,13 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
-
-
-
-
     printf("Entered\n");
     int  n;
     char buffer[49];
-    packet *packet1;
 
     //Start communicating, first read input from client
     bzero(buffer,49);
     n = read(newsockfd,buffer,48 );
-    packet1 = (packet*) buffer;
     if (n < 0) {
         perror("ERROR reading from socket");
         exit(1);
@@ -121,23 +107,25 @@ int main( int argc, char *argv[] ) {
     printf("Read\n");
     
     printf("Message received: \n");
+    
     //Input from client
-    uint8_t hashR[32];
+    char hashR[32];
     uint64_t startR;
     uint64_t endR;
 
     for (int i = 0; i < 32; i++)
     {
-        hashR[i] = packet1->hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
+        hashR[i] = packet.hashvalue[i] | ((uint8_t)buffer[31-i] << (i*8));
         printf("%02x", hashR[i]);
     }
     printf("\n");
     
-    startR = be64toh(packet1 -> start);
-    endR = be64toh(packet1 -> end);
+    startR = be64toh(packet.start);
+    endR = be64toh(packet.end);
+    //hashR = packet.hashvalue;
 
     printf("flipped byte order\n");
-    uint64_t ans = reverse(startR, endR, packet1 -> hashvalue);
+    uint64_t ans = reverse(startR, endR, packet.hashvalue);
     uint64_t ansR = htobe64(ansR);
     printf("Made it out\n");
     printf("%ld", ans);
