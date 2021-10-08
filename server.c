@@ -51,7 +51,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
 
     }
 
-    return -1;
+    return 0;
 }
 
 int communicate (int sockfd) {
