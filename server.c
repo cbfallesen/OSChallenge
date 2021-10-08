@@ -65,7 +65,7 @@ int main( int argc, char *argv[] ) {
     }
     printf("\n");
     
-    char startArray[8];
+    unsigned char *startArray[8];
 
     for (int i = 32; i < 40; i++) {
         startArray[i - 32] = buffer[i];
@@ -77,7 +77,7 @@ int main( int argc, char *argv[] ) {
     printf("\n");
     
     
-    uint64_t start = atoi(&startArray);
+    uint64_t start = (uint64_t) &startArray;
 
     printf("%u", start);
     printf("\n");
