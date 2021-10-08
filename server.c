@@ -14,8 +14,6 @@ typedef struct {
 
 uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
     printf("Entered reverse - ");
-    printf(" start:%ld",start);
-    printf("  end:%ld",end);
     printf("  hash: ");
     for (int i = 0; i < 32; i++)
     {   
@@ -145,7 +143,8 @@ int main( int argc, char *argv[] ) {
         exit(1);
     }
 
+    write(newsockfd,htobe64((uint64_t) 10),7);
     communicate(newsockfd);
-        
+
     return 0;
 }
