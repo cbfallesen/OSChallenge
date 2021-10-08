@@ -22,19 +22,22 @@ uint64_t reverse(uint64_t start, uint64_t end, char *argv) {
     printf("\n");
 
     unsigned char *targetHash = argv;
+    unsigned char newHash[32];
     printf("Target");
-    for (uint64_t i = start; i < end; i++) {
+    for (uint8_t i = start; i < end; i++) {
 
         i = htole64(i);
         printf("  i: %ld",i);
         
         //Generates a SHA256 hash for the current iteration
-        SHA256_CTX shactx;
-        static unsigned char digest[SHA256_DIGEST_LENGTH];
-        SHA256_Init(&shactx);
-        SHA256_Update(&shactx, &i, SHA256_DIGEST_LENGTH);
-        SHA256_Final(digest, &shactx);
-        unsigned char *newHash = digest;
+        // SHA256_CTX shactx;
+        // static unsigned char digest[SHA256_DIGEST_LENGTH];
+        // SHA256_Init(&shactx);
+        // SHA256_Update(&shactx, &i, SHA256_DIGEST_LENGTH);
+        // SHA256_Final(digest, &shactx);
+        // unsigned char *newHash = digest;
+
+        SHA256((unsigned char*) &i, 8, (unsigned char*) newHash);
 
         //Iterate through 
         int j;
