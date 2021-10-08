@@ -65,6 +65,7 @@ int main( int argc, char *argv[] ) {
     }
     printf("\n");
     printf("%u", &hash);
+    printf("\n");
     
     unsigned char *startArray[8];
 
