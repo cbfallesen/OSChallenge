@@ -1,16 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "messages.h"
 
-#define PACKET_REQUEST_SIZE           (SHA256_DIGEST_LENGTH + 8 + 8 + 1)
-#define PACKET_REQUEST_HASH_OFFSET    0
-#define PACKET_REQUEST_START_OFFSET   (SHA256_DIGEST_LENGTH)
-#define PACKET_REQUEST_END_OFFSET     (SHA256_DIGEST_LENGTH + 8)
-#define PACKET_REQUEST_PRIO_OFFSET    (SHA256_DIGEST_LENGTH + 8 + 8)
+#include <openssl/sha.h>
 
-#define PACKET_RESPONSE_SIZE          8
-#define PACKET_RESPONSE_ANSWER_OFFSET 0
+int algoritm (uint8_t hash[], uint64_t start, uint64_t end) {
+
+    int i;
+    int j;
+    for (i = start; i < end; i++) {
+
+        const char *s;
+        sprintf(s, "%d", i);
+	    unsigned char *d = SHA256(s, strlen(s), 0);
+
+        for (int j = 0; j < SHA256_DIGEST_LENGTH; j++) {
+            if (d[j] != hash[j]) {
+                break;
+            }
+        }
+
+        if (j == SHA256_DIGEST_LENGTH - 1) {
+            return i;
+        }
+    }
+}
+
 
 int main (int argc, char *argv[]) {
-    int inputPacket = argv[1];
-    
+    uint8_t hash[] = "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5";
+    uint64_t start = 1;
+    uint64_t end = 11;
+
+    printf("%d", algoritm(hash, start, end));
 }

@@ -35,8 +35,6 @@ int communicate (int sockfd) {
         printf("%u",hash[i]);
     }
     printf("\n");
-    printf("%u", &hash);
-    printf("\n");
     
     unsigned char *startArray[8];
 
@@ -53,7 +51,7 @@ int communicate (int sockfd) {
     uint64_t start;
     memcpy(&start, startArray, 4);
 
-    be64toh(packet1->start)
+    be64toh(packet1->start);
     printf("%u", start);
     printf("\n");
 
