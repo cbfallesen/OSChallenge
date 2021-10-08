@@ -53,7 +53,8 @@ int communicate (int sockfd) {
     uint64_t start;
     memcpy(&start, startArray, 4);
 
-    printf(be64toh(packet1->start));
+    be64toh(packet1->start)
+    printf("%u", start);
     printf("\n");
 
     char endArray[8];
