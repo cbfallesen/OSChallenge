@@ -22,6 +22,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     printf("\n");
 
     unsigned char *targetHash = hash;
+    printf("Target");
     for (uint64_t i = start; i < end; i++) {
         printf("  i: %ld",i);
         
