@@ -16,7 +16,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     unsigned char *targetHash = hash;
     
     for (uint8_t i = start; i < end; i++) {
-
+        //reverse endian
         i = htole64(i);
         
         //Generates a SHA256 hash for the current iteration
@@ -27,7 +27,7 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
         SHA256_Final(digest, &shactx);
         unsigned char *newHash = digest;
 
-        //Iterate through 
+        //Iterate through both hashes, to check if current iteration matches.
         int j;
         for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
         {
