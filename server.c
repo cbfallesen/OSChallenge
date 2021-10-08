@@ -21,34 +21,35 @@ uint64_t reverse(uint64_t start, uint64_t end, uint8_t *hash) {
     }
     printf("\n");
 
-    // char *targetHash = hash;
-    // for (uint64_t i = start; i < end; i++) {
-    //     printf("  i: %ld",i);
+    char *targetHash = hash;
+    printf("Target");
+    for (uint64_t i = start; i < end; i++) {
+        printf("  i: %ld",i);
         
-    //     //Generates a SHA256 hash for the current iteration
-    //     SHA256_CTX shactx;
-    //     char digest[SHA256_DIGEST_LENGTH];
-    //     SHA256_Init(&shactx);
-    //     SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
-    //     SHA256_Final(digest, &shactx);
-    //     char *newHash = digest;
+        //Generates a SHA256 hash for the current iteration
+        SHA256_CTX shactx;
+        char digest[SHA256_DIGEST_LENGTH];
+        SHA256_Init(&shactx);
+        SHA256_Update(&shactx, i, SHA256_DIGEST_LENGTH);
+        SHA256_Final(digest, &shactx);
+        char *newHash = digest;
 
-    //     //Iterate through 
-    //     int j;
-    //     for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
-    //     {
-    //         printf("     %d\n",j);
-    //         if(*(targetHash+j) != *(newHash+j)) {
-    //             break;
-    //         }
-    //     }
+        //Iterate through 
+        int j;
+        for (j = 0; j < SHA256_DIGEST_LENGTH; i++)
+        {
+            printf("     %d\n",j);
+            if(*(targetHash+j) != *(newHash+j)) {
+                break;
+            }
+        }
 
-    //     if(j == SHA256_DIGEST_LENGTH - 1) {
-    //         return i;
-    //     }
-    //     printf("\n");
+        if(j == SHA256_DIGEST_LENGTH - 1) {
+            return i;
+        }
+        printf("\n");
 
-    // }
+    }
 
     return -1;
 }
@@ -142,7 +143,7 @@ int main( int argc, char *argv[] ) {
     printf("%ld", ans);
     
     //Then write a response
-    n = write(newsockfd, "10", 64);
+    n = write(newsockfd, ans, 64);
     
     if (n < 0) {
         perror("ERROR writing to socket");
