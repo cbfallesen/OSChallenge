@@ -24,7 +24,6 @@ typedef struct
 } packet;
 
 int runningThreads = 0;
-pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 packet *Packet1;
 uint64_t result;
@@ -41,20 +40,16 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-				pthread_mutex_lock(&running_mutex);
-				runningThreads --;
-				pthread_mutex_unlock(&running_mutex);
-				pthread_exit(NULL);
+				return (uint64_t)-1;
+				// pthread_exit(NULL);
 			}
 		}
 
 		if (equal == 1)
 		{
-			result = numGuess;
-			pthread_mutex_lock(&running_mutex);
-			runningThreads --;
-			pthread_mutex_unlock(&running_mutex);
-			pthread_exit(NULL);
+			// result = numGuess;
+			return numGuess;
+			// pthread_exit(NULL);
 		}
 }
 
@@ -85,23 +80,26 @@ void func(int sockfd)
 
 
 	//Change from hardcoded 10
-	pthread_t thread;
+	pthread_t threads[10];
 
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
-		pthread_mutex_lock(&running_mutex);
 		runningThreads ++;
-		pthread_mutex_unlock(&running_mutex);
-		pthread_create(&thread, 0, threadfunc, counter);
+		pthread_create(&threads[x], 0, threadfunc, counter);
 	}
 
-	while (runningThreads > 0)
+	for (int i = 0; i < runningThreads; i++)
 	{
-		
+		void *returnValue;
+		pthread_join(threads[i], &returnValue);
+		if((uint64_t)returnValue != -1){
+			result = (uint64_t) returnValue;
+		}
 	}
+	
 	
 	printf("result: %ld\n", result);
 	result = htobe64(result);
