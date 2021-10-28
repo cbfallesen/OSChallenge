@@ -23,6 +23,11 @@ typedef struct
 	uint8_t p;
 } packet;
 
+struct threadS {
+	uint64_t numGuess;
+	int counter;
+};
+
 packet *Packet1;
 uint64_t result;
 
@@ -81,7 +86,9 @@ void func(int sockfd)
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		pthread_create(&threads[x], NULL, threadfunc, (void *) x);
+		uint64_t *counter = malloc(sizeof(*counter));
+		*counter = x;
+		pthread_create(&threads[x], NULL, threadfunc, counter);
 		printf("result: %ld\n", result);
 	}
 
