@@ -77,7 +77,7 @@ void func(int sockfd)
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
 
-	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 	uint64_t x;
 	// uint64_t result;
