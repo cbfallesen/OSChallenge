@@ -83,15 +83,14 @@ void func(int sockfd)
 
 
 	//Change from hardcoded 10
-	pthread_t threads[10];
+	pthread_t thread;
 
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
-		printf("Counter: %ld\n", &counter);
-		pthread_create(&threads[x], NULL, threadfunc, counter);
+		pthread_create(&thread, 0, threadfunc, counter);
 		printf("result: %ld\n", result);
 	}
 
