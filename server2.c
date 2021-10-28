@@ -90,9 +90,10 @@ void func(int sockfd)
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
 		pthread_create(&thread, 0, threadfunc, counter);
-		printf("result: %ld\n", result);
 	}
 
+	sleep(10);
+	printf("result: %ld\n", result);
 	result = htobe64(result);
 
 	// and send that buffer to client
