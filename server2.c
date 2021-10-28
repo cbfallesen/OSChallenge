@@ -29,9 +29,6 @@ void func(int sockfd)
 	int n;
 	packet *Packet1;
 
-	// infinite loop for chat
-	// for (;;)
-	// {
 	bzero(buff, MAX);
 
 	// read the message from client and copy it in buffer
@@ -52,24 +49,16 @@ void func(int sockfd)
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		// printf("\n%li: ", x);
-		// printf("\n");
-		// for (i = 0; i < 32; i++)
-		// 	printf("%02x", Packet1->hashvalue[i]);
+		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-		unsigned char *calc7 = SHA256((unsigned char *)&x, 8, 0);
-
-		// printf("\n");
 		int equal = 1;
 		for (i = 0; i < 32; i++)
 		{
-			if (calc7[i] != Packet1->hashvalue[i])
+			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
 				break;
 			}
-
-			// printf("%02x", (int)calc7[i]);
 		}
 
 		if (equal == 1)
