@@ -97,7 +97,7 @@ void func(int sockfd)
 
 	while (runningThreads > 0)
 	{
-		sleep(0.1);
+		
 	}
 	
 	printf("result: %ld\n", result);
