@@ -38,14 +38,14 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-				pthread_exit;
+				pthread_exit(NULL);
 			}
 		}
 
 		if (equal == 1)
 		{
 			result = numGuess;
-			pthread_exit;
+			pthread_exit(NULL);
 		}
 }
 
@@ -82,6 +82,7 @@ void func(int sockfd)
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		pthread_create(&threads[x], NULL, threadfunc, (void *) x);
+		printf("result: %ld\n", result);
 	}
 
 	result = htobe64(result);
