@@ -5,12 +5,12 @@
 #include <string.h>
 #include "messages.h"
 
-struct Packet { 
+typedef struct Packet { 
     char hashvalue[32]; 
     uint64_t start; 
     uint64_t end;
     uint8_t p;
-} packet;
+} Packet;
 
 uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
     unsigned char *targetHash = hash;
@@ -19,6 +19,11 @@ uint64_t reverse(uint64_t start, uint64_t end, char *hash) {
         //reverse endian
         i = htole64(i);
         
+        //Client forventer en binary string af hash
+        //Sørg for at parse request rigtigt, står som hints under rapporten
+        //Kan sende 1 request med 1 som det tal der skal hashes
+        //Når det virker kan vi gå videre til at fixe hashe
+
         //Generates a SHA256 hash for the current iteration
         SHA256_CTX shactx;
         static unsigned char digest[SHA256_DIGEST_LENGTH];
@@ -88,19 +93,26 @@ int main( int argc, char *argv[] ) {
     char buffer[49];
     //Start communicating, first read input from client
     bzero(buffer,49);
-    read(newsockfd,buffer,48 );
+    read(newsockfd,buffer, 49);
     
 
     //Input from client
+    Packet packet = {buffer};
+    //Data skal parses rigtigt, vigtigt præcist format følges
     unsigned char *hashArr = buffer;
     uint64_t startR = be64toh(packet.start);
+    printf("%lu", startR);
     uint64_t endR = be64toh(packet.end);
+    printf("%lu", endR);
 
     uint8_t outBuff[8];
     bzero(outBuff, sizeof(outBuff)); 
+    printf("%c", outBuff);
 
     uint64_t ans = reverse(startR, endR, hashArr);
+    printf("%lu", ans);
     uint64_t ansR = htobe64(ans);
+    printf("%lu", ansR);
     memcpy(outBuff, &ansR, (size_t) 8);
     
     //Then write a response
