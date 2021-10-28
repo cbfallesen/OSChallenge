@@ -28,6 +28,7 @@ struct threadS {
 	int counter;
 };
 
+int runningThreads = 0;
 packet *Packet1;
 uint64_t result;
 
@@ -44,6 +45,7 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
+				runningThreads--;
 				pthread_exit(NULL);
 			}
 		}
@@ -51,6 +53,7 @@ void *threadfunc(void *threadid)
 		if (equal == 1)
 		{
 			result = numGuess;
+			runningThreads--;
 			pthread_exit(NULL);
 		}
 }
@@ -89,10 +92,15 @@ void func(int sockfd)
 	{
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
+		runningThreads ++;
 		pthread_create(&thread, 0, threadfunc, counter);
 	}
 
-	sleep(10);
+	while (runningThreads > 0)
+	{
+		sleep(0.1);
+	}
+	
 	printf("result: %ld\n", result);
 	result = htobe64(result);
 
