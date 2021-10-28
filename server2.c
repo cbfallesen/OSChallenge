@@ -29,9 +29,9 @@ uint64_t result;
 void *threadfunc(void *threadid)
 {
 	uint64_t  numGuess = (uint64_t) threadid;
-
+	printf("numGuess: %d\n", numGuess);
 	unsigned char *guess = SHA256((unsigned char *)&numGuess, 8, 0);
-
+	
 		int equal = 1;
 		for (int i = 0; i < 32; i++)
 		{
