@@ -1,3 +1,4 @@
+@@ -1,175 +1,174 @@
 #include <stdio.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -23,16 +24,9 @@ typedef struct
 	uint8_t p;
 } packet;
 
-<<<<<<< HEAD
 int runningThreads = 0;
-=======
-struct threadS {
-	uint64_t numGuess;
-	int counter;
-};
->>>>>>> parent of 1797625 (Update server2.c)
+pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-int runningThreads = 0;
 packet *Packet1;
 uint64_t result;
 
@@ -48,27 +42,20 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-<<<<<<< HEAD
-				return (void*)-1;
-				// pthread_exit(NULL);
-=======
-				runningThreads--;
+				pthread_mutex_lock(&running_mutex);
+				runningThreads --;
+				pthread_mutex_unlock(&running_mutex);
 				pthread_exit(NULL);
->>>>>>> parent of 1797625 (Update server2.c)
 			}
 		}
 
 		if (equal == 1)
 		{
-<<<<<<< HEAD
-			// result = numGuess;
-			return (void* )numGuess;
-			// pthread_exit(NULL);
-=======
 			result = numGuess;
-			runningThreads--;
+			pthread_mutex_lock(&running_mutex);
+			runningThreads --;
+			pthread_mutex_unlock(&running_mutex);
 			pthread_exit(NULL);
->>>>>>> parent of 1797625 (Update server2.c)
 		}
 }
 
@@ -99,30 +86,23 @@ void func(int sockfd)
 
 
 	//Change from hardcoded 10
-	pthread_t threads[10];
+	pthread_t thread;
 
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
+		pthread_mutex_lock(&running_mutex);
 		runningThreads ++;
-<<<<<<< HEAD
-		pthread_create(&threads[x], 0, threadfunc, counter);
-=======
+		pthread_mutex_unlock(&running_mutex);
 		pthread_create(&thread, 0, threadfunc, counter);
->>>>>>> parent of 1797625 (Update server2.c)
 	}
 
-	for (int i = 0; i < runningThreads; i++)
+	while (runningThreads > 0)
 	{
-		void *returnValue;
-		pthread_join(threads[i], &returnValue);
-		if((uint64_t)returnValue != -1){
-			result = (uint64_t) returnValue;
-		}
+		
 	}
-	
 	
 	printf("result: %ld\n", result);
 	result = htobe64(result);
