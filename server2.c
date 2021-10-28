@@ -34,6 +34,7 @@ uint64_t result;
 void *threadfunc(void *threadid)
 {
 	uint64_t  numGuess = *((uint64_t *) threadid);
+	free(threadid);
 	printf("numGuess: %ld\n", numGuess);
 	unsigned char *guess = SHA256((unsigned char *)&numGuess, 8, 0);
 
@@ -43,7 +44,6 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-				free(numGuess);
 				pthread_exit(NULL);
 			}
 		}
@@ -51,7 +51,6 @@ void *threadfunc(void *threadid)
 		if (equal == 1)
 		{
 			result = numGuess;
-			free(numGuess);
 			pthread_exit(NULL);
 		}
 }
