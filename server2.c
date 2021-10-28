@@ -23,8 +23,16 @@ typedef struct
 	uint8_t p;
 } packet;
 
+<<<<<<< HEAD
 int runningThreads = 0;
+=======
+struct threadS {
+	uint64_t numGuess;
+	int counter;
+};
+>>>>>>> parent of 1797625 (Update server2.c)
 
+int runningThreads = 0;
 packet *Packet1;
 uint64_t result;
 
@@ -40,16 +48,27 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
+<<<<<<< HEAD
 				return (void*)-1;
 				// pthread_exit(NULL);
+=======
+				runningThreads--;
+				pthread_exit(NULL);
+>>>>>>> parent of 1797625 (Update server2.c)
 			}
 		}
 
 		if (equal == 1)
 		{
+<<<<<<< HEAD
 			// result = numGuess;
 			return (void* )numGuess;
 			// pthread_exit(NULL);
+=======
+			result = numGuess;
+			runningThreads--;
+			pthread_exit(NULL);
+>>>>>>> parent of 1797625 (Update server2.c)
 		}
 }
 
@@ -88,7 +107,11 @@ void func(int sockfd)
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
 		runningThreads ++;
+<<<<<<< HEAD
 		pthread_create(&threads[x], 0, threadfunc, counter);
+=======
+		pthread_create(&thread, 0, threadfunc, counter);
+>>>>>>> parent of 1797625 (Update server2.c)
 	}
 
 	for (int i = 0; i < runningThreads; i++)
