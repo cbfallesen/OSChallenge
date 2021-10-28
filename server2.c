@@ -40,7 +40,7 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-				return (uint64_t)-1;
+				return (void*)-1;
 				// pthread_exit(NULL);
 			}
 		}
@@ -48,7 +48,7 @@ void *threadfunc(void *threadid)
 		if (equal == 1)
 		{
 			// result = numGuess;
-			return numGuess;
+			return (void* )numGuess;
 			// pthread_exit(NULL);
 		}
 }
