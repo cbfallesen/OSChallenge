@@ -23,12 +23,9 @@ typedef struct
 	uint8_t p;
 } packet;
 
-struct threadS {
-	uint64_t numGuess;
-	int counter;
-};
-
 int runningThreads = 0;
+pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 packet *Packet1;
 uint64_t result;
 
@@ -45,7 +42,9 @@ void *threadfunc(void *threadid)
 			if (guess[i] != Packet1->hashvalue[i])
 			{
 				equal = 0;
-				runningThreads--;
+				pthread_mutex_lock(&running_mutex);
+				runningThreads --;
+				pthread_mutex_unlock(&running_mutex);
 				pthread_exit(NULL);
 			}
 		}
@@ -53,7 +52,9 @@ void *threadfunc(void *threadid)
 		if (equal == 1)
 		{
 			result = numGuess;
-			runningThreads--;
+			pthread_mutex_lock(&running_mutex);
+			runningThreads --;
+			pthread_mutex_unlock(&running_mutex);
 			pthread_exit(NULL);
 		}
 }
@@ -92,7 +93,9 @@ void func(int sockfd)
 	{
 		uint64_t *counter = malloc(sizeof(*counter));
 		*counter = x;
+		pthread_mutex_lock(&running_mutex);
 		runningThreads ++;
+		pthread_mutex_unlock(&running_mutex);
 		pthread_create(&thread, 0, threadfunc, counter);
 	}
 
