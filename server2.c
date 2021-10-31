@@ -101,10 +101,10 @@ void func(int sockfd)
 	uint64_t end = be64toh(Packet1->end);
 	printf("Start: %ld\n", start);
 	printf("End: %ld\n", end);
-	
+
 	if (end - start >= 1000)
 	{
-		uint64_t partitionSize = end - start / MAX_THREADS;
+		uint64_t partitionSize = (end - start)/MAX_THREADS;
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
