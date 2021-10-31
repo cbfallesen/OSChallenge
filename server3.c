@@ -46,7 +46,7 @@ void func(int sockfd)
 	uint64_t x;
 	uint64_t result;
 	result = -1;
-    char hashArray[sizeof(Packet1->hashvalue)][Packet1->end - Packet1->start];
+    char hashArray[sizeof(Packet1->hashvalue)][be64toh(Packet1->end) - be64toh(Packet1->start)];
     int hashCounter = 1;
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
