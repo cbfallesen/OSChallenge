@@ -57,10 +57,10 @@ void func(int sockfd)
         //    *guess = hashArray[x];
         //} else {
             *guess = SHA256((unsigned char *)&x, 8, 0);
-            for (int i = 0; i < sizeof(Packet1->hashvalue); i++) {
-                hashArray[i][x] = guess[i];
-            }
-            hashCounter++;
+            //for (int i = 0; i < sizeof(Packet1->hashvalue); i++) {
+            //    hashArray[i][x] = guess[i];
+            //}
+            //hashCounter++;
         //}
 
 		int equal = 1;
