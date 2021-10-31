@@ -40,7 +40,9 @@ void *threadfunc(void *arguments)
 	struct partitionStruct *partition = arguments;
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
-	
+	printf("Start: %ld\n", start);
+	printf("End: %ld\n", end);
+
 	for (uint64_t i = start; i <= end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
@@ -58,13 +60,12 @@ void *threadfunc(void *arguments)
 			if (equal == 1)
 			{
 				result = i;
+				runningThreads--;
 				pthread_exit(NULL);
 			}
-			pthread_exit(NULL);
 	}
-	
-	
-	
+	runningThreads--;
+	pthread_exit(NULL);
 }
 
 // Function designed for chat between client and server.
@@ -98,18 +99,24 @@ void func(int sockfd)
 
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	
+
 	if (end - start >= 1000)
 	{
-		uint64_t partitionSize = end - start / MAX_THREADS;
+		uint64_t partitionSize = (end - start)/MAX_THREADS;
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
-			partition->start = partitionSize *  i;
-			partition->end = partition->start + partitionSize - 1;
+			partition->start = (partitionSize *  i) + start;
+			partition->end = (partitionSize *  i) + start + partitionSize;
 
-			pthread_create(&thread, NULL, &threadfunc, partition);
-			
+			printf("Start_create: %ld\n", partition->start);
+			printf("End_create: %ld\n", partition->end);
+
+			runningThreads++;
+			pthread_create(&thread, 0, threadfunc, partition);
+		}
+		while (runningThreads > 0)
+		{
 		}
 		
 	} else {
