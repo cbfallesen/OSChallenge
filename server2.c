@@ -43,7 +43,7 @@ void *threadfunc(void *arguments)
 	printf("Start: %ld\n", start);
 	printf("End: %ld\n", end);
 
-	for (uint64_t i = start; i <= end; i++)
+	for (uint64_t i = start; i < end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 
@@ -108,8 +108,8 @@ void func(int sockfd)
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
-			partition->start = partitionSize *  i;
-			partition->end = partitionSize *  i + partitionSize - 1;
+			partition->start = (partitionSize *  i) + start;
+			partition->end = partitionSize *  i + partitionSize;
 
 			runningThreads++;
 			pthread_create(&thread, 0, threadfunc, partition);
