@@ -107,7 +107,7 @@ void func(int sockfd)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
 			partition->start = (partitionSize *  i) + start;
-			partition->end = partitionSize *  i + partitionSize;
+			partition->end = (partitionSize *  i) + start + partitionSize;
 
 			printf("Start_create: %ld\n", partition->start);
 			printf("End_create: %ld\n", partition->end);
