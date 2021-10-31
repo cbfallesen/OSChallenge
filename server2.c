@@ -99,6 +99,8 @@ void func(int sockfd)
 
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
+	printf("Start: %ld\n", start);
+	printf("End: %ld\n", end);
 	
 	if (end - start >= 1000)
 	{
@@ -107,7 +109,7 @@ void func(int sockfd)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
 			partition->start = partitionSize *  i;
-			partition->end = partition->start + partitionSize - 1;
+			partition->end = partitionSize *  i + partitionSize - 1;
 
 			runningThreads++;
 			pthread_create(&thread, 0, threadfunc, partition);
