@@ -47,20 +47,20 @@ void func(int sockfd)
 	uint64_t result;
 	result = -1;
     char hashArray[sizeof(Packet1->hashvalue)][be64toh(Packet1->end) - be64toh(Packet1->start)];
-    int hashCounter = 1;
+    int hashCounter = be64toh(Packet1->start);
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
         unsigned char *guess;
 
-		if (x <= hashCounter) {
-            guess = hashArray[x];
-        } else {
+		if (x >= hashCounter) {
             guess = SHA256((unsigned char *)&x, 8, 0);
             for (int i = 0; i < sizeof(Packet1->hashvalue); i++) {
                 hashArray[i][x] = guess[i];
             }
             hashCounter++;
+        } else {
+            guess = hashArray[x];
         }
 
 		int equal = 1;
