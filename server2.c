@@ -14,6 +14,7 @@
 #define MAX 49
 #define PORT 8080
 #define SA struct sockaddr
+#define MAX_THREADS 10
 
 typedef struct
 {
@@ -23,39 +24,46 @@ typedef struct
 	uint8_t p;
 } packet;
 
+struct partitionStruct
+{
+	uint64_t start;
+	uint64_t end;
+} *partition;
+
 int runningThreads = 0;
-pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 packet *Packet1;
 uint64_t result;
 
-void *threadfunc(void *threadid)
+void *threadfunc(void *arguments)
 {
-	uint64_t  numGuess = *((uint64_t *) threadid);
-	free(threadid);
-	unsigned char *guess = SHA256((unsigned char *)&numGuess, 8, 0);
+	struct partitionStruct *partition = arguments;
+	uint64_t start = partition->start;
+	uint64_t end = partition->end;
+	
+	for (uint64_t i = start; i <= end; i++)
+	{
+		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 
-		int equal = 1;
-		for (int i = 0; i < 32; i++)
-		{
-			if (guess[i] != Packet1->hashvalue[i])
+			int equal = 1;
+			for (i = 0; i < 32; i++)
 			{
-				equal = 0;
-				pthread_mutex_lock(&running_mutex);
-				runningThreads --;
-				pthread_mutex_unlock(&running_mutex);
+				if (guess[i] != Packet1->hashvalue[i])
+				{
+					equal = 0;
+					break;
+				}
+			}
+
+			if (equal == 1)
+			{
+				result = i;
 				pthread_exit(NULL);
 			}
-		}
-
-		if (equal == 1)
-		{
-			result = numGuess;
-			pthread_mutex_lock(&running_mutex);
-			runningThreads --;
-			pthread_mutex_unlock(&running_mutex);
-			pthread_exit(NULL);
-		}
+	}
+	
+	
+	
 }
 
 // Function designed for chat between client and server.
@@ -87,22 +95,47 @@ void func(int sockfd)
 	//Change from hardcoded 10
 	pthread_t thread;
 
-
-	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
-	{
-		uint64_t *counter = malloc(sizeof(*counter));
-		*counter = x;
-		pthread_mutex_lock(&running_mutex);
-		runningThreads ++;
-		pthread_mutex_unlock(&running_mutex);
-		pthread_create(&thread, 0, threadfunc, counter);
-	}
-
-	while (runningThreads > 0)
-	{
-		
-	}
+	uint64_t start = be64toh(Packet1->start);
+	uint64_t end = be64toh(Packet1->end);
 	
+	if (end - start >= 1000)
+	{
+		uint64_t partitionSize = end - start / MAX_THREADS;
+		for (int i = 0; i < MAX_THREADS; i++)
+		{
+			partition = malloc(sizeof(struct partitionStruct) * 1);
+			partition->start = partitionSize *  i;
+			partition->end = partition->start + partitionSize - 1;
+
+			pthread_create(&thread, NULL, &threadfunc, partition);
+			
+			pthread_join(threadfunc, NULL); /* Wait until thread is finished */
+		}
+		
+	} else {
+		for (x = start; x < end; x++)
+		{
+			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+
+			int equal = 1;
+			for (i = 0; i < 32; i++)
+			{
+				if (guess[i] != Packet1->hashvalue[i])
+				{
+					equal = 0;
+					break;
+				}
+			}
+
+			if (equal == 1)
+			{
+				result = x;
+				break;
+			}
+		}
+	}
+		
+
 	printf("result: %ld\n", result);
 	result = htobe64(result);
 
