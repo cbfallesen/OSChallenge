@@ -64,9 +64,6 @@ void *threadfunc(void *arguments)
 			runningThreads--;
 			pthread_exit(NULL);
 	}
-	
-	
-	
 }
 
 // Function designed for chat between client and server.
@@ -111,11 +108,10 @@ void func(int sockfd)
 			partition->end = partition->start + partitionSize - 1;
 
 			runningThreads++;
-			pthread_create(&thread, NULL, &threadfunc, partition);
+			pthread_create(&thread, 0, threadfunc, partition);
 		}
 		while (runningThreads > 0)
 		{
-			sleep(0.0001);
 		}
 		
 	} else {
