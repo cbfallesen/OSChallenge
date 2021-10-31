@@ -58,8 +58,10 @@ void *threadfunc(void *arguments)
 			if (equal == 1)
 			{
 				result = i;
+				runningThreads--;
 				pthread_exit(NULL);
 			}
+			runningThreads--;
 			pthread_exit(NULL);
 	}
 	
@@ -108,8 +110,12 @@ void func(int sockfd)
 			partition->start = partitionSize *  i;
 			partition->end = partition->start + partitionSize - 1;
 
+			runningThreads++;
 			pthread_create(&thread, NULL, &threadfunc, partition);
-			
+		}
+		while (runningThreads > 0)
+		{
+			sleep(0.0001);
 		}
 		
 	} else {
