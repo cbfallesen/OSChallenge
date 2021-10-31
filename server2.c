@@ -40,7 +40,9 @@ void *threadfunc(void *arguments)
 	struct partitionStruct *partition = arguments;
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
-	
+	printf("Start: %ld\n", start);
+	printf("End: %ld\n", end);
+
 	for (uint64_t i = start; i <= end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
