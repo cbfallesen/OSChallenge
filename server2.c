@@ -43,7 +43,7 @@ void *threadfunc(void *arguments)
 	printf("Start: %ld\n", start);
 	printf("End: %ld\n", end);
 
-	for (uint64_t i = start; i < end; i++)
+	for (uint64_t i = start; i <= end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 
@@ -63,9 +63,9 @@ void *threadfunc(void *arguments)
 				runningThreads--;
 				pthread_exit(NULL);
 			}
-			runningThreads--;
-			pthread_exit(NULL);
 	}
+	runningThreads--;
+	pthread_exit(NULL);
 }
 
 // Function designed for chat between client and server.
