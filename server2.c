@@ -60,6 +60,7 @@ void *threadfunc(void *arguments)
 				result = i;
 				pthread_exit(NULL);
 			}
+			pthread_exit(NULL);
 	}
 	
 	
@@ -109,7 +110,6 @@ void func(int sockfd)
 
 			pthread_create(&thread, NULL, &threadfunc, partition);
 			
-			pthread_join(threadfunc, NULL); /* Wait until thread is finished */
 		}
 		
 	} else {
