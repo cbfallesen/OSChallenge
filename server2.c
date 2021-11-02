@@ -41,10 +41,12 @@ void *threadfunc(void *arguments)
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
 
+	printf("Thread number: %d\n", runningThreads);
+	runningThreads++;
+
 	for (uint64_t i = start; i <= end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
-
 			int equal = 1;
 			for (i = 0; i < 32; i++)
 			{
@@ -84,7 +86,6 @@ void func(int sockfd)
 
 	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
-	uint64_t x;
 	// uint64_t result;
 	result = -1;
 
@@ -106,7 +107,6 @@ void func(int sockfd)
 			partition->end = (partitionSize *  i) + start + partitionSize;
 
 
-			runningThreads++;
 			pthread_create(&threads[i], 0, threadfunc, partition);
 		}
 		
@@ -118,6 +118,7 @@ void func(int sockfd)
 		
 		
 	} else {
+		uint64_t x;
 		for (x = start; x < end; x++)
 		{
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
