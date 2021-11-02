@@ -45,10 +45,10 @@ void *threadfunc(void *arguments)
 	printf("Thread number: %d\n", runningThreads);
 	runningThreads++;
 	// print buffer which contains the client contents
-	printf("\n\n");
-	int i;
-	for (i = 0; i < 32; i++)
-		printf("%02x", partition->localHash[i]);
+	// printf("\n\n");
+	// for (int i = 0; i < 32; i++)
+	// 	printf("%02x", partition->localHash[i]);
+	// printf("\n");
 
 	for (uint64_t i = start; i <= end; i++)
 	{
@@ -116,6 +116,17 @@ void func(int sockfd)
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
 
+			//compares the original to the copied hash. These should be identical
+			printf("\n\n");
+			for (int k = 0; k < 32; k++)
+			{
+				printf("%02x", Packet1->hashvalue[i]);
+			}
+			printf("\n");
+			for (int k = 0; k < 32; k++)
+			{
+				printf("%02x", partition->localHash[i]);
+			}
 
 			pthread_create(&threads[i], 0, threadfunc, partition);
 		}
