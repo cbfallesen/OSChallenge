@@ -31,7 +31,7 @@ struct partitionStruct
 	uint64_t end;
 } *partition;
 
-// int runningThreads = 0;
+int runningThreads = 0;
 
 packet *Packet1;
 uint64_t result;
@@ -42,8 +42,13 @@ void *threadfunc(void *arguments)
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
 
-	// printf("Thread number: %d\n", runningThreads);
-	// runningThreads++;
+	printf("Thread number: %d\n", runningThreads);
+	runningThreads++;
+	// print buffer which contains the client contents
+	printf("\n\n");
+	int i;
+	for (i = 0; i < 32; i++)
+		printf("%02x", partition->localHash[i]);
 
 	for (uint64_t i = start; i <= end; i++)
 	{
@@ -61,7 +66,7 @@ void *threadfunc(void *arguments)
 			if (equal == 1)
 			{
 				result = i;
-				// runningThreads--;
+				runningThreads--;
 			}
 	}
 }
@@ -79,11 +84,11 @@ void func(int sockfd)
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
 
-	// print buffer which contains the client contents
-	printf("\n\n");
-	int i;
-	for (i = 0; i < 32; i++)
-		printf("%02x", Packet1->hashvalue[i]);
+	// // print buffer which contains the client contents
+	// printf("\n\n");
+	// int i;
+	// for (i = 0; i < 32; i++)
+	// 	printf("%02x", Packet1->hashvalue[i]);
 
 	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
@@ -129,7 +134,7 @@ void func(int sockfd)
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
 			int equal = 1;
-			for (i = 0; i < 32; i++)
+			for (int i = 0; i < 32; i++)
 			{
 				if (guess[i] != Packet1->hashvalue[i])
 				{
