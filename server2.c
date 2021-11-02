@@ -31,7 +31,7 @@ struct partitionStruct
 	uint64_t end;
 } *partition;
 
-int runningThreads = 0;
+// int runningThreads = 0;
 
 packet *Packet1;
 uint64_t result;
@@ -42,8 +42,8 @@ void *threadfunc(void *arguments)
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
 
-	printf("Thread number: %d\n", runningThreads);
-	runningThreads++;
+	// printf("Thread number: %d\n", runningThreads);
+	// runningThreads++;
 
 	for (uint64_t i = start; i <= end; i++)
 	{
@@ -61,7 +61,7 @@ void *threadfunc(void *arguments)
 			if (equal == 1)
 			{
 				result = i;
-				runningThreads--;
+				// runningThreads--;
 			}
 	}
 }
