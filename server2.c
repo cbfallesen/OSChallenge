@@ -39,7 +39,6 @@ uint64_t result;
 void *threadfunc(void *arguments)
 {
 	struct partitionStruct *partition = arguments;
-	uint8_t hash[32] = partition->localHash;
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
 
@@ -52,7 +51,7 @@ void *threadfunc(void *arguments)
 			int equal = 1;
 			for (i = 0; i < 32; i++)
 			{
-				if (guess[i] != hash[i])
+				if (guess[i] != partition->localHash[i])
 				{
 					equal = 0;
 					break;
