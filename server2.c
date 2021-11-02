@@ -128,7 +128,7 @@ void func(int sockfd)
 				printf("%02x", partition->localHash[i]);
 			}
 
-			pthread_create(&threads[i], 0, threadfunc, partition);
+			// pthread_create(&threads[i], 0, threadfunc, partition);
 		}
 		
 		for (int i = 0; i < MAX_THREADS; i++)
