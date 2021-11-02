@@ -110,7 +110,7 @@ void func(int sockfd)
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
-			printf("Size: %d\n", sizeof(struct partitionStruct));
+			printf("Size: %ld\n", sizeof(struct partitionStruct));
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
 			memcpy(partition->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
