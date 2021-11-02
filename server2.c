@@ -109,8 +109,8 @@ void func(int sockfd)
 		uint64_t partitionSize = (end - start)/MAX_THREADS;
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
-			partition = malloc(sizeof(struct partitionStruct) * 1);
-			printf("Size: %ld\n", sizeof(struct partitionStruct));
+			partition = malloc(sizeof(uint64_t) * 2 + sizeof(uint8_t) * 32);
+			printf("Size: %d\n", sizeof(struct partitionStruct));
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
 			memcpy(partition->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
