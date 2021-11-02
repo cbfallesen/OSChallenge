@@ -59,11 +59,8 @@ void *threadfunc(void *arguments)
 			{
 				result = i;
 				runningThreads--;
-				pthread_exit(NULL);
 			}
 	}
-	runningThreads--;
-	pthread_exit(NULL);
 }
 
 // Function designed for chat between client and server.
@@ -93,10 +90,11 @@ void func(int sockfd)
 
 
 	//Change from hardcoded 10
-	pthread_t thread;
 
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
+
+	pthread_t threads[MAX_THREADS];
 
 	if (end - start >= 1000)
 	{
@@ -109,11 +107,15 @@ void func(int sockfd)
 
 
 			runningThreads++;
-			pthread_create(&thread, 0, threadfunc, partition);
+			pthread_create(&threads[i], 0, threadfunc, partition);
 		}
-		while (runningThreads > 0)
+		
+		for (int i = 0; i < MAX_THREADS; i++)
 		{
+			pthread_join(threads[i], NULL);
 		}
+		printf("Final result from threads: %ld\n", result);
+		
 		
 	} else {
 		for (x = start; x < end; x++)
