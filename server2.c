@@ -26,6 +26,7 @@ typedef struct
 
 struct partitionStruct
 {
+	uint8_t localHash[32];
 	uint64_t start;
 	uint64_t end;
 } *partition;
@@ -38,6 +39,7 @@ uint64_t result;
 void *threadfunc(void *arguments)
 {
 	struct partitionStruct *partition = arguments;
+	uint8_t hash[32] = partition->localHash;
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
 
@@ -50,7 +52,7 @@ void *threadfunc(void *arguments)
 			int equal = 1;
 			for (i = 0; i < 32; i++)
 			{
-				if (guess[i] != Packet1->hashvalue[i])
+				if (guess[i] != hash[i])
 				{
 					equal = 0;
 					break;
@@ -103,6 +105,10 @@ void func(int sockfd)
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
+			for	(int j = 0; j < 32; j++)
+			{
+				partition->localHash[i] = Packet1->hashvalue[i];
+			}
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
 
