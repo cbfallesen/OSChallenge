@@ -40,8 +40,6 @@ void *threadfunc(void *arguments)
 	struct partitionStruct *partition = arguments;
 	uint64_t start = partition->start;
 	uint64_t end = partition->end;
-	printf("Start: %ld\n", start);
-	printf("End: %ld\n", end);
 
 	for (uint64_t i = start; i <= end; i++)
 	{
@@ -87,7 +85,7 @@ void func(int sockfd)
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
 
-	printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 	uint64_t x;
 	// uint64_t result;
@@ -109,15 +107,12 @@ void func(int sockfd)
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
 
-			printf("Start_create: %ld\n", partition->start);
-			printf("End_create: %ld\n", partition->end);
 
 			runningThreads++;
 			pthread_create(&thread, 0, threadfunc, partition);
 		}
 		while (runningThreads > 0)
 		{
-			sleep(0.1);
 		}
 		
 	} else {
