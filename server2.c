@@ -117,6 +117,7 @@ void func(int sockfd)
 		}
 		while (runningThreads > 0)
 		{
+			sleep(0.1);
 		}
 		
 	} else {
