@@ -110,26 +110,17 @@ void func(int sockfd)
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
 			partition = malloc(sizeof(struct partitionStruct) * 1);
-			// for	(int j = 0; j < 32; j++)
-			// {
-			// 	partition->localHash[i] = Packet1->hashvalue[i];
-			// }
 			partition->start = (partitionSize *  i) + start;
 			partition->end = (partitionSize *  i) + start + partitionSize;
-
+			memcpy(partition->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
 			//compares the original to the copied hash. These should be identical
-			printf("\n\n");
-			for (int k = 0; k < 32; k++)
-			{
-				printf("%02x", Packet1->hashvalue[i]);
-			}
 			printf("\n");
 			// for (int k = 0; k < 32; k++)
 			// {
 			// 	printf("%02x", partition->localHash[i]);
 			// }
 
-			// pthread_create(&threads[i], 0, threadfunc, partition);
+			pthread_create(&threads[i], 0, threadfunc, partition);
 		}
 		
 		for (int i = 0; i < MAX_THREADS; i++)
