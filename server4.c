@@ -40,7 +40,7 @@ uint64_t result, start, end;
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	printf("\n\n");
 	for (int i = 0; i < 32; i++)
-		printf("%02x", target[i]);
+		printf("%02x", guess[i]);
 	printf("\n\n");
 	for (int i = 0; i < 32; i++)
 	{
