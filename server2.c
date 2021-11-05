@@ -14,7 +14,7 @@
 #define MAX 49
 #define PORT 8080
 #define SA struct sockaddr
-#define MAX_THREADS 10
+#define MAX_THREADS 5
 
 typedef struct
 {
@@ -24,12 +24,12 @@ typedef struct
 	uint8_t p;
 } packet;
 
-struct partitionStruct
+typedef struct
 {
 	uint8_t localHash[32];
 	uint64_t start;
 	uint64_t end;
-} *partition;
+} threadStruct;
 
 int runningThreads = 0;
 
@@ -38,9 +38,9 @@ uint64_t result;
 
 void *threadfunc(void *arguments)
 {
-	struct partitionStruct *partition = arguments;
-	uint64_t start = partition->start;
-	uint64_t end = partition->end;
+	threadStruct *threadStruct = arguments;
+	uint64_t start = threadStruct->start;
+	uint64_t end = threadStruct->end;
 
 	printf("Thread number: %d\n", runningThreads);
 	runningThreads++;
@@ -56,7 +56,7 @@ void *threadfunc(void *arguments)
 			int equal = 1;
 			for (i = 0; i < 32; i++)
 			{
-				if (guess[i] != partition->localHash[i])
+				if (guess[i] != threadStruct->localHash[i])
 				{
 					equal = 0;
 					break;
@@ -109,18 +109,18 @@ void func(int sockfd)
 		uint64_t partitionSize = (end - start)/MAX_THREADS;
 		for (int i = 0; i < MAX_THREADS; i++)
 		{
-			partition = malloc(sizeof(uint64_t) * 2 + sizeof(uint8_t) * 32);
-			partition->start = (partitionSize *  i) + start;
-			partition->end = (partitionSize *  i) + start + partitionSize;
-			memcpy(partition->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
+			threadStruct *params = malloc(sizeof(uint64_t) * 2 + sizeof(uint8_t) * 32);
+			params->start = (partitionSize *  i) + start;
+			params->end = (partitionSize *  i) + start + partitionSize;
+			memcpy(params->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
 			//compares the original to the copied hash. These should be identical
-			printf("\n");
-			for (int k = 0; k < 32; k++)
-			{
-				printf("%02x", partition->localHash[i]);
-			}
+			// printf("\n");
+			// for (int k = 0; k < 32; k++)
+			// {
+			// 	printf("%02x", params->localHash[i]);
+			// }
 
-			pthread_create(&threads[i], 0, threadfunc, partition);
+			pthread_create(&threads[i], 0, threadfunc, params);
 		}
 		
 		for (int i = 0; i < MAX_THREADS; i++)
