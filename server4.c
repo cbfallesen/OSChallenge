@@ -58,7 +58,7 @@ void *threadFunction(void *arguments)
 	for (int i = 0; i < 32; i++)
 		printf("%02x", args->localHash[i]);
 	printf("\n");
-	for (uint64_t i = args->start; i <= args->end; i++)
+	for (uint64_t i = args->start; i < args->end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
