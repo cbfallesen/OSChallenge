@@ -35,7 +35,7 @@ typedef struct
 
 packet *Packet1;
 uint64_t result, start, end;
-
+bool resultLock = false;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	printf("\n\n");
@@ -50,7 +50,11 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 		}
 	}
 	printf("Found result");
-	return true;
+	if(!resultLock) {
+		resultLock = true;
+		return true;
+	}
+	return false;
 }
 
 void *threadFunction(void *arguments)
