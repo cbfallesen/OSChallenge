@@ -49,6 +49,7 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 			return false;
 		}
 	}
+	printf("Found result");
 	return true;
 }
 
