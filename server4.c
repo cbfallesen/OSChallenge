@@ -32,7 +32,7 @@ typedef struct
 	uint64_t end;
 } threadStruct;
 
-uint64_t start, end;
+uint64_t result, start, end;
 bool resultLock;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -65,7 +65,7 @@ void *threadFunction(void *arguments)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
-			return (void *) i;
+			result = i;
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
 		}
@@ -96,7 +96,7 @@ void func(int sockfd)
 
 	pthread_t threads[MAX_THREADS];
 
-	//https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/ThreadArgs.html
+
 	uint64_t partitionSize = (end - start)/MAX_THREADS;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
@@ -108,18 +108,13 @@ void func(int sockfd)
 		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
 	
-	struct results *results[MAX_THREADS];
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_join(threads[i], (void **)&results[i]);
-		free(results[i]);
+		pthread_join(threads[i], NULL);
 	}
 	
-	for (int i = 0; i < MAX_THREADS; i++)
-		printf("%ld\n", results[i]);
 	
-	
-	uint64_t result = htobe64((uint64_t) results[1]);
+	result = htobe64(result);
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
