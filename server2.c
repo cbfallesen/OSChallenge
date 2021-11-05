@@ -113,12 +113,12 @@ void func(int sockfd)
 			params->start = (partitionSize *  i) + start;
 			params->end = (partitionSize *  i) + start + partitionSize;
 			memcpy(params->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
-			//compares the original to the copied hash. These should be identical
-			// printf("\n");
-			// for (int k = 0; k < 32; k++)
-			// {
-			// 	printf("%02x", params->localHash[i]);
-			// }
+			// compares the original to the copied hash. These should be identical
+			printf("\n");
+			for (int k = 0; k < 32; k++)
+			{
+				printf("%02x", params->localHash[i]);
+			}
 
 			pthread_create(&threads[i], 0, threadfunc, params);
 		}
