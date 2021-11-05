@@ -38,10 +38,6 @@ uint64_t result, start, end;
 bool resultLock = false;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
-	printf("\n\n");
-	for (int i = 0; i < 32; i++)
-		printf("%02x", guess[i]);
-	printf("\n\n");
 	for (int i = 0; i < 32; i++)
 	{
 		if (guess[i] != target[i])
@@ -49,7 +45,7 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 			return false;
 		}
 	}
-	printf("Found result");
+	// printf("Found result");
 	if(!resultLock) {
 		resultLock = true;
 		return true;
@@ -60,9 +56,9 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 void *threadFunction(void *arguments)
 {
 	threadStruct *args = arguments;
-	printf("New thread.\n");
-	printf("Start: %ld\n", args->start);
-	printf("End: %ld\n\n", args->end);
+	// printf("New thread.\n");
+	// printf("Start: %ld\n", args->start);
+	// printf("End: %ld\n\n", args->end);
 	// printf("Hash: ");
 	// for (int i = 0; i < 32; i++)
 	// 	printf("%02x", args->localHash[i]);
