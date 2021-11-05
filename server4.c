@@ -96,7 +96,7 @@ void func(int sockfd)
 
 	pthread_t threads[MAX_THREADS];
 
-
+	//https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/ThreadArgs.html
 	uint64_t partitionSize = (end - start)/MAX_THREADS;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
@@ -107,11 +107,16 @@ void func(int sockfd)
 		
 		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
-	void *threadResult;
+	
+	struct results *results[MAX_THREADS];
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_join(threads[i], &threadResult);
+		pthread_join(threads[i], (void **)&results[i]);
+		free(results[i]);
 	}
+	
+	for (int i = 0; i < MAX_THREADS; i++)
+		printf("%ld\n", results[i]);
 	
 	
 	uint64_t result = htobe64((uint64_t) threadResult);
