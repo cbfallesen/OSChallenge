@@ -35,7 +35,7 @@ typedef struct
 
 packet *Packet1;
 uint64_t result, start, end;
-bool resultLock = false;
+bool resultLock;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
@@ -81,7 +81,7 @@ void func(int sockfd)
 {
 	char buff[MAX];
 	bzero(buff, MAX);
-
+	resultLock = false;
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
