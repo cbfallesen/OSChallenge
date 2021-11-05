@@ -57,17 +57,17 @@ void *threadFunction(void *arguments)
 	printf("Hash: ");
 	for (int i = 0; i < 32; i++)
 		printf("%02x", args->localHash[i]);
-	
+	printf("\n");
 	for (uint64_t i = args->start; i <= args->end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
 			result = i;
-			printf("Result was found: %ld\n\n", result);
+			printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
 		}
 	}
-	printf("Result was not found: %ld\n\n", result);
+	printf("Result was not found: %ld\n\n\n", result);
 	pthread_exit(NULL);
 }
 
