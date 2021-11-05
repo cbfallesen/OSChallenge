@@ -51,23 +51,23 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 void *threadFunction(void *arguments)
 {
 	threadStruct *args = arguments;
-	// printf("New thread.\n");
-	// printf("Start: %ld\n", args->start);
-	// printf("End: %ld\n", args->end);
-	// printf("Hash: ");
-	// for (int i = 0; i < 32; i++)
-	// 	printf("%02x", args->localHash[i]);
-	// printf("\n\n");
+	printf("New thread.\n");
+	printf("Start: %ld\n", args->start);
+	printf("End: %ld\n", args->end);
+	printf("Hash: ");
+	for (int i = 0; i < 32; i++)
+		printf("%02x", args->localHash[i]);
+	
 	for (uint64_t i = args->start; i <= args->end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
 			result = i;
-			printf("Result was found: %ld\n", result);
+			printf("Result was found: %ld\n\n", result);
 			pthread_exit(NULL);
 		}
 	}
-	printf("Result was not found: %ld\n", result);
+	printf("Result was not found: %ld\n\n", result);
 	pthread_exit(NULL);
 }
 
