@@ -107,10 +107,10 @@ void func(int sockfd)
 		
 		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
-	
+	void *result;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(threads[i], &result);
 	}
 	
 	
