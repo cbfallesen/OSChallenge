@@ -114,7 +114,7 @@ void func(int sockfd)
 	}
 	
 	
-	result = htobe64(result);
+	result = htobe64((uint64_t)result);
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
