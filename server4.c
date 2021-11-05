@@ -32,8 +32,6 @@ typedef struct
 	uint64_t end;
 } threadStruct;
 
-
-packet *Packet1;
 uint64_t result, start, end;
 bool resultLock;
 
@@ -84,7 +82,7 @@ void func(int sockfd)
 	resultLock = false;
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
-	Packet1 = (packet *)buff;
+	packet *Packet1 = (packet *)buff;
 	
 	start = be64toh(Packet1->start);
 	end = be64toh(Packet1->end);
