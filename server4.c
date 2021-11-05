@@ -32,7 +32,7 @@ typedef struct
 	uint64_t end;
 } threadStruct;
 
-uint64_t result, start, end;
+uint64_t start, end;
 bool resultLock;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -65,7 +65,7 @@ void *threadFunction(void *arguments)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
-			result = i;
+			return (void *) i;
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
 		}
