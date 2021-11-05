@@ -107,14 +107,14 @@ void func(int sockfd)
 		
 		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
-	void *result;
+	void *threadResult;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_join(threads[i], &result);
+		pthread_join(threads[i], &threadResult);
 	}
 	
 	
-	result = htobe64((uint64_t)result);
+	uint64_t result = htobe64((uint64_t) threadResult);
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
