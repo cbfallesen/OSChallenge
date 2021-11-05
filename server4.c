@@ -34,7 +34,8 @@ typedef struct
 
 
 packet *Packet1;
-uint64_t result;
+uint64_t result, start, end;
+
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
@@ -47,9 +48,16 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 	return true;
 }
 
-void *threadfunc(void *arguments)
+void *threadFunction(void *arguments)
 {
-	
+	threadStruct *args = arguments;
+	printf("New thread.\n");
+	printf("Start: %ld\n", args->start);
+	printf("End: %ld\n", args->end);
+	printf("Hash: ");
+	for (int i = 0; i < 32; i++)
+		printf("%02x", args->localHash[i]);
+	printf("\n\n");
 }
 
 // Function designed for chat between client and server.
@@ -61,6 +69,9 @@ void func(int sockfd)
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
+	
+	start = be64toh(Packet1->start);
+	end = be64toh(Packet1->end);
 
 	// // print buffer which contains the client contents
 	printf("\n\n");
@@ -71,9 +82,16 @@ void func(int sockfd)
 
 	pthread_t threads[MAX_THREADS];
 
+
+	uint64_t partitionSize = (end - start)/MAX_THREADS;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_create;
+		threadStruct *args = malloc(sizeof (threadStruct));
+		args->start = (partitionSize *  i) + start;
+		args->end = (partitionSize *  i) + start + partitionSize;
+		memcpy(args->localHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
+		
+		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
 	
 	for (int i = 0; i < MAX_THREADS; i++)
