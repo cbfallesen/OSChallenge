@@ -117,7 +117,7 @@ void func(int sockfd)
 			printf("\n");
 			for (int k = 0; k < 32; k++)
 			{
-				printf("%02x", params->localHash[i]);
+				printf("%02x", &params->localHash[i]);
 			}
 
 			pthread_create(&threads[i], 0, threadfunc, params);
