@@ -119,7 +119,7 @@ void func(int sockfd)
 		printf("%ld\n", results[i]);
 	
 	
-	uint64_t result = htobe64((uint64_t) threadResult);
+	uint64_t result = htobe64((uint64_t) results[1]);
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
