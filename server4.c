@@ -40,7 +40,7 @@ uint64_t result, start, end;
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
 	{
-		if (guess[i] != Packet1->hashvalue[i])
+		if (guess[i] != target[i])
 		{
 			return false;
 		}
