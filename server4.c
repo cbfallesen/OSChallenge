@@ -173,7 +173,6 @@ int main()
 		len = sizeof(cli);
 
 		// Accept the data packet from client and verification
-		pthread_mutex_lock(&connectionMutex);
 		connfd = accept(sockfd, (SA *)&cli, &len);
 		if (connfd < 0)
 		{
@@ -184,10 +183,11 @@ int main()
 			printf("server accept the client...\n");
 
 		// Function for chatting between client and server
+		pthread_mutex_lock(&connectionMutex);
 		func(connfd);
 		pthread_mutex_unlock(&connectionMutex);
 	}
-	pthread_mutexattr_destroy(&connectionMutex);
+	pthread_mutex_destroy(&connectionMutex);
 	// After chatting close the socket
 	close(sockfd);
 }
