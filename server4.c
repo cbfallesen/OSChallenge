@@ -112,6 +112,7 @@ void func(int sockfd)
 		memcpy(args->localHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 		
 		pthread_create(&threads[i], NULL, threadFunction, args);
+		free(args);
 	}
 	
 	for (int i = 0; i < MAX_THREADS; i++)
