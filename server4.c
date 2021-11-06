@@ -36,6 +36,7 @@ uint64_t result;
 
 pthread_mutex_t hashMutex;
 pthread_mutex_t resultMutex;
+pthread_mutex_t connectionMutex;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	pthread_mutex_lock(&hashMutex);
@@ -158,6 +159,7 @@ int main()
 	else
 		printf("Socket successfully binded..\n");
 
+	pthread_mutex_init(&connectionMutex, NULL);
 	for (;;)
 	{
 		// Now server is ready to listen and verification
@@ -171,6 +173,7 @@ int main()
 		len = sizeof(cli);
 
 		// Accept the data packet from client and verification
+		pthread_mutex_lock(&connectionMutex);
 		connfd = accept(sockfd, (SA *)&cli, &len);
 		if (connfd < 0)
 		{
@@ -182,8 +185,9 @@ int main()
 
 		// Function for chatting between client and server
 		func(connfd);
+		pthread_mutex_unlock(&connectionMutex);
 	}
-
+	pthread_mutexattr_destroy(&connectionMutex);
 	// After chatting close the socket
 	close(sockfd);
 }
