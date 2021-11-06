@@ -57,19 +57,19 @@ void *threadFunction(void *arguments)
 	// for (int i = 0; i < 32; i++)
 	// 	printf("%02x", args->localHash[i]);
 	// printf("\n");
+	uint64_t answer = -1;
 	for (uint64_t i = args->start; i < args->end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
 			if(i >= args->start && i <= args->end) {
-				result = i;
+				return (void *) i;
 			}
 			// printf("Result was found: %ld\n\n\n", result);
-			pthread_exit(NULL);
 		}
 	}
 	// printf("Result was not found: %ld\n\n\n", result);
-	pthread_exit(NULL);
+	return (void *) answer;
 }
 
 // Function designed for chat between client and server.
@@ -92,7 +92,7 @@ void func(int sockfd)
 
 
 	pthread_t threads[MAX_THREADS];
-
+	uint64_t answers[MAX_THREADS];
 
 	uint64_t partitionSize = (end - start)/MAX_THREADS;
 	for (int i = 0; i < MAX_THREADS; i++)
@@ -107,7 +107,14 @@ void func(int sockfd)
 	
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
-		pthread_join(threads[i], NULL);
+		void *answer;
+		pthread_join(threads[i], &answer);
+		answers[i] = (uint64_t) answer;
+	}
+	
+	for (int i = 0; i < MAX_THREADS; i++)
+	{
+		printf("Answer %d : %ld\n", i, answers[i]);
 	}
 	
 	
