@@ -162,7 +162,6 @@ int main()
 	pthread_mutex_init(&connectionMutex, NULL);
 	for (;;)
 	{
-		pthread_mutex_lock(&connectionMutex);
 		// Now server is ready to listen and verification
 		if ((listen(sockfd, 5)) != 0)
 		{
@@ -185,7 +184,6 @@ int main()
 
 		// Function for chatting between client and server
 		func(connfd);
-		pthread_mutex_unlock(&connectionMutex);
 	}
 	pthread_mutex_destroy(&connectionMutex);
 	// After chatting close the socket
