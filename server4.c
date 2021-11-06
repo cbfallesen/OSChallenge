@@ -32,23 +32,24 @@ typedef struct
 	uint64_t end;
 } threadStruct;
 
-uint64_t result, start, end;
-bool resultLock;
+uint64_t result;
+
+pthread_mutex_t hashMutex;
+pthread_mutex_t resultMutex;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
+	pthread_mutex_lock(&hashMutex);
 	for (int i = 0; i < 32; i++)
 	{
 		if (guess[i] != target[i])
 		{
+			pthread_mutex_unlock(&hashMutex);
 			return false;
 		}
 	}
+	pthread_mutex_unlock(&hashMutex);
 	// printf("Found result");
-	if(!resultLock) {
-		resultLock = true;
-		return true;
-	}
-	return false;
+	return true;
 }
 
 void *threadFunction(void *arguments)
@@ -65,7 +66,9 @@ void *threadFunction(void *arguments)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
+			pthread_mutex_lock(&resultMutex);
 			result = i;
+			pthread_mutex_unlock(&resultMutex);
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
 		}
@@ -79,19 +82,21 @@ void func(int sockfd)
 {
 	char buff[MAX];
 	bzero(buff, MAX);
-	resultLock = false;
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 	packet *Packet1 = (packet *)buff;
 	
-	start = be64toh(Packet1->start);
-	end = be64toh(Packet1->end);
+	uint64_t start = be64toh(Packet1->start);
+	uint64_t end = be64toh(Packet1->end);
+
+	pthread_mutex_init(&hashMutex, NULL);
+	pthread_mutex_init(&resultMutex, NULL);
 
 	// // print buffer which contains the client contents
-	printf("\n\n");
-	for (int i = 0; i < 32; i++)
-		printf("%02x", Packet1->hashvalue[i]);
-	printf("\n\n");
+	// printf("\n\n");
+	// for (int i = 0; i < 32; i++)
+	// 	printf("%02x", Packet1->hashvalue[i]);
+	// printf("\n\n");
 
 
 	pthread_t threads[MAX_THREADS];
@@ -116,6 +121,8 @@ void func(int sockfd)
 	
 	result = htobe64(result);
 
+	pthread_mutex_destroy(&resultMutex);
+	pthread_mutex_destroy(&hashMutex);
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
 }
