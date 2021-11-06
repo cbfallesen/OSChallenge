@@ -33,6 +33,7 @@ typedef struct
 } threadStruct;
 
 uint64_t result;
+uint64_t resultP;
 
 pthread_mutex_t hashMutex;
 pthread_mutex_t resultMutex;
@@ -69,7 +70,7 @@ void *threadFunction(void *arguments)
 		if(compareHashes(guess, args->localHash)){
 			pthread_mutex_lock(&resultMutex);
 			if(i >= args->start && i <= args->end) {
-				result = i;
+				resultP = i;
 			}
 			pthread_mutex_unlock(&resultMutex);
 			// printf("Result was found: %ld\n\n\n", result);
@@ -91,7 +92,7 @@ void func(int sockfd)
 	
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-
+	resultP = malloc(sizeof(uint64_t));
 	pthread_mutex_init(&hashMutex, NULL);
 	pthread_mutex_init(&resultMutex, NULL);
 
