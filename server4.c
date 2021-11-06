@@ -33,7 +33,7 @@ typedef struct
 } threadStruct;
 
 uint64_t result;
-uint64_t resultP;
+uint64_t *resultP;
 
 pthread_mutex_t hashMutex;
 pthread_mutex_t resultMutex;
