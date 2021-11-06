@@ -62,7 +62,7 @@ void *threadFunction(void *arguments)
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
 			if(i >= args->start && i <= args->end) {
-				resultP = &i;
+				result = i;
 			}
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
@@ -111,7 +111,7 @@ void func(int sockfd)
 	}
 	
 	
-	result = htobe64(*resultP);
+	result = htobe64(result);
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
 }
