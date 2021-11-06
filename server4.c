@@ -110,6 +110,9 @@ void func(int sockfd)
 		void *answer;
 		pthread_join(threads[i], &answer);
 		answers[i] = (uint64_t) answer;
+		if(answers[i] != -1) {
+			result = answers[i];
+		}
 	}
 	
 	for (int i = 0; i < MAX_THREADS; i++)
