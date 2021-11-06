@@ -114,6 +114,9 @@ void func(int sockfd)
 			result = answers[i];
 		}
 	}
+	if(result == -1) {
+		func(sockfd);
+	}
 	
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
