@@ -33,23 +33,16 @@ typedef struct
 } threadStruct;
 
 uint64_t result;
-uint64_t *resultP;
 
-pthread_mutex_t hashMutex;
-pthread_mutex_t resultMutex;
-pthread_mutex_t connectionMutex;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
-	pthread_mutex_lock(&hashMutex);
 	for (int i = 0; i < 32; i++)
 	{
 		if (guess[i] != target[i])
 		{
-			pthread_mutex_unlock(&hashMutex);
 			return false;
 		}
 	}
-	pthread_mutex_unlock(&hashMutex);
 	// printf("Found result");
 	return true;
 }
@@ -68,11 +61,9 @@ void *threadFunction(void *arguments)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
-			pthread_mutex_lock(&resultMutex);
 			if(i >= args->start && i <= args->end) {
 				resultP = &i;
 			}
-			pthread_mutex_unlock(&resultMutex);
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
 		}
@@ -92,9 +83,6 @@ void func(int sockfd)
 	
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	resultP = malloc(sizeof(uint64_t));
-	pthread_mutex_init(&hashMutex, NULL);
-	pthread_mutex_init(&resultMutex, NULL);
 
 	// // print buffer which contains the client contents
 	// printf("\n\n");
@@ -124,11 +112,8 @@ void func(int sockfd)
 	
 	
 	result = htobe64(*resultP);
-	pthread_mutex_destroy(&resultMutex);
-	pthread_mutex_destroy(&hashMutex);
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
-	free(resultP);
 }
 
 // Driver function
@@ -162,7 +147,6 @@ int main()
 	else
 		printf("Socket successfully binded..\n");
 
-	pthread_mutex_init(&connectionMutex, NULL);
 	for (;;)
 	{
 		// Now server is ready to listen and verification
@@ -188,7 +172,6 @@ int main()
 		// Function for chatting between client and server
 		func(connfd);
 	}
-	pthread_mutex_destroy(&connectionMutex);
 	// After chatting close the socket
 	close(sockfd);
 }
