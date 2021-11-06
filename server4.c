@@ -162,6 +162,7 @@ int main()
 	pthread_mutex_init(&connectionMutex, NULL);
 	for (;;)
 	{
+		pthread_mutex_lock(&connectionMutex);
 		// Now server is ready to listen and verification
 		if ((listen(sockfd, 5)) != 0)
 		{
@@ -183,7 +184,6 @@ int main()
 			printf("server accept the client...\n");
 
 		// Function for chatting between client and server
-		pthread_mutex_lock(&connectionMutex);
 		func(connfd);
 		pthread_mutex_unlock(&connectionMutex);
 	}
