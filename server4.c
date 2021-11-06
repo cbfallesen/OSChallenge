@@ -123,7 +123,7 @@ void func(int sockfd)
 	}
 	
 	
-	result = htobe64(result);
+	result = htobe64(resultP);
 	pthread_mutex_destroy(&resultMutex);
 	pthread_mutex_destroy(&hashMutex);
 	// and send that buffer to client
