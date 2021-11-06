@@ -70,7 +70,7 @@ void *threadFunction(void *arguments)
 		if(compareHashes(guess, args->localHash)){
 			pthread_mutex_lock(&resultMutex);
 			if(i >= args->start && i <= args->end) {
-				resultP = i;
+				resultP = &i;
 			}
 			pthread_mutex_unlock(&resultMutex);
 			// printf("Result was found: %ld\n\n\n", result);
