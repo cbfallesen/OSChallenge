@@ -68,8 +68,9 @@ void *threadFunction(void *arguments)
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, args->localHash)){
 			pthread_mutex_lock(&resultMutex);
-			if(i >= args->start && i <= args->end)
-			result = i;
+			if(i >= args->start && i <= args->end) {
+				result = i;
+			}
 			pthread_mutex_unlock(&resultMutex);
 			// printf("Result was found: %ld\n\n\n", result);
 			pthread_exit(NULL);
