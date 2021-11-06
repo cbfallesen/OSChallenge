@@ -128,7 +128,7 @@ void func(int sockfd)
 	pthread_mutex_destroy(&hashMutex);
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
-	free(&resultP);
+	free(resultP);
 }
 
 // Driver function
