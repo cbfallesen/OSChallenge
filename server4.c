@@ -32,6 +32,7 @@ typedef struct
 	uint64_t end;
 } threadStruct;
 
+bool foundResult;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
@@ -59,8 +60,13 @@ void *threadFunction(void *arguments)
 	for (uint64_t i = args->start; i < args->end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
+		if(foundResult) {
+			return -1;
+		}
+		
 		if(compareHashes(guess, args->localHash)){
 			if(i >= args->start && i <= args->end) {
+				foundResult = true;
 				return (void *) i;
 			}
 			// printf("Result was found: %ld\n\n\n", result);
@@ -78,7 +84,7 @@ void func(int sockfd)
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 	packet *Packet1 = (packet *)buff;
-	
+	foundResult = false;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 
