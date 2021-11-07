@@ -70,7 +70,7 @@ void func(int sockfd)
 	for (x = start; x < end; x++)
 	{
 		printf("Inden if");
-		if (compareHashes(*resultTable[x-start], Packet1->hashvalue)) {
+		if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
 		}
