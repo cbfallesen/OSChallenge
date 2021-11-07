@@ -68,7 +68,7 @@ void func(int sockfd)
 	result = -1;
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
+		if (compareHashes(*resultTable[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
 		}
