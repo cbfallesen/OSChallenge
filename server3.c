@@ -77,10 +77,10 @@ void func(int sockfd)
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
 			{
-				hashTable[x][i] = guess[i];
+				*hashTable[x][i] = guess[i];
 			}
 		} else {
-			guess = hashTable[x];
+			*guess = hashTable[x];
 		}
 
 		if (compareHashes(guess, Packet1->hashvalue)) {
