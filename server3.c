@@ -62,6 +62,7 @@ void func(int sockfd)
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	uint8_t *hashTable[end-start][32];
+	printf("Inden for 1\n");
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
 		*hashTable[i][0] = '*';
@@ -69,10 +70,11 @@ void func(int sockfd)
 	
 	result = -1;
 
+	printf("Inden for 2\n");
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		unsigned char *guess;
-		printf("Før if\n");
+		printf("Inden if if\n");
 		if (*hashTable[x][0] == '*') {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
