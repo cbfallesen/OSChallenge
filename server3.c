@@ -64,7 +64,7 @@ void func(int sockfd)
 	uint8_t *hashTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
-		*hashTable[i][0] = -1;
+		*hashTable[i][0] = '*';
 	}
 	
 	result = -1;
@@ -73,7 +73,7 @@ void func(int sockfd)
 	{
 		unsigned char *guess;
 
-		if (*hashTable[x][0] == -1) {
+		if (*hashTable[x][0] == '*') {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
