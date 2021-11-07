@@ -63,14 +63,14 @@ void func(int sockfd)
 	uint64_t end = be64toh(Packet1->end);
 	char *hashTable[end-start];
 	bzero(hashTable, end-start);
-	for (int i = 0; i < end-start; i++)
-	{
-		for (int j = 0; j < 32; i++)
-		{
-			printf("%02x", hashTable[i][j]);
-		}
+	// for (int i = 0; i < end-start; i++)
+	// {
+	// 	for (int j = 0; j < 32; i++)
+	// 	{
+	// 		printf("%02x", hashTable[i][j]);
+	// 	}
 		
-	}
+	// }
 	
 	result = -1;
 
