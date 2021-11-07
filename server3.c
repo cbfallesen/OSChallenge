@@ -64,7 +64,7 @@ void func(int sockfd)
 	uint8_t *hashTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
-		hashTable[i][0] = -1;
+		*hashTable[i][0] = -1;
 	}
 	
 	result = -1;
