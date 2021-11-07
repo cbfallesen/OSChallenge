@@ -78,10 +78,7 @@ void func(int sockfd)
 		if ((int) (x - start) > hashCounter) {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
-			for (int i = 0; i < 32; i++)
-			{
-				*hashTable[x][i] = guess[i];
-			}
+			memcpy(hashTable[x], guess, sizeof(guess));
 			hashCounter++;
 		} else {
 			printf("Gammel hash\n");
