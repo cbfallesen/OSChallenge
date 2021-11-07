@@ -72,7 +72,7 @@ void func(int sockfd)
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		unsigned char *guess;
-
+		printf("Før if\n");
 		if (*hashTable[x][0] == '*') {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
