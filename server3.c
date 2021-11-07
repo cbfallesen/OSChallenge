@@ -78,10 +78,10 @@ void func(int sockfd)
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
 			{
-				printf("Gammel hash\n");
 				*hashTable[x][i] = guess[i];
 			}
 		} else {
+			printf("Gammel hash\n");
 			guess = *hashTable[x];
 		}
 
