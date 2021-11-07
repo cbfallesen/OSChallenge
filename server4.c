@@ -59,10 +59,10 @@ void *threadFunction(void *arguments)
 	uint64_t answer = -1;
 	for (uint64_t i = args->start; i < args->end; i++)
 	{
-		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(foundResult) {
 			return (void *) -1;
 		}
+		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 
 		if(compareHashes(guess, args->localHash)){
 			if(i >= args->start && i <= args->end) {
