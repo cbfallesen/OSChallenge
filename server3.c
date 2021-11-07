@@ -75,7 +75,7 @@ void func(int sockfd)
 	{
 		unsigned char *guess;
 		printf("Inden if if\n");
-		if (x - start > hashCounter) {
+		if ((x - start) > hashCounter) {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
