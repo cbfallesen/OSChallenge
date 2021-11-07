@@ -15,7 +15,7 @@
 #define MAX 49
 #define PORT 8080
 #define SA struct sockaddr
-#define MAX_THREADS 5
+#define MAX_THREADS 1
 
 typedef struct
 {
@@ -31,8 +31,6 @@ typedef struct
 	uint64_t start;
 	uint64_t end;
 } threadStruct;
-
-uint64_t result;
 
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -104,7 +102,7 @@ void func(int sockfd)
 		
 		pthread_create(&threads[i], NULL, threadFunction, args);
 	}
-	
+	uint64_t result;
 	for (int i = 0; i < MAX_THREADS; i++)
 	{
 		void *answer;
