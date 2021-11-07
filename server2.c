@@ -6,7 +6,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 /* OpenSSL headers */
 #include <openssl/sha.h>
@@ -22,18 +21,6 @@ typedef struct
 	uint64_t end;
 	uint8_t p;
 } packet;
-
-bool compareHashes(unsigned char *guess, unsigned char *target) {
-	for (int i = 0; i < 32; i++)
-	{
-		if (guess[i] != target[i])
-		{
-			return false;
-		}
-	}
-	// printf("Found result");
-	return true;
-}
 
 // Function designed for chat between client and server.
 void func(int sockfd)
@@ -56,31 +43,26 @@ void func(int sockfd)
 
 	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
-	uint64_t start = Packet1->start;
-	uint64_t end = Packet1->end;
 	uint64_t x;
 	uint64_t result;
-	printf("Inden resultArray");
-	uint8_t *resultArray[end - start][32];
-	printf("Inden for 1");
-	for(int i = 0; i < end-start; i++) {
-		bzero(resultArray[i], 32);
-	}
 	result = -1;
-
-	printf("Inden for 2");
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		printf("Inden if");
-		if (compareHashes(*resultArray[x-start], Packet1->hashvalue)) {
-			result = x;
-			break;
-		}
-
 		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-		if(compareHashes(guess, Packet1->hashvalue)) {
+		int equal = 1;
+		for (i = 0; i < 32; i++)
+		{
+			if (guess[i] != Packet1->hashvalue[i])
+			{
+				equal = 0;
+				break;
+			}
+		}
+
+		if (equal == 1)
+		{
 			result = x;
 			break;
 		}
