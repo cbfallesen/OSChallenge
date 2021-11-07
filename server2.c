@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <pthread.h>
+#include <stdbool.h>
 
 /* OpenSSL headers */
 #include <openssl/sha.h>
@@ -14,7 +14,6 @@
 #define MAX 49
 #define PORT 8080
 #define SA struct sockaddr
-#define MAX_THREADS 5
 
 typedef struct
 {
@@ -24,51 +23,16 @@ typedef struct
 	uint8_t p;
 } packet;
 
-typedef struct
-{
-	uint8_t localHash[32];
-	uint64_t start;
-	uint64_t end;
-} threadStruct;
-
-int runningThreads = 0;
-
-packet *Packet1;
-uint64_t result;
-
-void *threadfunc(void *arguments)
-{
-	threadStruct *threadStruct = arguments;
-	uint64_t start = threadStruct->start;
-	uint64_t end = threadStruct->end;
-
-	printf("Thread number: %d\n", runningThreads);
-	runningThreads++;
-	// print buffer which contains the client contents
-	// printf("\n\n");
-	// for (int i = 0; i < 32; i++)
-	// 	printf("%02x", partition->localHash[i]);
-	// printf("\n");
-
-	for (uint64_t i = start; i <= end; i++)
+bool compareHashes(unsigned char *guess, unsigned char *target) {
+	for (int i = 0; i < 32; i++)
 	{
-		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
-			int equal = 1;
-			for (i = 0; i < 32; i++)
-			{
-				if (guess[i] != threadStruct->localHash[i])
-				{
-					equal = 0;
-					break;
-				}
-			}
-
-			if (equal == 1)
-			{
-				result = i;
-				runningThreads--;
-			}
+		if (guess[i] != target[i])
+		{
+			return false;
+		}
 	}
+	// printf("Found result");
+	return true;
 }
 
 // Function designed for chat between client and server.
@@ -76,7 +40,7 @@ void func(int sockfd)
 {
 	char buff[MAX];
 	int n;
-	// packet *Packet1;
+	packet *Packet1;
 
 	bzero(buff, MAX);
 
@@ -84,78 +48,39 @@ void func(int sockfd)
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
 
-	// // print buffer which contains the client contents
+	// print buffer which contains the client contents
 	printf("\n\n");
 	int i;
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
-	printf("\n\n");
 
-	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
-	// uint64_t result;
+	uint64_t start = Packet1->start;
+	uint64_t end = Packet1->end;
+	uint64_t x;
+	uint64_t result;
+	uint8_t resultArray[end - start][32];
+	for(int i = 0; i < end-start; i++) {
+		bzero(resultArray[i], 32);
+	}
 	result = -1;
 
-
-	//Change from hardcoded 10
-
-	uint64_t start = be64toh(Packet1->start);
-	uint64_t end = be64toh(Packet1->end);
-
-	pthread_t threads[MAX_THREADS];
-
-	if (end - start >= 1000)
+	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		uint64_t partitionSize = (end - start)/MAX_THREADS;
-		for (int i = 0; i < MAX_THREADS; i++)
-		{
-			threadStruct *params = malloc(sizeof(uint64_t) * 2 + sizeof(uint8_t) * 32);
-			params->start = (partitionSize *  i) + start;
-			params->end = (partitionSize *  i) + start + partitionSize;
-			memcpy(params->localHash, Packet1->hashvalue, 32*sizeof(uint8_t));
-			// compares the original to the copied hash. These should be identical
-			printf("\n");
-			for (int k = 0; k < 32; k++)
-			{
-				printf("%02x", &params->localHash[i]);
-			}
-
-			pthread_create(&threads[i], 0, threadfunc, params);
+		if (compareHashes(resultArray[x-start], Packet1->hashvalue)) {
+			result = x;
+			break;
 		}
 		
-		for (int i = 0; i < MAX_THREADS; i++)
-		{
-			pthread_join(threads[i], NULL);
-		}
-		printf("Final result from threads: %ld\n", result);
-		
-		
-	} else {
-		uint64_t x;
-		for (x = start; x < end; x++)
-		{
-			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-			int equal = 1;
-			for (int i = 0; i < 32; i++)
-			{
-				if (guess[i] != Packet1->hashvalue[i])
-				{
-					equal = 0;
-					break;
-				}
-			}
-
-			if (equal == 1)
-			{
-				result = x;
-				break;
-			}
+		if(compareHashes(guess, Packet1->hashvalue)) {
+			result = x;
+			break;
 		}
 	}
-		
 
-	printf("result: %ld\n", result);
 	result = htobe64(result);
 
 	// and send that buffer to client
