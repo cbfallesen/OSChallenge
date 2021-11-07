@@ -15,7 +15,7 @@
 #define MAX 49
 #define PORT 8080
 #define SA struct sockaddr
-#define MAX_THREADS 1
+#define MAX_THREADS 3
 
 typedef struct
 {
