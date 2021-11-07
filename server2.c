@@ -60,7 +60,7 @@ void func(int sockfd)
 	uint64_t end = Packet1->end;
 	uint64_t x;
 	uint64_t result;
-	uint8_t resultArray[end - start][32];
+	uint8_t *resultArray[end - start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultArray[i], 32);
 	}
