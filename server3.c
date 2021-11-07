@@ -61,34 +61,32 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	char *hashTable[end-start];
-	bzero(hashTable, end-start);
-	// for (int i = 0; i < end-start; i++)
-	// {
-	// 	for (int j = 0; j < 32; i++)
-	// 	{
-	// 		printf("%02x", hashTable[i][j]);
-	// 	}
+	char *hashTable[end-start][32];
+	for(int i = 0; i < end-start; i++) {
+		bzero(hashTable[i], 32);
+	}
+	for (int i = 0; i < end-start; i++)
+	{
+		for (int j = 0; j < 32; i++)
+		{
+			printf("%02x", hashTable[i][j]);
+		}
 		
-	// }
+	}
 	
 	result = -1;
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		unsigned char *guess;
 
-		if ((*hashTable + x) == 0) {
-			guess = SHA256((unsigned char *)&x, 8, 0);
-		} else {
-			guess = (*hashTable + x);
-		}
-		
+		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+
 		if (compareHashes(guess, Packet1->hashvalue)) {
 			result = x;
 			break;
 		}
 	}
+
 
 	result = htobe64(result);
 
