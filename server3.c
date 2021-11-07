@@ -75,23 +75,18 @@ void func(int sockfd)
 
 	for (x = start; x < end; x++)
 	{
-		if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
+		unsigned char *guess;
+		if ((int) (x - start) > hashCounter) {
+			guess = SHA256((unsigned char *)&x, 8, 0);
+			memcpy(hashTable[x], guess, sizeof(guess));
+			hashCounter++;
+		} else {
+			guess = *hashTable[x];
+		}
+
+		if (compareHashes(guess, Packet1->hashvalue)) {
 			result = x;
 			break;
-		} else {
-			unsigned char *guess;
-			if ((int) (x - start) > hashCounter) {
-				guess = SHA256((unsigned char *)&x, 8, 0);
-				memcpy(hashTable[x], guess, sizeof(guess));
-				hashCounter++;
-			} else {
-				guess = *hashTable[x];
-			}
-
-			if (compareHashes(guess, Packet1->hashvalue)) {
-				result = x;
-				break;
-			}
 		}
 	}
 
