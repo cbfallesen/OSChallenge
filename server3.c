@@ -69,7 +69,7 @@ void func(int sockfd)
 	{
 		for (int j = 0; j < 32; i++)
 		{
-			printf("%02x", hashTable[i][j]);
+			printf("%c", hashTable[i][j]);
 		}
 		
 	}
