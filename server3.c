@@ -65,14 +65,6 @@ void func(int sockfd)
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
 	}
-	for (int i = 0; i < end-start; i++)
-	{
-		for (int j = 0; j < 32; i++)
-		{
-			printf("%u", hashTable[i][j]);
-		}
-		
-	}
 	
 	result = -1;
 
