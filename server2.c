@@ -23,6 +23,13 @@ typedef struct
 	uint8_t p;
 } packet;
 
+typedef struct
+{
+	uint64_t number;
+	uint8_t resultHash[32];
+} resultStruct;
+
+
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
 	{
@@ -60,10 +67,12 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	uint8_t *resultTable[end-start][32];
+	printf(sizeof(end));
+	resultStruct *resultTable[1000][sizeof(end) + 32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
 	}
+	int resultCounter = -1;
 
 	result = -1;
 	for (x = start; x < end; x++)
