@@ -74,9 +74,11 @@ void func(int sockfd)
 		unsigned char *guess;
 
 		if (*hashTable[x][0] == -1) {
+			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
 			{
+				printf("Gammel hash\n");
 				*hashTable[x][i] = guess[i];
 			}
 		} else {
