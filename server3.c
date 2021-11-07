@@ -65,7 +65,7 @@ void func(int sockfd)
 	printf("Inden for 1\n");
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
-		*hashTable[i][0] = '*';
+		*hashTable[i][0] = -1;
 	}
 	
 	result = -1;
