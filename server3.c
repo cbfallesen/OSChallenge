@@ -80,7 +80,7 @@ void func(int sockfd)
 				*hashTable[x][i] = guess[i];
 			}
 		} else {
-			*guess = hashTable[x];
+			guess = *hashTable[x];
 		}
 
 		if (compareHashes(guess, Packet1->hashvalue)) {
