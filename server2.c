@@ -61,12 +61,13 @@ void func(int sockfd)
 	uint64_t x;
 	uint64_t result;
 	uint8_t *resultArray[end - start][32];
+	printf("Inden for 1");
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultArray[i], 32);
 	}
 	result = -1;
 
-	printf("Inden for");
+	printf("Inden for 2");
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
