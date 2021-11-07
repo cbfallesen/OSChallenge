@@ -76,8 +76,14 @@ void func(int sockfd)
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
-		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+		unsigned char *guess;
 
+		if ((*hashTable + x) == 0) {
+			guess = SHA256((unsigned char *)&x, 8, 0);
+		} else {
+			guess = (*hashTable + x);
+		}
+		
 		if (compareHashes(guess, Packet1->hashvalue)) {
 			result = x;
 			break;
