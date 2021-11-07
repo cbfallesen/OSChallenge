@@ -61,9 +61,9 @@ void *threadFunction(void *arguments)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(foundResult) {
-			return -1;
+			return (void *) -1;
 		}
-		
+
 		if(compareHashes(guess, args->localHash)){
 			if(i >= args->start && i <= args->end) {
 				foundResult = true;
