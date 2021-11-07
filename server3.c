@@ -71,11 +71,11 @@ void func(int sockfd)
 	result = -1;
 
 	printf("Inden for 2\n");
-	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
+	for (x = start; x < end; x++)
 	{
 		unsigned char *guess;
 		printf("Inden if if\n");
-		if ((x - start) > hashCounter) {
+		if ((int) (x - start) > hashCounter) {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
