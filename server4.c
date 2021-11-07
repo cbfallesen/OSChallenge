@@ -56,7 +56,6 @@ void *threadFunction(void *arguments)
 	// for (int i = 0; i < 32; i++)
 	// 	printf("%02x", args->localHash[i]);
 	// printf("\n");
-	uint64_t answer = -1;
 	for (uint64_t i = args->start; i < args->end; i++)
 	{
 		if(foundResult) {
@@ -73,7 +72,7 @@ void *threadFunction(void *arguments)
 		}
 	}
 	// printf("Result was not found: %ld\n\n\n", result);
-	return (void *) answer;
+	return (void *) -1;
 }
 
 // Function designed for chat between client and server.
