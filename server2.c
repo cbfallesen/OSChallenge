@@ -47,12 +47,12 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = Packet1->start;
 	uint64_t end = Packet1->end;
-	result = -1;
 	uint8_t *resultTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
 	}
 
+	result = -1;
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
