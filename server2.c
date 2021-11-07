@@ -65,13 +65,17 @@ void func(int sockfd)
 		bzero(resultTable[i], 32);
 	}
 
+	printf("Inden for");
 	result = -1;
-	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
+	for (x = start; x < end; x++)
 	{
+		printf("Inden if");
 		if (compareHashes(*resultTable[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
 		}
+
+		printf("Efter if");
 		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
 		if (compareHashes(guess, Packet1->hashvalue))
