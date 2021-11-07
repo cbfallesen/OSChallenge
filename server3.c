@@ -73,7 +73,7 @@ void func(int sockfd)
 	{
 		unsigned char *guess;
 
-		if (hashTable[x][0] == -1) {
+		if (*hashTable[x][0] == -1) {
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
 			{
