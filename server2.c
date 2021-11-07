@@ -71,16 +71,15 @@ void func(int sockfd)
 		if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
-		}
+		} else {
+			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
-
-		if (compareHashes(guess, Packet1->hashvalue))
-		{
-			result = x;
-			break;
+			if (compareHashes(guess, Packet1->hashvalue))
+			{
+				result = x;
+				break;
+			}
 		}
-		
 	}
 
 	result = htobe64(result);
