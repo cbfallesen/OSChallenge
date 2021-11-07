@@ -61,6 +61,10 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
+	uint8_t *resultTable[end-start][32];
+	for(int i = 0; i < end-start; i++) {
+		bzero(resultTable[i], 32);
+	}
 	uint8_t *hashTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
@@ -71,18 +75,23 @@ void func(int sockfd)
 
 	for (x = start; x < end; x++)
 	{
-		unsigned char *guess;
-		if ((int) (x - start) > hashCounter) {
-			guess = SHA256((unsigned char *)&x, 8, 0);
-			memcpy(hashTable[x], guess, sizeof(guess));
-			hashCounter++;
-		} else {
-			guess = *hashTable[x];
-		}
-
-		if (compareHashes(guess, Packet1->hashvalue)) {
+		if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
+		} else {
+			unsigned char *guess;
+			if ((int) (x - start) > hashCounter) {
+				guess = SHA256((unsigned char *)&x, 8, 0);
+				memcpy(hashTable[x], guess, sizeof(guess));
+				hashCounter++;
+			} else {
+				guess = *hashTable[x];
+			}
+
+			if (compareHashes(guess, Packet1->hashvalue)) {
+				result = x;
+				break;
+			}
 		}
 	}
 
