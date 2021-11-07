@@ -50,12 +50,12 @@ void func(int sockfd)
 	Packet1 = (packet *)buff;
 
 	// print buffer which contains the client contents
-	printf("\n\n");
-	int i;
-	for (i = 0; i < 32; i++)
-		printf("%02x", Packet1->hashvalue[i]);
+	// printf("\n\n");
+	// int i;
+	// for (i = 0; i < 32; i++)
+	// 	printf("%02x", Packet1->hashvalue[i]);
 
-	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	// printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 	uint64_t x;
 	uint64_t result;
