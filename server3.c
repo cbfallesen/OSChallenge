@@ -65,8 +65,8 @@ void func(int sockfd)
 	printf("Inden for 1\n");
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
-		// *hashTable[i][0] = -1;
 	}
+	int hashCounter = -1;
 	
 	result = -1;
 
@@ -75,13 +75,14 @@ void func(int sockfd)
 	{
 		unsigned char *guess;
 		printf("Inden if if\n");
-		if (*hashTable[x][0] == '*') {
+		if (x - start > hashCounter) {
 			printf("Ny hash\n");
 			guess = SHA256((unsigned char *)&x, 8, 0);
 			for (int i = 0; i < 32; i++)
 			{
 				*hashTable[x][i] = guess[i];
 			}
+			hashCounter++;
 		} else {
 			printf("Gammel hash\n");
 			guess = *hashTable[x];
