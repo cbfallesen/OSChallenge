@@ -68,29 +68,38 @@ void func(int sockfd)
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	printf("%ld", sizeof(end));
-	// resultStruct *resultTable[1000][sizeof(end) + 32];
-	// for(int i = 0; i < end-start; i++) {
-	// 	bzero(resultTable[i], 32);
-	// }
-	// int resultCounter = -1;
+	resultStruct *resultTable[1000][sizeof(end) + 32];
+	for(int i = 0; i < end-start; i++) {
+		bzero(resultTable[i], 32);
+	}
+	int resultCounter = -1;
+	bool resultLock = false;
 
 	result = -1;
-	for (x = start; x < end; x++)
+
+	for(int i = 0; i < resultCounter; i++) {
+		if(compareHashes(resultTable[x-start], Packet1->hashvalue)){
+			result = x;
+			resultLock = true;
+			break;
+		}
+	}
+
+	if (!resultLock)
 	{
-		// if (compareHashes(resultTable[x-start], Packet1->hashvalue)) {
-		// 	result = x;
-		// 	break;
-		// } else {
+		for (x = start; x < end; x++)
+		{
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
 				result = x;
+				resultLock = true;
 				break;
 			}
-		//}
+		}
 	}
-
+	
 	result = htobe64(result);
 
 	// and send that buffer to client
