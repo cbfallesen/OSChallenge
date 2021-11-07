@@ -59,13 +59,27 @@ void func(int sockfd)
 
 	uint64_t x;
 	uint64_t result;
+	char hash = Packet1->hashvalue;
+	uint64_t start = be64toh(Packet1->start);
+	uint64_t end = be64toh(Packet1->end);
+	char *hashTable[end-start];
+	bzero(hashTable, end-start);
+	for (int i = 0; i < end-start; i++)
+	{
+		for (int j = 0; j < 32; i++)
+		{
+			printf("%02x", hashTable[i][j]);
+		}
+		
+	}
+	
 	result = -1;
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-		if (compareHashes(guess, Packet1->hashvalue)) {
+		if (compareHashes(guess, hash)) {
 			result = x;
 			break;
 		}
