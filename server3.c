@@ -64,14 +64,24 @@ void func(int sockfd)
 	uint8_t *hashTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
+		hashTable[i][0] = -1;
 	}
 	
 	result = -1;
 
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
+		unsigned char *guess;
 
-		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+		if (hashTable[x][0] == -1) {
+			guess = SHA256((unsigned char *)&x, 8, 0);
+			for (int i = 0; i < 32; i++)
+			{
+				hashTable[x][i] = guess[i];
+			}
+		} else {
+			guess = hashTable[x];
+		}
 
 		if (compareHashes(guess, Packet1->hashvalue)) {
 			result = x;
