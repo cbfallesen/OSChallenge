@@ -71,7 +71,7 @@ void func(int sockfd)
 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
 	{
 		printf("Inden if");
-		if (compareHashes(resultArray[x-start], Packet1->hashvalue)) {
+		if (compareHashes(*resultArray[x-start], Packet1->hashvalue)) {
 			result = x;
 			break;
 		}
