@@ -60,6 +60,7 @@ void func(int sockfd)
 	uint64_t end = Packet1->end;
 	uint64_t x;
 	uint64_t result;
+	printf("Inden resultArray");
 	uint8_t *resultArray[end - start][32];
 	printf("Inden for 1");
 	for(int i = 0; i < end-start; i++) {
