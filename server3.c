@@ -59,7 +59,7 @@ void func(int sockfd)
 
 	uint64_t x;
 	uint64_t result;
-	char hash = Packet1->hashvalue;
+	uint8_t hash = Packet1->hashvalue;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	char *hashTable[end-start];
