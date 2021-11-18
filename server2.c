@@ -114,6 +114,7 @@ void func(int sockfd)
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
+	printf("%d", Packet1->p);
 	// }
 }
 
