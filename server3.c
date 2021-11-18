@@ -61,10 +61,6 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	uint8_t *resultTable[end-start][32];
-	for(int i = 0; i < end-start; i++) {
-		bzero(resultTable[i], 32);
-	}
 	uint8_t *hashTable[end-start][32];
 	for(int i = 0; i < end-start; i++) {
 		bzero(hashTable[i], 32);
