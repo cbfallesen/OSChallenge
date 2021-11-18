@@ -69,6 +69,9 @@ void func(int sockfd)
 	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 	printf("\nP: %d", Packet1->p);
 
+	fflush(stdout);
+	printf("\nP: %d", Packet1->p);
+
 	printf("67");
 	uint64_t x;
 	uint64_t result;
