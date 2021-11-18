@@ -49,18 +49,12 @@ void func(int sockfd)
 	char buff[MAX];
 	int n;
 	bzero(buff, MAX);
-	packet *Packet1 = malloc(sizeof(packet));
+	packet *Packet1;
 
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 
-
-
-	// Packet1 = (packet *)buff;
-	memcpy(Packet1->start, buff[0], sizeof(Packet1->start));
-	memcpy(Packet1->end, buff[8], sizeof(Packet1->end));
-	memcpy(Packet1->hashvalue, buff[16], sizeof(Packet1->hashvalue));
-	memcpy(Packet1->p, buff[48], sizeof(Packet1->p));
+	Packet1 = (packet *)buff;
 
 	// print buffer which contains the client contents
 	printf("\n\n");
@@ -122,7 +116,6 @@ void func(int sockfd)
 
 	// and send that buffer to client
 	write(sockfd, &result, sizeof(result));
-	free(Packet1);
 	// }
 }
 
