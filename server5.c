@@ -66,8 +66,8 @@ void *threadFunction(void *arguments)
 					{
 						uint64_t result = htobe64(i);
 						// and send that buffer to client
-						write(socket, &result, sizeof(result));
-						close(socket);
+						write(localPacket->socket, &result, sizeof(result));
+						close(localPacket->socket);
 						lock = false;
 					}
 				}
