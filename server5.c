@@ -156,6 +156,10 @@ int main()
 		
 		printf("\n\n");
 		for (int j = 0; j < 32; j++)
+			printf("%02x", buffRequest->hash[j]);
+
+		printf("\n\n");
+		for (int j = 0; j < 32; j++)
 			printf("%02x", currentPacket->request.hash[j]);
 	}
 	// After chatting close the socket
