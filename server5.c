@@ -54,8 +54,10 @@ void *threadFunction(void *arguments)
 			Packet *localPacket = malloc(sizeof(Packet));
 			memcpy(localPacket, currentPacket, sizeof(localPacket));
 			if(localPacket->socket != -1) {
-				printf("56\n");
-				
+				printf("\n\n");
+				for (int j = 0; j < 32; j++)
+					printf("%02x", localPacket->request.hash[j]);
+
 				uint64_t start = be64toh(localPacket->request.start);
 				uint64_t end = be64toh(localPacket->request.end);
 				
