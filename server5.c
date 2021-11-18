@@ -52,12 +52,12 @@ void *threadFunction(void *arguments)
 	{
 		if(!lock) {
 			lock = true;
-			Packet *localPacket;
+			Packet *localPacket = malloc(sizeof(Packet));
 			if(localPacket->socket != -1) {
 				memcpy(localPacket, currentPacket, sizeof(localPacket));
 				
 				uint64_t start = be64toh(localPacket->request.start);
-				uint64_t end = be64toh(localPacket->request.start);
+				uint64_t end = be64toh(localPacket->request.end);
 				
 				for (uint64_t i = start; i < end; i++)
 				{
@@ -130,7 +130,7 @@ int main()
         pthread_t thread;
         pthread_create(&thread, NULL, &threadFunction, NULL);
     }
-	printf("Beyond pthread_Create\n");
+	
 	for (;;)
 	{
 		// Accept the data packet from client and verification
