@@ -149,8 +149,11 @@ int main()
 		bzero(buff, MAX);
 		// read the message from client and copy it in buffer
 		read(sockfd, buff, sizeof(buff));
-		currentPacket = (Packet *) buff;
+		
+		Request *buffRequest = (Request *) buff;
+		currentPacket->request = *buffRequest;
 		currentPacket->socket = connfd;
+		
 		printf("\n\n");
 		for (int j = 0; j < 32; j++)
 			printf("%02x", currentPacket->request.hash[j]);
