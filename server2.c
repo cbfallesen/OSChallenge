@@ -76,8 +76,8 @@ void func(int sockfd)
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	printf("Line 71\n");
-	// resultStruct *resultTable[1000][sizeof(end) + 32];
-	resultStruct *resultTable[1][1];
+	resultStruct *resultTable[1000][sizeof(end) + 32];
+	// resultStruct *resultTable[1][1];
 	printf("Before bzero line 73\n");
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
