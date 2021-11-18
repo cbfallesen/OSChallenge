@@ -79,7 +79,7 @@ void func(int sockfd)
 	resultStruct *resultTable[1000][sizeof(end) + 32];
 	// resultStruct *resultTable[1][1];
 	printf("Before bzero line 73\n");
-	for(int i = 0; i < end-start; i++) {
+	for(int i = 0; i < 1000; i++) {
 		bzero(resultTable[i], 32);
 	}
 	int resultCounter = -1;
