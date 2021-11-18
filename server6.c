@@ -124,7 +124,7 @@ int main()
 			exit(0);
 		}
 		else
-			printf("server accept the client...\n");
+			// printf("server accept the client...\n");
 		
 		forkStage(connfd);
 	}
