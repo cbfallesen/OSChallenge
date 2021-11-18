@@ -31,6 +31,7 @@ typedef struct
 
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
+	printf("Entered compareHashes");
 	for (int i = 0; i < 32; i++)
 	{
 		if (guess[i] != target[i])
@@ -68,6 +69,7 @@ void func(int sockfd)
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	resultStruct *resultTable[1000][sizeof(end) + 32];
+	printf("Before bzero line 73");
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
 	}
@@ -76,6 +78,7 @@ void func(int sockfd)
 
 	result = -1;
 
+	printf("Line 81");
 	for(int i = 0; i < resultCounter; i++) {
 		if(compareHashes(resultTable[x-start], Packet1->hashvalue)){
 			result = x;
@@ -83,6 +86,7 @@ void func(int sockfd)
 			break;
 		}
 	}
+	printf("Line 89");
 
 	if (!resultLock)
 	{
@@ -98,7 +102,7 @@ void func(int sockfd)
 			}
 		}
 	}
-	
+	printf("Line 105");
 	result = htobe64(result);
 
 	// and send that buffer to client
