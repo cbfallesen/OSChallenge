@@ -52,9 +52,9 @@ void *threadFunction(void *arguments)
 	{
 		if(!lock) {
 			Packet *localPacket = malloc(sizeof(Packet));
+			memcpy(localPacket, currentPacket, sizeof(localPacket));
 			if(localPacket->socket != -1) {
 				printf("56\n");
-				memcpy(localPacket, currentPacket, sizeof(localPacket));
 				
 				uint64_t start = be64toh(localPacket->request.start);
 				uint64_t end = be64toh(localPacket->request.end);
