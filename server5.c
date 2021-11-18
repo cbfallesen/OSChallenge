@@ -75,7 +75,6 @@ void *threadFunction(void *arguments)
 				break;
 			}
 		}
-		lock = false;
 	}
 	return NULL;
 }
