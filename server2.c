@@ -48,12 +48,12 @@ void func(int sockfd)
 {
 	char buff[MAX];
 	int n;
-	packet *Packet1;
-
+	packet *Packet1 = malloc(sizeof(packet));
 	bzero(buff, MAX);
 
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
+	malloc(sizeof(Packet1));
 	Packet1 = (packet *)buff;
 	// print buffer which contains the client contents
 	printf("\n\n");
