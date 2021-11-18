@@ -31,7 +31,7 @@ typedef struct{
 } Packet;
 
 Packet *currentPacket;
-bool lock = false;
+bool lock = true;
 // request Request currentRequest;
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -143,8 +143,8 @@ int main()
 		}
 		else
 			printf("server accept the client...\n");
-
-
+		
+		lock = false;
 		char buff[MAX];
 		bzero(buff, MAX);
 		// read the message from client and copy it in buffer
