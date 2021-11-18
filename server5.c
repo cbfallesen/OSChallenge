@@ -151,13 +151,13 @@ int main()
 		read(sockfd, buff, sizeof(buff));
 		
 		Request *buffRequest = (Request *) buff;
-		currentPacket->request = *buffRequest;
-		currentPacket->socket = connfd;
 		
 		printf("\n\n");
 		for (int j = 0; j < 32; j++)
 			printf("%02x", buffRequest->hash[j]);
 
+		currentPacket->request = *buffRequest;
+		currentPacket->socket = connfd;
 		printf("\n\n");
 		for (int j = 0; j < 32; j++)
 			printf("%02x", currentPacket->request.hash[j]);
