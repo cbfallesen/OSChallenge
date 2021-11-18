@@ -48,12 +48,11 @@ void func(int sockfd)
 {
 	char buff[MAX];
 	int n;
-	packet *Packet1 = malloc(sizeof(packet));
 	bzero(buff, MAX);
+	packet *Packet1;
 
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
-	malloc(sizeof(Packet1));
 	Packet1 = (packet *)buff;
 	// print buffer which contains the client contents
 	printf("\n\n");
@@ -75,7 +74,8 @@ void func(int sockfd)
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
 	printf("Line 71");
-	resultStruct *resultTable[1000][sizeof(end) + 32];
+	// resultStruct *resultTable[1000][sizeof(end) + 32];
+	resultStruct *resultTable[1][1];
 	printf("Before bzero line 73");
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
