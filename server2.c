@@ -61,16 +61,16 @@ void func(int sockfd)
 	int i;
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
-	printf("\n63");
-	printf("\nStart: %li", Packet1->start);
-	printf("\nEnd: %li", Packet1->end);
-	printf("\nbe64toh Start: %li", be64toh(Packet1->start));
-	printf("\nbe64toh End: %li", be64toh(Packet1->end));
-	printf("\nP: %d", Packet1->p);
-	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
-	printf("\nP: %d", Packet1->p);
+	printf("63\n");
+	printf("Start: %li\n", Packet1->start);
+	printf("End: %li\n", Packet1->end);
+	printf("be64toh Start: %li\n", be64toh(Packet1->start));
+	printf("be64toh End: %li\n", be64toh(Packet1->end));
+	printf("P: %d\n", Packet1->p);
+	printf("From start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	printf("P: %d \n", Packet1->p);
 
-	printf("67");
+	printf("67\n");
 	uint64_t x;
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
