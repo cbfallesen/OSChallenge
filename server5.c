@@ -53,6 +53,7 @@ void *threadFunction(void *arguments)
 		if(!lock) {
 			Packet *localPacket = malloc(sizeof(Packet));
 			if(localPacket->socket != -1) {
+				printf("56\n");
 				memcpy(localPacket, currentPacket, sizeof(localPacket));
 				
 				uint64_t start = be64toh(localPacket->request.start);
@@ -63,6 +64,7 @@ void *threadFunction(void *arguments)
 					unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 					if(compareHashes(guess, localPacket->request.hash))
 					{
+						printf("67\n");
 						lock = true;
 						uint64_t result = htobe64(i);
 						// and send that buffer to client
