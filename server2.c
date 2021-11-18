@@ -75,10 +75,10 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	printf("Line 71");
+	printf("Line 71\n");
 	// resultStruct *resultTable[1000][sizeof(end) + 32];
 	resultStruct *resultTable[1][1];
-	printf("Before bzero line 73");
+	printf("Before bzero line 73\n");
 	for(int i = 0; i < end-start; i++) {
 		bzero(resultTable[i], 32);
 	}
@@ -87,7 +87,7 @@ void func(int sockfd)
 
 	result = -1;
 
-	printf("Line 81");
+	printf("Line 81\n");
 	for(int i = 0; i < resultCounter; i++) {
 		if(compareHashes(resultTable[x-start], Packet1->hashvalue)){
 			result = x;
@@ -95,7 +95,7 @@ void func(int sockfd)
 			break;
 		}
 	}
-	printf("Line 89");
+	printf("Line 89\n");
 
 	if (!resultLock)
 	{
@@ -111,7 +111,7 @@ void func(int sockfd)
 			}
 		}
 	}
-	printf("Line 105");
+	printf("Line 105\n");
 	result = htobe64(result);
 
 	// and send that buffer to client
