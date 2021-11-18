@@ -55,13 +55,12 @@ void func(int sockfd)
 	// read the message from client and copy it in buffer
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
-
 	// print buffer which contains the client contents
 	printf("\n\n");
 	int i;
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
-
+	printf("\n63");
 	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 	printf("67");
