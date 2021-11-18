@@ -131,7 +131,7 @@ int main()
         pthread_t thread;
         pthread_create(&thread, NULL, &threadFunction, NULL);
     }
-
+	printf("Beyond pthread_Create\n");
 	for (;;)
 	{
 		// Accept the data packet from client and verification
