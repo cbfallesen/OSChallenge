@@ -135,7 +135,7 @@ void func(int sockfd)
 				printf("Added number.\n");
 				//memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("%ld.\n", resultData.number);
-				pushResult(&startNode, &resultData, sizeof(resultStruct));
+				pushResult(&node, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
