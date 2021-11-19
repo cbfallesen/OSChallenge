@@ -25,11 +25,25 @@ Once we find a hash that is equal to the one in the request, we set this as the 
 The thought for our first experiment comes from the fact, that there is a chance of repetition in the requests from the client. The idea is, that if we create an array where we put in all the results and their hashes, we can start by looking through this, and then find the repeated results even faster.
 We started by making a struct, that contains both the number and the hash of a result. In the begging, we worked with an array of these structs, but after working woth it for a while, we realised that this would take up both unnecessary time and memory. Because of this we changed our strategy, so we use a linked list instead. This way, we have a dynamic list, that we can fill up as the results are found.
 ___
-The difference in this implementation from the milestone is, firstly, that we have moved the comparison to a function on its own. This function is called compareHashes, and it only returns true, if the guess and the request are equal. We have moved it, because it is used more than once, for each request.
+The difference in this implementation from the milestone is, firstly, that we have moved the comparison to a function on its own. This function is called compareHashes(), and it only returns true, if the guess and the request are equal. We have moved it, because it is used more than once, for each request.
+In func() we start by checking through the entire linked list, to see if the request is within the previous results. If this is the case, we change the result, and we also make the resultLock true. The resultLock ensures, that if we have already found the result, we don't need to go through another compa
 
 ### Experiment 2:
 
+Experiment 2 was the first experiment in which we successfully implemented parallelism to handle requests. Instead of using threads, which we had unsuccessfully experimented with earlier on, we instead went with forking.
+After accepting the data packet, a new process is created through a call to the 'fork()' function. A new process is then created, which handles reading the data packet, cracking the sha encryption, and writing back to the request generator, before terminating.
+
+With this implementation, a new process would start every time a new request was generated. As such, the program solving the hashes would be pipelined, and we saw a large decrease in average solve time for the milestone test.
+
 ### Experiment 3:
+With this experiment, we wanted to combine the two previous improvements of both having parallelism and a solutions storage. 
+The major concern for this was however, that since we were using processes, we could no longer share memory between processes, and writing a process' answer to the solutions list would be difficult. 
+
+After some researched, we learned about piping in C. This would allow for one-way communication between processes through what is essentially a virtual file, which would be written to by one process, and read by another. 
+The pipe is established by the function call 'pipe()', in which an int array of size 2 is passed. One of these would be our read end, and the other would be the write end.
+In this experiment, we would have the child process write the result number and the corresponding hash as a struct through the pipe. The parent process would then read said result, and store it in a linked list in the parent process. 
+
+We figured that since there will only be a rather small number of requests, this initial check through the linked list could be run serially, with the sha cracking itself being run in parallel.
 
 ### Old hash lookup:
 

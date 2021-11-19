@@ -159,7 +159,7 @@ int main()
 	}
 	else
 		printf("Socket successfully binded..\n");
-
+	
 	for (;;)
 	{
 		// Now server is ready to listen and verification
