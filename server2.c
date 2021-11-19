@@ -105,9 +105,9 @@ void func(int sockfd)
 	
 	printf("Before print.\n");
 	if (startNode == NULL) {
-		printf("Null");
+		printf("Null\n");
 	} else {
-		print(node);
+		print(startNode);
 	}
 	printf("Before while.\n");
 	while(node != NULL) {
