@@ -34,7 +34,6 @@ void* pushResult (struct Node **refNode, packet *newData, size_t dataSize) {
 	printf("push");
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
-	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
 
 	newNode->data->start = newData->start;
