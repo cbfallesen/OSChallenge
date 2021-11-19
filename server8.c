@@ -165,7 +165,7 @@ int main()
 		read(sockfd, buff, sizeof(buff));
 		Packet1 = (packet *)buff;
 
-		startNode = pushRequest(startNode, &Packet1, sizeof(Packet1));
+		startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
 
 		print(startNode);
 	}
