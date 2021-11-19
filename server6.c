@@ -59,6 +59,7 @@ void solveSha(int connfd)
 }
 
 // Function designed for chat between client and server.
+// https://www.geeksforgeeks.org/fork-system-call/
 void forkStage(int connfd) {
 	pid_t pid = fork();
 	if( pid == 0 ){
