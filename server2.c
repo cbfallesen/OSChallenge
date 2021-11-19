@@ -122,14 +122,13 @@ void func(int sockfd)
 		printf("No resultLock.\n");
 		for (x = start; x < end; x++)
 		{
-			printf("Inside for.\n");
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-			printf("After sha.\n");
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
 				printf("Found hash.\n");
 				resultData->number = x;
+				printf("Added number.\n");
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				pushResult(&start, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
