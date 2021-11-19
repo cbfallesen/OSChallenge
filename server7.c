@@ -56,7 +56,8 @@ void solveSha(int connfd)
 		{
 			uint64_t result = htobe64(i);
 			write(connfd, &result, sizeof(result));
-			write(fd[1], &result, sizeof(result));
+			uint64_t childResult = 8888;
+			write(fd[1], &childResult, sizeof(result));
 			close(fd[1]);
 			close(connfd);
 			break;
