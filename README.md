@@ -53,7 +53,8 @@ We use a push function to add the result. The function takes the node to link to
 ___
 With this implementation the overall time saved is not much, but there are cases with repeats, where there is time saved, compared to the milestone. The main thought with this improvement is also, to be able to link it with other improvements.
 
-We have noticed that the first time the client requests from the server, it is slower than the second time. If we keep the server running, and then run the client again, the duplicates are found much faster. Since a seed is used, all numbers in the request are considered duplicates the second time. The issue lies within the fact that in the second run, a duplicate can be found in about 1000 microseconds, whereas the third time takes about 1000000 microseconds.
+We have noticed that the first time the client requests from the server, it is slower than the second time. If we keep the server running, and then run the client again, the duplicates are found much faster. Since a seed is used, all numbers in the request are considered duplicates the second time, and are then found quickly by the linked list. The issue lies within the fact that in the second run, a duplicate can be found in about 1000 microseconds, whereas the third time takes about 1000000 microseconds.
+The reason that the first run is so much slower than the following might be because of errors in our code. We have not been able to determine exactly why this happens, but it would seem that perhaps the linked list "saves" the results only when the request generator finishes.
 
 We believe that this could be improved even further upon, given a bit more time, as there seems to be a bug in our implementation.
 
@@ -229,11 +230,18 @@ Times are in microseconds
 
 ___
 ## Concluding remarks on experiments
-**Is multithreading faster than multi-processing?**
+**1. Is multithreading faster than multi-processing?**
+
 In our implementation multi-processing is much faster than multithreading. In our experience, it is primarily due to the sharing of data in multithreading that gives trouble with the result. In multi-processing they are run as separate processes, and can actually be run in parallel, without needing delays.
-**What sorts of pre-processing of data is feasible?**
+
+**2. What sorts of pre-processing of data is feasible?**
+
 We concluded that storing each previous hash attempt is not feasible. The memory requirement scales poorly and quickly grows to a dataset the size of the search interval. Furthermore, the only performance increase would be in not having to run the sha algorithm.
-**Is it worth the time waste to save previous results?**
+
+**3. Is it worth the time waste to save previous results?**
+
 In some cases it is worth it. In cases where the repetition is high, there is a lot of time to be saved. As can be seen in our runtimes above, we have saved some time, with just 10 requests from the client.
-**Is it possible to improve forking, by adding a result list?**
+
+**4. Is it possible to improve forking, by adding a result list?**
+
 Having a shared memory pool which would include the result list would in theory provide a performance increase as the more duplicates appears in a session, the faster these would be solved, but the piping which is necessary for interprocess communication is rather inefficient, and in our experiments the solution would run slower than just having the process run without checking the results beforehand.
