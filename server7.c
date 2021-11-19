@@ -24,14 +24,7 @@ typedef struct
 	uint8_t p;
 } Request;
 
-typedef struct
-{
-	uint64_t number;
-	uint8_t resultHash[32];
-} resultStruct;
-
-resultStruct results[20];
-int resultsCounter = 0;
+int fd[2];
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
@@ -44,27 +37,10 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 	return true;
 }
 
-uint64_t searchResults(resultStruct *resultTable, uint8_t *hash) {
-	for (int i = 0; i < 20; i++)
-	{
-		if(compareHashes(resultTable[i].resultHash, hash)) {
-			return resultTable[i].number;
-		}
-	}
-	return -1;
-}
-
-void printResults(resultStruct *results, uint8_t *hash) {
-	for (int i = 0; i < 20; i++)
-	{
-		for (int j = 0; j < 32; j++)
-		printf("%02x", results[i].resultHash[j]);
-	}
-}
-
 //https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent
-void solveSha(int connfd, int *pipefd)
+void solveSha(int connfd)
 {
+	close(fd[0]);
 	char buffer[MAX];
 	bzero(buffer, MAX);
 	read(connfd, buffer, sizeof(buffer));
@@ -73,9 +49,6 @@ void solveSha(int connfd, int *pipefd)
 	uint64_t start = be64toh(request->start);
 	uint64_t end = be64toh(request->end);
 	
-	// uint64_t prevAnswer = searchResults(results, request->hash);
-	// printResults(results, request->hash);
-	
 	for (uint64_t i = start; i < end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
@@ -83,22 +56,18 @@ void solveSha(int connfd, int *pipefd)
 		{
 			uint64_t result = htobe64(i);
 			write(connfd, &result, sizeof(result));
-			write(pipefd[1], result, sizeof(result));
+			write(fd[1], &result, sizeof(result));
+			close(fd[1]);
 			close(connfd);
 			break;
 		}
 	}
 }
 
+// Function designed for chat between client and server.
 // https://www.geeksforgeeks.org/fork-system-call/
 // https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/
 void forkStage(int connfd) {
-	int fd[2];
-	if(pipe(fd) == -1){
-		printf("Pipe failed\n");
-		exit(0);
-	}
-
 	pid_t pid = fork();
 	if( pid  < 0) {
 		//Error
@@ -106,19 +75,15 @@ void forkStage(int connfd) {
 		exit(0);
 	} else if ( pid > 0 ){
 		//Parent process
-		wait(NULL);
 		close(fd[1]);
-		char buff[sizeof(uint64_t)];
-		bzero(buff, sizeof(buff));
-		read(fd[0], buff, sizeof(buff));
-		uint64_t result = (uint64_t) buff;
- 		printf("Result address: %li\n", result);
-		
+		uint64_t forkresult;
+		read(fd[0], &forkresult, sizeof(uint64_t));
 		close(fd[0]);
 		close(connfd);
+		printf("Received answer from child: %ld \n", forkresult);
 	} else {
 		//Child process
-		solveSha(connfd, fd);
+		solveSha(connfd);
 		exit(0);
 	}
 }
@@ -165,6 +130,11 @@ int main()
 	
 	len = sizeof(cli);
 	
+	if(pipe(fd) == -1) {
+		printf("Error piping.\n");
+		exit(0);
+	}
+
 	for (;;)
 	{
 		// Accept the data packet from client and verification
