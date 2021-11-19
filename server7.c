@@ -77,6 +77,7 @@ void solveSha(int connfd)
 // Function designed for chat between client and server.
 // https://www.geeksforgeeks.org/fork-system-call/
 // https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/
+// https://www.youtube.com/watch?v=Mqb2dVRe0uo
 void forkStage(int connfd) {
 	if(pipe(fd) == -1) {
 			printf("Error piping.\n");
@@ -92,7 +93,7 @@ void forkStage(int connfd) {
 		//Parent process
 		close(fd[1]);
 		resultStruct forkresult;
-		read(fd[0], &forkresult, sizeof(uint64_t));
+		read(fd[0], &forkresult, sizeof(resultStruct));
 		close(fd[0]);
 		close(connfd);
 		printf("Received answer from child: %ld \n", forkresult.number);
