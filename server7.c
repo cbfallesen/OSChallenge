@@ -30,6 +30,28 @@ typedef struct
 	uint8_t hash[32];
 } resultStruct;
 
+struct Node
+{
+	resultStruct *data;
+	struct Node *next;	
+};
+
+struct Node *startNode = NULL;
+
+void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
+	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+
+	newNode->data = malloc(dataSize);
+	newNode->next = (*refNode);
+
+	newNode->data->number = newData->number;
+	memcpy(newNode->data->hash, newData->hash, sizeof(newData->hash));
+
+	//(*refNode) = newNode;
+
+	return newNode;
+}
+
 int fd[2];
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -54,6 +76,21 @@ void solveSha(int connfd)
 
 	uint64_t start = be64toh(request->start);
 	uint64_t end = be64toh(request->end);
+	uint64_t result;
+	bool resultLock = false;
+	struct Node *node = startNode;
+	resultStruct resultData;
+
+	while(node != NULL) {
+		if(compareHashes(node->data->hash, request->hash)){
+			result = node->data->number;
+			resultLock = true;
+			write(connfd, &result, sizeof(result));
+			close(connfd);
+			break;
+		}
+		node = node->next;
+	}
 	
 	for (uint64_t i = start; i < end; i++)
 	{
@@ -64,6 +101,7 @@ void solveSha(int connfd)
 			resultStruct resultStruct;
 			resultStruct.number = i;
 			memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
+			startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
 			
 			write(connfd, &result, sizeof(result));
 			write(fd[1], &resultStruct, sizeof(resultStruct));
