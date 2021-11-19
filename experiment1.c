@@ -37,18 +37,6 @@ struct Node
 
 struct Node *startNode = NULL;
 
-void print(struct Node *head) {
-    struct Node *current_node = head;
-   	while ( current_node != NULL) {
-        printf("%li \n", current_node->data->number);
-		for(int i = 0; i < 32; i++) {
-			printf("%02x", current_node->data->resultHash[i]);
-		}
-		printf("\n\n");
-        current_node = current_node->next;
-    }
-}
-
 void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
@@ -94,14 +82,7 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	// resultStruct *resultTable[1000][sizeof(end) + 32];
-	// resultStruct *resultTable[1][1];
-	// for(int i = 0; i < 1000; i++) {
-	// 	bzero(resultTable[i], 32);
-	// }
-	// int resultCounter = -1;
 	bool resultLock = false;
-	// resultStruct *resultData;
 	result = -1;
 	struct Node *node = startNode;
 	resultStruct resultData;
