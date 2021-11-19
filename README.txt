@@ -6,7 +6,8 @@ Our repository contains 8 .c files in total.
 
 Milestone:
 
-Our milestone file contains 
+Our milestone file contains the basic setup for a TCP server. We have used this file, as a starting point for all of our experiments.
+The 
 
 Experiment 1:
 
