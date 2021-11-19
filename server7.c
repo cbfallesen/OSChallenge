@@ -24,6 +24,12 @@ typedef struct
 	uint8_t p;
 } Request;
 
+typedef struct 
+{
+	uint64_t number;
+	uint8_t hash[32];
+} resultStruct;
+
 int fd[2];
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -55,8 +61,11 @@ void solveSha(int connfd)
 		if(compareHashes(guess, request->hash))
 		{
 			uint64_t result = htobe64(i);
+			resultStruct resultStruct;
+			resultStruct.number = i;
+			memcpy(resultStruct.hash,guess, sizeof(guess));
 			write(connfd, &result, sizeof(result));
-			write(fd[1], &i, sizeof(result));
+			write(fd[1], &resultStruct, sizeof(resultStruct));
 			close(fd[1]);
 			close(connfd);
 			break;
@@ -81,11 +90,11 @@ void forkStage(int connfd) {
 	} else if ( pid > 0 ){
 		//Parent process
 		close(fd[1]);
-		uint64_t forkresult;
+		resultStruct forkresult;
 		read(fd[0], &forkresult, sizeof(uint64_t));
 		close(fd[0]);
 		close(connfd);
-		// printf("Received answer from child: %ld \n", forkresult);
+		printf("Received answer from child: %ld \n", forkresult.number);
 	} else {
 		//Child process
 		solveSha(connfd);
