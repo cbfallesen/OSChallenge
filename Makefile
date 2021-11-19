@@ -6,5 +6,5 @@ DEPS = messages.h
 %.o: %.c $(DEPS)
 	$(CC) $(CPPFLAGS) -c -o $@ $< $(CFLAGS)
 
-servermake: server.o 
-	$(CC) $(CPPFLAGS) server.o -o server $(CFLAGS)
+servermake: experiment2.o 
+	$(CC) $(CPPFLAGS) experiment2.o -o server $(CFLAGS)
