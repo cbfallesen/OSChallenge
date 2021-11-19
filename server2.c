@@ -102,9 +102,13 @@ void func(int sockfd)
 	struct Node *node = startNode;
 	result = -1;
 
+	printf("Before print.\n");
 	print(startNode);
+	printf("Before while.\n");
 	while(node != NULL) {
+		printf("Inside while loop.\n");
 		if(compareHashes(node, Packet1->hashvalue)){
+			printf("Found hash in results.\n");
 			result = x;
 			resultLock = true;
 			break;
@@ -112,17 +116,23 @@ void func(int sockfd)
 		node = node->next;
 	}
 
+	printf("Before resultLock.\n");
 	if (!resultLock)
 	{
+		printf("No resultLock.\n");
 		for (x = start; x < end; x++)
 		{
+			printf("Inside for.\n");
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
+			printf("After sha.\n");
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
+				printf("Found hash.\n");
 				resultData->number = x;
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				pushResult(&start, &resultData, sizeof(resultStruct));
+				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
 				break;
