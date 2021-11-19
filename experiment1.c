@@ -86,8 +86,6 @@ void func(int sockfd)
 	struct Node *node = startNode;
 	resultStruct resultData;
 	
-	print(startNode);
-
 	while(node != NULL) {
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			result = node->data->number;
