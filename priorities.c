@@ -59,7 +59,7 @@ void* popResult(struct Node** refNode, int priority) {
 	printf("pop");
 
 	// Store head node
-    struct Node *temp = refNode, *prev;
+    struct Node *temp = *refNode, *prev;
  
     // If head node itself holds the key to be deleted
     if (temp != NULL && temp->data->p == priority) {
@@ -70,7 +70,7 @@ void* popResult(struct Node** refNode, int priority) {
  
     // Search for the key to be deleted, keep track of the
     // previous node as we need to change 'prev->next'
-    while (temp != NULL && temp->data != priority) {
+    while (temp != NULL && temp->data->p != priority) {
         prev = temp;
         temp = temp->next;
     }
@@ -147,7 +147,7 @@ void func(int sockfd, struct Node* starter)
 		}
 	}
 
-	startNode = popResult(startNode, currentP);
+	startNode = popResult(&startNode, currentP);
 
 	result = htobe64(result);
 	write(sockfd, &result, sizeof(result));
