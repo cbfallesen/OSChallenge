@@ -24,6 +24,12 @@ typedef struct
 	uint8_t p;
 } Request;
 
+typedef struct 
+{
+	uint64_t number;
+	uint8_t hash[32];
+} resultStruct;
+
 int fd[2];
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -55,8 +61,12 @@ void solveSha(int connfd)
 		if(compareHashes(guess, request->hash))
 		{
 			uint64_t result = htobe64(i);
+			resultStruct resultStruct;
+			resultStruct.number = i;
+			memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
+			
 			write(connfd, &result, sizeof(result));
-			write(fd[1], &i, sizeof(result));
+			write(fd[1], &resultStruct, sizeof(resultStruct));
 			close(fd[1]);
 			close(connfd);
 			break;
@@ -67,6 +77,7 @@ void solveSha(int connfd)
 // Function designed for chat between client and server.
 // https://www.geeksforgeeks.org/fork-system-call/
 // https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/
+// https://www.youtube.com/watch?v=Mqb2dVRe0uo
 void forkStage(int connfd) {
 	if(pipe(fd) == -1) {
 			printf("Error piping.\n");
@@ -81,11 +92,14 @@ void forkStage(int connfd) {
 	} else if ( pid > 0 ){
 		//Parent process
 		close(fd[1]);
-		uint64_t forkresult;
-		read(fd[0], &forkresult, sizeof(uint64_t));
+		resultStruct forkresult;
+		read(fd[0], &forkresult, sizeof(resultStruct));
 		close(fd[0]);
 		close(connfd);
-		// printf("Received answer from child: %ld \n", forkresult);
+		printf("Received answer from child: %ld \n", forkresult.number);
+		for (int j = 0; j < 32; j++)
+				printf("%02x", forkresult.hash[j]);
+			printf("\n");
 	} else {
 		//Child process
 		solveSha(connfd);
