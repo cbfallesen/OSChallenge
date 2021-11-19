@@ -71,48 +71,6 @@ void print(struct Node *head) {
     }
 }
 
-// Function designed for chat between client and server.
-// void func(int sockfd)
-// {
-// 	// print buffer which contains the client contents
-// 	printf("\n\n");
-// 	int i;
-// 	for (i = 0; i < 32; i++)
-// 		printf("%02x", Packet1->hashvalue[i]);
-
-// 	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
-
-// 	uint64_t x;
-// 	uint64_t result;
-// 	result = -1;
-
-// 	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
-// 	{
-// 		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
-
-// 		int equal = 1;
-// 		for (i = 0; i < 32; i++)
-// 		{
-// 			if (guess[i] != Packet1->hashvalue[i])
-// 			{
-// 				equal = 0;
-// 				break;
-// 			}
-// 		}
-
-// 		if (equal == 1)
-// 		{
-// 			result = x;
-// 			break;
-// 		}
-// 	}
-
-// 	result = htobe64(result);
-
-// 	// and send that buffer to client
-// 	write(sockfd, &result, sizeof(result));
-// 	// }
-// }
 
 // Driver function
 int main()
@@ -166,33 +124,26 @@ int main()
 		}
 		else
 			printf("server accept the client...\n");
-		
+
+
 		char buff[MAX];
 		int n;
-		packetPrint *Packet1;
+		packet *Packet1;
 
 		bzero(buff, MAX);
 
 		// read the message from client and copy it in buffer
 		read(sockfd, buff, sizeof(buff));
-		Packet1 = (packetPrint *)buff;
-
-		// print buffer which contains the client contents
+		Packet1 = (packet *)buff;
+		// Function for chatting between client and server
 		printf("\n\n");
 		int i;
 		for (i = 0; i < 32; i++)
 			printf("%02x", Packet1->hashvalue[i]);
 
 		printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
-
-		// printf("Before push\n");
-		// startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
-		// printf("After push\n");
-		// print(startNode);
 	}
-	// Function for chatting between client and server
-	//func(connfd);
-	print(startNode);
+
 	// After chatting close the socket
 	close(sockfd);
 }
