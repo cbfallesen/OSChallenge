@@ -130,6 +130,7 @@ void func(int sockfd)
 				resultData->number = x;
 				printf("Added number.\n");
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
+				printf("memcpy.\n");
 				pushResult(&start, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
