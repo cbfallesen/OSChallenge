@@ -51,7 +51,7 @@ void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%d ", current_node->data->number);
+        printf("%ld ", current_node->data->number);
         current_node = current_node->next;
     }
 }
@@ -107,7 +107,7 @@ void func(int sockfd)
 	printf("Before while.\n");
 	while(node != NULL) {
 		printf("Inside while loop.\n");
-		if(compareHashes(node, Packet1->hashvalue)){
+		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			printf("Found hash in results.\n");
 			result = x;
 			resultLock = true;
@@ -122,16 +122,17 @@ void func(int sockfd)
 		printf("No resultLock.\n");
 		for (x = start; x < end; x++)
 		{
-			printf("Inside for.\n");
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-			printf("After sha.\n");
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
 				printf("Found hash.\n");
 				resultData->number = x;
+				printf("Added number.\n");
+				//resultData->resultHash = Packet1->hashvalue;
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				pushResult(&start, &resultData, sizeof(resultStruct));
+				printf("memcpy.\n");
+				pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
