@@ -85,7 +85,7 @@ void forkStage(int connfd) {
 		read(fd[0], &forkresult, sizeof(uint64_t));
 		close(fd[0]);
 		close(connfd);
-		printf("Received answer from child: %ld \n", forkresult);
+		// printf("Received answer from child: %ld \n", forkresult);
 	} else {
 		//Child process
 		solveSha(connfd);
