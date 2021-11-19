@@ -69,6 +69,11 @@ void solveSha(int connfd)
 // https://www.geeksforgeeks.org/fork-system-call/
 // https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/
 void forkStage(int connfd) {
+	if(pipe(fd) == -1) {
+			printf("Error piping.\n");
+			exit(0);
+	}
+
 	pid_t pid = fork();
 	if( pid  < 0) {
 		//Error
@@ -131,10 +136,6 @@ int main()
 	
 	len = sizeof(cli);
 	
-	if(pipe(fd) == -1) {
-		printf("Error piping.\n");
-		exit(0);
-	}
 
 	for (;;)
 	{
