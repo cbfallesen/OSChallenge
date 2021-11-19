@@ -119,7 +119,7 @@ void solveSha(int connfd)
 				resultStruct.number = i;
 				memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
 
-				printf("%ld.\n", resultData.number);
+				printf("%ld.\n", resultStruct.number);
 				printf("resultData:\n");
 				for (int i = 0; i < 32; i++)
 					printf("%02x", resultStruct.hash[i]);
