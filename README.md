@@ -119,9 +119,9 @@ Lastly, the treated requests should be removed from the linked list, and once it
 
 Previous sites used for linked lists.
 ___
-We found that a problem with our implementation is that there is no way for the server to know, when requests are no longer coming in from the client. This could be mitigated by just having the server run without end, and instead continuously push items from the request generator into 
+We found that a problem with our implementation is that there is no way for the server to know, when requests are no longer coming in from the client. This could be mitigated by just having the server run without end, and instead continuously push items from the request generator into the linked list which would be in shared memory. As mentioned in the comments of threads, the threads would then launch at the beginning of the program, and fetch every time a new request is added. 
 
-Unfortunately, due to lack of time, we haven’t had a chance to try and implement these.
+Unfortunately, due to lack of time, we haven’t had a chance to try and implement these, and we decided to stick to a more basic process approach.
 ___
 ## Runtimes
 
@@ -131,7 +131,7 @@ Experiments run on an Apple computer with intel chip.
 16 GB 1600 MHz DDR3
 
 Times are in microseconds
-####Milestone
+#### Milestone
 | #   | num      | 1                | 2                    | 3                       | Avg                   |
 |-----|----------|------------------|----------------------|-------------------------|-----------------------|
 | 1   | 7143775  |    1,551,569.00  |        1,590,259.00  |           1,564,804.00  |            1,568,877  |
@@ -146,7 +146,7 @@ Times are in microseconds
 | 10  | 7909485  |    32,395,767.0  |      32,884,965.00   |         32,553,441.00   |          32,611,391   |
 | Avg |          |    19,696,618.0  |      20,049,808.00   |         19,845,106.00   |          19,863,844   |
 
-####Experiment 1, reset server each time
+#### Experiment 1, reset server each time
 |     |          | 1                   | 2                   | 3                   | Avg                 |
 |-----|----------|---------------------|---------------------|---------------------|---------------------|
 | 1   | 7143775  |          1,587,849  |          1,721,409  |          1,632,100  |          1,647,119  |
@@ -161,7 +161,7 @@ Times are in microseconds
 | 10  | 7909485  |        18,440,096   |        32,900,470   |        33,731,244   |        28,357,270   |
 | Avg |          |        13,364,606   |        20,244,429   |        20,588,453   |        18,065,829   |
 
-####Experiment 1, same server, new client request
+#### Experiment 1, same server, new client request
 |     |          | 1              | 2    | 3    | Avg             |
 |-----|----------|----------------|------|------|-----------------|
 | 1   | 7143775  |     1,600,301  | 1046 | 887  |        534,078  |
@@ -176,7 +176,7 @@ Times are in microseconds
 | 10  | 7909485  |    33,428,246  | 1395 | 1302 |   11,143,648    |
 | Avg |          |    20,329,104  | 1422 | 1396 |     6,777,307   |
 
-####Experiment 2
+#### Experiment 2
 |     |          | 1              | 2              | 3              | Avg                |
 |-----|----------|----------------|----------------|----------------|--------------------|
 | 1   | 7143775  |     1,565,852  |     1,579,071  |     1,607,016  |        1,583,980   |
@@ -206,7 +206,7 @@ Times are in microseconds
 | 10  | 7909485  |     19,628,690  |     20,564,306  |     19,431,103  |        19,874,700   |
 | Avg |          |     13,613,764  |     14,282,782  |     13,512,745  |        13,803,097   |
 
-####Experiment 4, same server, new client request
+#### Experiment 4, same server, new client request
 |     |          | 1            | 2            | 3        | Avg            |
 |-----|----------|--------------|--------------|----------|----------------|
 | 1   | 7143775  |   1,560,988  |       1,264  |   1,401  |       521,218  |
