@@ -49,35 +49,8 @@ void func(int sockfd)
 
 	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
-	uint64_t x;
-	uint64_t result;
-	result = -1;
-
-	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
-	{
-		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
-
-		int equal = 1;
-		for (i = 0; i < 32; i++)
-		{
-			if (guess[i] != Packet1->hashvalue[i])
-			{
-				equal = 0;
-				break;
-			}
-		}
-
-		if (equal == 1)
-		{
-			result = x;
-			break;
-		}
-	}
-
-	result = htobe64(result);
 
 	// and send that buffer to client
-	write(sockfd, &result, sizeof(result));
 	// }
 }
 
