@@ -64,6 +64,11 @@ void solveSha(int connfd)
 			resultStruct resultStruct;
 			resultStruct.number = i;
 			memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
+			
+			for (int j = 0; j < 32; j++)
+				printf("%02x", resultStruct.hash[j]);
+			printf("\n");
+
 			write(connfd, &result, sizeof(result));
 			write(fd[1], &resultStruct, sizeof(resultStruct));
 			close(fd[1]);
@@ -95,9 +100,6 @@ void forkStage(int connfd) {
 		close(fd[0]);
 		close(connfd);
 		printf("Received answer from child: %ld \n", forkresult.number);
-		for (int i = 0; i < 32; i++)
-		printf("%02x", forkresult.hash[i]);
-		printf("\n");
 	} else {
 		//Child process
 		solveSha(connfd);
