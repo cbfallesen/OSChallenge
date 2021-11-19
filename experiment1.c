@@ -37,6 +37,18 @@ struct Node
 
 struct Node *startNode = NULL;
 
+void print(struct Node *head) {
+    struct Node *current_node = head;
+   	while ( current_node != NULL) {
+        printf("%li \n", current_node->data->number);
+		for(int i = 0; i < 32; i++) {
+			printf("%02x", current_node->data->resultHash[i]);
+		}
+		printf("\n\n");
+        current_node = current_node->next;
+    }
+}
+
 void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
@@ -45,8 +57,6 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
-
-	//(*refNode) = newNode;
 
 	return newNode;
 }
@@ -96,6 +106,8 @@ void func(int sockfd)
 	struct Node *node = startNode;
 	resultStruct resultData;
 	
+	print(startNode);
+
 	while(node != NULL) {
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			result = node->data->number;
