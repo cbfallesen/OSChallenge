@@ -28,6 +28,34 @@ struct Node
 	struct Node *next;	
 };
 
+struct Node *startNode = NULL;
+
+void* pushResult (struct Node **refNode, packet *newData, size_t dataSize) {
+	printf("push");
+	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+
+	newNode->data = malloc(dataSize);
+	newNode->next = (*refNode);
+
+	newNode->data->start = newData->start;
+	newNode->data->end = newData->end;
+	newNode->data->p = newData->p;
+	memcpy(newNode->data->hashvalue, newData->hashvalue, sizeof(newData->hashvalue));
+
+
+	//(*refNode) = newNode;
+
+	return newNode;
+}
+
+void print(struct Node *head) {
+    struct Node *current_node = head;
+   	while ( current_node != NULL) {
+        printf("%li ", current_node->data->p);
+        current_node = current_node->next;
+    }
+}
+
 // Function designed for chat between client and server.
 void func(int sockfd)
 {
@@ -47,7 +75,8 @@ void func(int sockfd)
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
 
-	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	pushResult(&startNode, &Packet1, sizeof(Packet1));
 
 
 	// and send that buffer to client
