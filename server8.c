@@ -50,9 +50,9 @@ struct Node *startNode = NULL;
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%i \n", current_node->data.start);
-		printf("%i \n", current_node->data.end);
-		printf("%i \n", current_node->data.p);
+        printf("%li \n", current_node->data.start);
+		printf("%li \n", current_node->data.end);
+		printf("%f \n", current_node->data.p);
 		for(int i = 0; i < 32; i++) {
 			printf("%02x \n", current_node->data.hashvalue[i]);
 		}
