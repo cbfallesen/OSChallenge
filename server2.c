@@ -31,7 +31,7 @@ typedef struct
 
 struct Node
 {
-	void *data;
+	resultStruct *data;
 	struct Node *next;	
 };
 
