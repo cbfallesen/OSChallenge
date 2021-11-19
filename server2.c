@@ -91,20 +91,19 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	struct Node *start = NULL;
 	// resultStruct *resultTable[1000][sizeof(end) + 32];
 	// resultStruct *resultTable[1][1];
 	// for(int i = 0; i < 1000; i++) {
 	// 	bzero(resultTable[i], 32);
 	// }
-	int resultCounter = -1;
+	// int resultCounter = -1;
 	bool resultLock = false;
 	resultStruct *resultData;
-
+	struct Node *start = NULL;
+	struct Node *node = start;
 	result = -1;
 
-	struct Node *node = start;
-	for(int i = 0; i < resultCounter; i++) {
+	while(node != NULL) {
 		if(compareHashes(node, Packet1->hashvalue)){
 			result = x;
 			resultLock = true;
