@@ -177,14 +177,14 @@ int main()
 		}
 		printf("\n");
 
-		printf("Before push\n");
-		startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
-		printf("After push\n");
-		print(startNode);
+		// printf("Before push\n");
+		// startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
+		// printf("After push\n");
+		// print(startNode);
 	}
 	// Function for chatting between client and server
 	//func(connfd);
-
+	print(startNode);
 	// After chatting close the socket
 	close(sockfd);
 }
