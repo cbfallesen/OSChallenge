@@ -211,7 +211,7 @@ int main()
 		int n;
 		packet *Packet1;
 		bzero(buff, MAX);// read the message from client and copy it in buffer
-		read(sockfd, buff, sizeof(buff));
+		read(connfd, buff, sizeof(buff));
 		Packet1 = (packet *)buff;
 
 		printf("Before print.\n");
