@@ -51,7 +51,7 @@ void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%ld ", current_node->data->number);
+        printf("%li ", current_node->data->number);
         current_node = current_node->next;
     }
 }
