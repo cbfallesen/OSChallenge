@@ -149,7 +149,6 @@ int main()
 	
 	len = sizeof(cli);
 	
-
 	for (;;)
 	{
 		// Accept the data packet from client and verification
