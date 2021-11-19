@@ -131,7 +131,6 @@ void solveSha(int connfd)
 					printf("%02x", resultStruct.hash[i]);
 				printf("\n\n");
 
-				startNode = pushResult(&startNode, &resultStruct, sizeof(resultStruct));
 				uint64_t result = htobe64(i);
 				
 				write(connfd, &result, sizeof(result));
@@ -164,6 +163,9 @@ void forkStage(int connfd) {
 		close(fd[1]);
 		resultStruct forkresult;
 		read(fd[0], &forkresult, sizeof(resultStruct));
+
+		startNode = pushResult(&startNode, &forkresult, sizeof(resultStruct));
+
 		close(fd[0]);
 		close(connfd);
 		// printf("Received answer from child: %ld \n", forkresult.number);
