@@ -10,9 +10,11 @@ Our repository contains 8 .c files in total.
 Our milestone file fulfills the requirements of the milestone assignment.
 
 We have created 3 improvements for our milestone.
+
 Experiment 1
 Experiment 2
 Experiment 3 (Combination of 1 and 2)
+
 There are two separate improvements, both are an implementation of their own idea. The third experiment is a combination of the two improvements, into one implementation. This is however not the fastest implementation, and therefore our final program is the one called experiment 2. All three experiments yield 100 % reliability.
 
 Some specific experiments we have done:
@@ -30,7 +32,7 @@ ___
 The first part of our milestone is to set up the server. The main part is to set up the TCP socket. In our main function, we start by creating a socket. Next we assign an IP address and a port. Once this is done, we bind the socket to the IP address. Now the socket is set up.
 The next part is to start listening for the server. Once the client is found, it should be accepted. Since our client will give us multiple requests, our accept and listen are both in an endless loop. This makes it possible for the server to recieve all requests from the client, no matter how many. Lastly, once the client has been accepted, we call func() is called.
 ___
-All of the treatment of our hash value happens in func(). Since the most basic way to do reverse hashing is by brute forcing, this was the first implementation that we made. We have created a struct, that maked it possible for us, to take all of the 49 bits given by the client, and split it into the parts that we need. That is why, the first thing we do is use a buffer to split the 49 bits into start, end, hash and priority.
+All of the treatment of our hash value happens in func(). Since the most basic way to do reverse hashing is by brute forcing, this was the first implementation that we made. We have created a struct that maked it possible for us to take all of the 49 bits given by the client, and split it into the parts that we need. That is why, the first thing we do is use a buffer to split the 49 bits into start, end, hash and priority.
 We create two variables, one is the result, and one is the counter we will use for our comparison.
 For the brute force, we have created a for-loop that continues from the lowest value of the given interval, to the highest. First we take the number from the counter, and put it through the SHA256 algorithm. This will give us the hash string for that number. Next, we compare each character in the new hash string, to the character from the same index in the request hash string.
 If at any point the two characters are not the same, the loop breaks, and the program will continue with the next number.
@@ -191,7 +193,7 @@ Times are in microseconds
 | 10  | 7909485  |     9,621,162  |     8,903,987  |     9,091,287  |        9,205,479   |
 | Avg |          |     6,626,848  |     6,493,389  |     6,341,702  |        6,487,313   |
 
-####Experiment 3, reset server every time
+#### Experiment 3, reset server every time
 |     |          | 1               | 2               | 3               | Avg                 |
 |-----|----------|-----------------|-----------------|-----------------|---------------------|
 | 1   | 7143775  |      1,635,481  |      1,732,218  |      1,662,727  |          1,676,809  |
@@ -223,11 +225,12 @@ Times are in microseconds
  
 
 ___
-##Concluding remarks on experiments
+## Concluding remarks on experiments
 **Is multithreading faster than multi-processing?**
 In our implementation multi-processing is much faster than multithreading. In our experience, it is primarily due to the sharing of data in multithreading that gives trouble with the result. In multi-processing they are run as separate processes, and can actually be run in parallel, without needing delays.
 **What sorts of pre-processing of data is feasible?**
+We concluded that storing each previous hash attempt is not feasible. The memory requirement scales poorly and quickly grows to a dataset the size of the search interval. Furthermore, the only performance increase would be in not having to run the sha algorithm.
 **Is it worth the time waste to save previous results?**
 In some cases it is worth it. In cases where the repetition is high, there is a lot of time to be saved. As can be seen in our runtimes above, we have saved some time, with just 10 requests from the client.
 **Is it possible to improve forking, by adding a result list?**
-
+Having a shared memory pool which would include the result list would in theory provide a performance increase as the more duplicates appears in a session, the faster these would be solved, but the piping which is necessary for interprocess communication is rather inefficient, and in our experiments the solution would run slower than just having the process run without checking the results beforehand.
