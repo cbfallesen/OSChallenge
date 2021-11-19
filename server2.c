@@ -43,8 +43,14 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
 
+	printf("newData:\n");
+	for (int i = 0; i < 32; i++)
+			printf("%02x", newData->resultHash[i]);
+		printf("\n\n");
+
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
+	printf("newNode:\n");
 	for (int i = 0; i < 32; i++)
 			printf("%02x", newNode->data->resultHash[i]);
 		printf("\n\n");
@@ -105,6 +111,7 @@ void func(int sockfd)
 	// resultStruct *resultData;
 	result = -1;
 	struct Node *node = startNode;
+	resultStruct resultData;
 	
 	printf("Before print.\n");
 	if (startNode == NULL) {
@@ -134,12 +141,15 @@ void func(int sockfd)
 
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
-				resultStruct resultData = {.number = x, .resultHash = Packet1->hashvalue};
 				printf("Found hash.\n");
-				//resultData->number = x;
+				resultData.number = x;
 				printf("Added number.\n");
-				//memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
+				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("%ld.\n", resultData.number);
+				printf("resultData:\n");
+				for (int i = 0; i < 32; i++)
+					printf("%02x", resultData.resultHash[i]);
+				printf("\n\n");
 				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
