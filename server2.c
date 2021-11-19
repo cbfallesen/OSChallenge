@@ -29,14 +29,14 @@ typedef struct
 	uint8_t resultHash[32];
 } resultStruct;
 
-struct Node
+typedef struct
 {
 	resultStruct *data;
 	struct Node *next;	
-};
+} Node;
 
-void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
-	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+void pushResult (Node **refNode, void *newData, size_t dataSize) {
+	Node* newNode = (struct Node*) malloc(sizeof(Node));
 
 	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
@@ -48,10 +48,10 @@ void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
 	(*refNode) = newNode;
 }
 
-void print(struct Node *head) {
-    struct Node *current_node = head;
+void print(Node *head) {
+    Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%d ", current_node->data->number);
+        printf("%ld ", current_node->data->number);
         current_node = current_node->next;
     }
 }
@@ -98,8 +98,8 @@ void func(int sockfd)
 	// int resultCounter = -1;
 	bool resultLock = false;
 	resultStruct *resultData;
-	struct Node *startNode = NULL;
-	struct Node *node = startNode;
+	Node *startNode = NULL;
+	Node *node = startNode;
 	result = -1;
 
 	printf("Before print.\n");
@@ -107,7 +107,7 @@ void func(int sockfd)
 	printf("Before while.\n");
 	while(node != NULL) {
 		printf("Inside while loop.\n");
-		if(compareHashes(node, Packet1->hashvalue)){
+		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			printf("Found hash in results.\n");
 			result = x;
 			resultLock = true;
@@ -129,6 +129,7 @@ void func(int sockfd)
 				printf("Found hash.\n");
 				resultData->number = x;
 				printf("Added number.\n");
+				//resultData->resultHash = Packet1->hashvalue;
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("memcpy.\n");
 				pushResult(&start, &resultData, sizeof(resultStruct));
