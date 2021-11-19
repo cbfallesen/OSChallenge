@@ -108,11 +108,9 @@ void forkStage(int connfd) {
 		//Parent process
 		wait(NULL);
 		close(fd[1]);
-		char result[sizeof(uint64_t)];
-		bzero(result, sizeof(result));
+		uint64_t result;
 		read(fd[0], result, sizeof(result));
 		printf("Result address: %d\n", result);
-		printf("Result: %d\n", *result);
 		
 		close(fd[0]);
 		close(connfd);
