@@ -94,14 +94,7 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	// resultStruct *resultTable[1000][sizeof(end) + 32];
-	// resultStruct *resultTable[1][1];
-	// for(int i = 0; i < 1000; i++) {
-	// 	bzero(resultTable[i], 32);
-	// }
-	// int resultCounter = -1;
 	bool resultLock = false;
-	// resultStruct *resultData;
 	result = -1;
 	struct Node *node = startNode;
 	resultStruct resultData;
@@ -129,7 +122,7 @@ void func(int sockfd)
 				resultData.number = x;
 				//Arrays cannot be assigned in structs, so we use memcpy
 				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				node = pushResult(&startNode, &resultData, sizeof(resultStruct));
+				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
 				result = x;
 				break;
 			}
