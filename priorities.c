@@ -125,7 +125,7 @@ int main()
 		bzero(buff, MAX);
 
 		// read the message from client and copy it in buffer
-		read(sockfd, buff, sizeof(buff));
+		read(connfd, buff, sizeof(buff));
 		Packet1 = (packet *)buff;
 		// Function for chatting between client and server
 		printf("\n\n");
