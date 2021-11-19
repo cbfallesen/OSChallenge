@@ -35,6 +35,8 @@ struct Node
 	struct Node *next;	
 };
 
+struct Node *startNode = NULL;
+
 void pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
@@ -97,7 +99,6 @@ void func(int sockfd)
 	// int resultCounter = -1;
 	bool resultLock = false;
 	// resultStruct *resultData;
-	struct Node *startNode = NULL;
 	struct Node *node = startNode;
 	result = -1;
 
