@@ -54,8 +54,9 @@ void print(struct Node *head) {
 		printf("%li \n", current_node->data.end);
 		printf("%d \n", current_node->data.p);
 		for(int i = 0; i < 32; i++) {
-			printf("%02x \n", current_node->data.hashvalue[i]);
+			printf("%02x", current_node->data.hashvalue[i]);
 		}
+		printf("\n");
         current_node = current_node->next;
     }
 }
