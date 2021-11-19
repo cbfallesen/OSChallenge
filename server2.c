@@ -79,7 +79,7 @@ void func(int sockfd)
 	int i;
 	for (i = 0; i < 32; i++)
 		printf("%02x", Packet1->hashvalue[i]);
-
+	printf("\n");
 	uint64_t x;
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
