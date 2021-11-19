@@ -211,7 +211,8 @@ int main()
 		int n;
 		packet *Packet1;
 		bzero(buff, MAX);// read the message from client and copy it in buffer
-		read(connfd, buff, sizeof(buff));
+		int readId = read(connfd, buff, sizeof(buff));
+		printf("%d\n", readId);
 		Packet1 = (packet *)buff;
 
 		printf("Before print.\n");
@@ -222,11 +223,11 @@ int main()
 		}
 
 		startNode = pushResult(&startNode, Packet1, sizeof(buff));
-		// Function for chatting between client and server
 	}
 
 	while (startNode != NULL)
 	{
+		// Function for chatting between client and server
 		func(connfd, startNode);
 	}
 	// After chatting close the socket
