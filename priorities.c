@@ -42,7 +42,12 @@ void* pushResult (struct Node **refNode, packet *newData, size_t dataSize) {
 	newNode->data->p = newData->p;
 	memcpy(newNode->data->hashvalue, newData->hashvalue, sizeof(newData->hashvalue));
 
+	printf("\n\n");
+	int i;
+	for (i = 0; i < 32; i++)
+		printf("%02x", newNode->data->hashvalue[i]);
 
+	printf("\nFrom start: %li end: %li priority: %d\n", be64toh(newNode->data->start), be64toh(newNode->data->end), newNode->data->p);
 	//(*refNode) = newNode;
 
 	return newNode;
@@ -70,12 +75,12 @@ void func(int sockfd)
 	Packet1 = (packet *)buff;
 
 	// print buffer which contains the client contents
-	printf("\n\n");
-	int i;
-	for (i = 0; i < 32; i++)
-		printf("%02x", Packet1->hashvalue[i]);
+	// printf("\n\n");
+	// int i;
+	// for (i = 0; i < 32; i++)
+	// 	printf("%02x", Packet1->hashvalue[i]);
 
-	printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 	pushResult(&startNode, &Packet1, sizeof(Packet1));
 
 
