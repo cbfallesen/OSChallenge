@@ -67,6 +67,7 @@ With this implementation, a new process would start every time a new request was
 *Our inspiration:*
 
 [Forking](https://www.geeksforgeeks.org/fork-system-call/)
+
 [Forking and piping](https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
 
 ### Experiment 3:
@@ -82,6 +83,7 @@ We figured that since there will only be a rather small number of requests, this
 This was faster than our sequential implementation, but was slower than our pure process-implementation. This is due to the fact that piping is a rather inefficient way to pass data between processes, which we would do after every request was solved.
 
 *Inspiration:*
+
 [Sharing data between processes](https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent)
 
 [Piping](https://www.youtube.com/watch?v=Mqb2dVRe0uo)
