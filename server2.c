@@ -97,7 +97,7 @@ void func(int sockfd)
 	// }
 	// int resultCounter = -1;
 	bool resultLock = false;
-	resultStruct *resultData;
+	// resultStruct *resultData;
 	struct Node *startNode = NULL;
 	struct Node *node = startNode;
 	result = -1;
@@ -126,11 +126,11 @@ void func(int sockfd)
 
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
+				resultStruct resultData = {.number = x, .resultHash = Packet1->hashvalue};
 				printf("Found hash.\n");
-				resultData->number = x;
+				//resultData->number = x;
 				printf("Added number.\n");
-				//resultData->resultHash = Packet1->hashvalue;
-				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
+				//memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("memcpy.\n");
 				pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
