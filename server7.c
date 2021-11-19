@@ -39,6 +39,7 @@ struct Node
 struct Node *startNode = NULL;
 
 void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
+	printf("push");
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
 	newNode->data = malloc(dataSize);
@@ -47,6 +48,11 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->hash, newData->hash, sizeof(newData->hash));
 
+
+	printf("newNode:\n");
+	for (int i = 0; i < 32; i++)
+			printf("%02x", newNode->data->resultHash[i]);
+		printf("\n\n");
 	//(*refNode) = newNode;
 
 	return newNode;
