@@ -32,11 +32,11 @@ typedef struct
 typedef struct
 {
 	resultStruct *data;
-	struct Node *next;	
+	Node *next;	
 } Node;
 
 void pushResult (Node **refNode, void *newData, size_t dataSize) {
-	Node* newNode = (struct Node*) malloc(sizeof(Node));
+	Node* newNode = (Node*) malloc(sizeof(Node));
 
 	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
