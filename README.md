@@ -11,9 +11,9 @@ Our milestone file fulfills the requirements of the milestone assignment.
 
 We have created 3 improvements for our milestone.
 
-Experiment 1
-Experiment 2
-Experiment 3 (Combination of 1 and 2)
+	- Experiment 1
+	- Experiment 2
+	- Experiment 3 (Combination of 1 and 2)
 
 There are two separate improvements, both are an implementation of their own idea. The third experiment is a combination of the two improvements, into one implementation. This is however not the fastest implementation, and therefore our final program is the one called experiment 2. All three experiments yield 100 % reliability.
 
@@ -65,8 +65,9 @@ After accepting the data packet, a new process is created through a call to the 
 With this implementation, a new process would start every time a new request was generated. As such, the program solving the hashes would be pipelined, and we saw a large decrease in average solve time for the milestone test.
 
 *Our inspiration:*
-[Forking] (https://www.geeksforgeeks.org/fork-system-call/)
-[Forking and piping] (https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
+
+[Forking](https://www.geeksforgeeks.org/fork-system-call/)
+[Forking and piping](https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
 
 ### Experiment 3:
 With this experiment, we wanted to combine the two previous improvements of both having parallelism and a solutions storage. 
@@ -81,9 +82,9 @@ We figured that since there will only be a rather small number of requests, this
 This was faster than our sequential implementation, but was slower than our pure process-implementation. This is due to the fact that piping is a rather inefficient way to pass data between processes, which we would do after every request was solved.
 
 *Inspiration:*
-[Sharing data between processes] (https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent)
+[Sharing data between processes](https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent)
 
-[Piping] (https://www.youtube.com/watch?v=Mqb2dVRe0uo)
+[Piping](https://www.youtube.com/watch?v=Mqb2dVRe0uo)
 
 All other sites have been mentioned in the previous implentations.
 
