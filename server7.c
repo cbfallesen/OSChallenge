@@ -52,6 +52,14 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 	return newNode;
 }
 
+void print(struct Node *head) {
+    struct Node *current_node = head;
+   	while ( current_node != NULL) {
+        printf("%li ", current_node->data->number);
+        current_node = current_node->next;
+    }
+}
+
 int fd[2];
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -81,10 +89,17 @@ void solveSha(int connfd)
 	struct Node *node = startNode;
 	resultStruct resultData;
 
+	printf("Before print.\n");
+	if (startNode == NULL) {
+		printf("Null\n");
+	} else {
+		print(startNode);
+	}
+
 	while(node != NULL) {
 		if(compareHashes(node->data->hash, request->hash)){
-			printf("Found hash in results");
-			result = node->data->number;
+			printf("Found hash in results\n");
+			result = hotobe64(node->data->number);
 			resultLock = true;
 			write(connfd, &result, sizeof(result));
 			close(connfd);
@@ -99,7 +114,7 @@ void solveSha(int connfd)
 			unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 			if(compareHashes(guess, request->hash))
 			{
-				printf("Found hash");
+				printf("Found hash\n");
 				uint64_t result = htobe64(i);
 				resultStruct resultStruct;
 				resultStruct.number = i;
