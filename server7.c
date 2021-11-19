@@ -83,7 +83,7 @@ void solveSha(int connfd, int pipefd)
 		{
 			uint64_t result = htobe64(i);
 			write(connfd, &result, sizeof(result));
-			write(pipefd, &result, sizeof(result));
+			write(pipefd, result, sizeof(result));
 			close(connfd);
 			break;
 		}
