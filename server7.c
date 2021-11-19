@@ -108,11 +108,11 @@ void forkStage(int connfd) {
 		//Parent process
 		wait(NULL);
 		close(fd[1]);
-		char result[sizeof(resultStruct)];
+		char result[sizeof(uint64_t)];
 		bzero(result, sizeof(result));
 		read(fd[0], result, sizeof(result));
-		resultStruct *rStruct = (resultStruct*) result;
-		printf("Result: %li\n", rStruct->number);
+		printf("Result address: %li\n", result);
+		printf("Result: %li\n", *result);
 		
 		close(fd[0]);
 		close(connfd);
