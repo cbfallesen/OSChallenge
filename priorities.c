@@ -22,6 +22,12 @@ typedef struct
 	uint8_t p;
 } packet;
 
+struct Node
+{
+	packet *data;
+	struct Node *next;	
+};
+
 // Function designed for chat between client and server.
 void func(int sockfd)
 {
