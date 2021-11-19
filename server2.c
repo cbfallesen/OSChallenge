@@ -45,6 +45,9 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
+	for (int i = 0; i < 32; i++)
+			printf("%02x", newNode->data->resultHash[i]);
+		printf("\n\n");
 
 	//(*refNode) = newNode;
 
@@ -55,9 +58,6 @@ void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
         printf("%li ", current_node->data->number);
-		for (int i = 0; i < 32; i++)
-			printf("%02x", current_node->data->resultHash[i]);
-		printf("\n\n");
         current_node = current_node->next;
     }
 }
