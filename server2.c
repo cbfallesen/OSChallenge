@@ -43,29 +43,12 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
 
-	printf("newData:\n");
-	for (int i = 0; i < 32; i++)
-			printf("%02x", newData->resultHash[i]);
-		printf("\n\n");
-
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
-	printf("newNode:\n");
-	for (int i = 0; i < 32; i++)
-			printf("%02x", newNode->data->resultHash[i]);
-		printf("\n\n");
 
 	//(*refNode) = newNode;
 
 	return newNode;
-}
-
-void print(struct Node *head) {
-    struct Node *current_node = head;
-   	while ( current_node != NULL) {
-        printf("%li ", current_node->data->number);
-        current_node = current_node->next;
-    }
 }
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
@@ -113,17 +96,8 @@ void func(int sockfd)
 	struct Node *node = startNode;
 	resultStruct resultData;
 	
-	printf("Before print.\n");
-	if (startNode == NULL) {
-		printf("Null\n");
-	} else {
-		print(startNode);
-	}
-	printf("Before while.\n");
 	while(node != NULL) {
-		printf("Inside while loop.\n");
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
-			printf("Found hash in results.\n");
 			result = node->data->number;
 			resultLock = true;
 			break;
@@ -131,27 +105,17 @@ void func(int sockfd)
 		node = node->next;
 	}
 
-	printf("Before resultLock.\n");
 	if (!resultLock)
 	{
-		printf("No resultLock.\n");
 		for (x = start; x < end; x++)
 		{
 			unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
-				printf("Found hash.\n");
 				resultData.number = x;
-				printf("Added number.\n");
 				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				printf("%ld.\n", resultData.number);
-				printf("resultData:\n");
-				for (int i = 0; i < 32; i++)
-					printf("%02x", resultData.resultHash[i]);
-				printf("\n\n");
 				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
-				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
 				break;
