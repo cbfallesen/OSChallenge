@@ -125,6 +125,8 @@ void func(int sockfd)
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			printf("Found hash in results.\n");
 			result = x;
+			result = htobe64(result);
+			write(sockfd, &result, sizeof(result));
 			resultLock = true;
 			break;
 		}
