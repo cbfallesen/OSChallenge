@@ -50,11 +50,11 @@ struct Node *startNode = NULL;
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%li \n", current_node->data.start);
-		printf("%li \n", current_node->data.end);
-		printf("%li \n", current_node->data.p);
+        printf("%i \n", current_node->data.start);
+		printf("%i \n", current_node->data.end);
+		printf("%i \n", current_node->data.p);
 		for(int i = 0; i < 32; i++) {
-			printf("%li \n", current_node->data.hashvalue[i]);
+			printf("%02x \n", current_node->data.hashvalue[i]);
 		}
         current_node = current_node->next;
     }
@@ -170,7 +170,7 @@ int main()
 		print(startNode);
 	}
 	// Function for chatting between client and server
-	func(connfd);
+	//func(connfd);
 
 	// After chatting close the socket
 	close(sockfd);
