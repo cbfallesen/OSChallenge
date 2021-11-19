@@ -98,8 +98,8 @@ void func(int sockfd)
 	// int resultCounter = -1;
 	bool resultLock = false;
 	resultStruct *resultData;
-	struct Node *start;
-	struct Node *node = start;
+	struct Node *startNode = NULL;
+	struct Node *node = startNode;
 	result = -1;
 
 	print(start);
