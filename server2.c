@@ -107,7 +107,7 @@ void func(int sockfd)
 	printf("Before while.\n");
 	while(node != NULL) {
 		printf("Inside while loop.\n");
-		if(compareHashes(node, Packet1->hashvalue)){
+		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			printf("Found hash in results.\n");
 			result = x;
 			resultLock = true;
@@ -132,7 +132,7 @@ void func(int sockfd)
 				//resultData->resultHash = Packet1->hashvalue;
 				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("memcpy.\n");
-				pushResult(&start, &resultData, sizeof(resultStruct));
+				pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
