@@ -5,7 +5,7 @@ Our repository contains 8 .c files in total.
 
 	- 1 milestone file
  	- 3 experinment files
-	- 4 failed experiments
+	- 4 "failed" experiments
 
 ### Milestone:
 
@@ -21,6 +21,11 @@ If at any point the two characters are not the same, the loop breaks, and the pr
 Once we find a hash that is equal to the one in the request, we set this as the result. We then convert the result to big endian, and write it to the client.
 
 ### Experiment 1:
+
+The thought for our first experiment comes from the fact, that there is a chance of repetition in the requests from the client. The idea is, that if we create an array where we put in all the results and their hashes, we can start by looking through this, and then find the repeated results even faster.
+We started by making a struct, that contains both the number and the hash of a result. In the begging, we worked with an array of these structs, but after working woth it for a while, we realised that this would take up both unnecessary time and memory. Because of this we changed our strategy, so we use a linked list instead. This way, we have a dynamic list, that we can fill up as the results are found.
+___
+The difference in this implementation from the milestone is, firstly, that we have moved the comparison to a function on its own. This function is called compareHashes, and it only returns true, if the guess and the request are equal. We have moved it, because it is used more than once, for each request.
 
 ### Experiment 2:
 
