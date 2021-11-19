@@ -63,7 +63,7 @@ void solveSha(int connfd)
 			uint64_t result = htobe64(i);
 			resultStruct resultStruct;
 			resultStruct.number = i;
-			memcpy(resultStruct.hash,guess, sizeof(guess));
+			memcpy(resultStruct.hash,request->hash, sizeof(guess));
 			write(connfd, &result, sizeof(result));
 			write(fd[1], &resultStruct, sizeof(resultStruct));
 			close(fd[1]);
