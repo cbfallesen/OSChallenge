@@ -20,7 +20,16 @@ typedef struct
 	uint64_t start;
 	uint64_t end;
 	uint8_t p;
+} packetPrint;
+
+typedef struct
+{
+	uint8_t hashvalue[32];
+	uint64_t start;
+	uint64_t end;
+	uint8_t p;
 } packet;
+
 
 struct Node
 {
@@ -160,13 +169,13 @@ int main()
 		
 		char buff[MAX];
 		int n;
-		packet *Packet1;
+		packetPrint *Packet1;
 
 		bzero(buff, MAX);
 
 		// read the message from client and copy it in buffer
 		read(sockfd, buff, sizeof(buff));
-		Packet1 = (packet *)buff;
+		Packet1 = (packetPrint *)buff;
 
 		// print buffer which contains the client contents
 		printf("\n\n");
@@ -174,7 +183,7 @@ int main()
 		for (i = 0; i < 32; i++)
 			printf("%02x", Packet1->hashvalue[i]);
 
-		printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+		printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 		// printf("Before push\n");
 		// startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
