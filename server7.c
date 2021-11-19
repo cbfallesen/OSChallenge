@@ -115,11 +115,18 @@ void solveSha(int connfd)
 			if(compareHashes(guess, request->hash))
 			{
 				printf("Found hash\n");
-				uint64_t result = htobe64(i);
 				resultStruct resultStruct;
 				resultStruct.number = i;
 				memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
+
+				printf("%ld.\n", resultData.number);
+				printf("resultData:\n");
+				for (int i = 0; i < 32; i++)
+					printf("%02x", resultStruct.hash[i]);
+				printf("\n\n");
+
 				startNode = pushResult(&startNode, &resultStruct, sizeof(resultStruct));
+				uint64_t result = htobe64(i);
 				
 				write(connfd, &result, sizeof(result));
 				write(fd[1], &resultStruct, sizeof(resultStruct));
