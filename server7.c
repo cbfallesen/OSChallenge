@@ -110,7 +110,7 @@ void forkStage(int connfd) {
 		close(fd[1]);
 		uint64_t result;
 		read(fd[0], result, sizeof(result));
-		printf("Result address: %d\n", result);
+		printf("Result address: %li\n", result);
 		
 		close(fd[0]);
 		close(connfd);
