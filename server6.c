@@ -35,6 +35,7 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 	return true;
 }
 
+//https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent
 void solveSha(int connfd)
 {
 	char buffer[MAX];
