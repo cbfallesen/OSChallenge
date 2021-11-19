@@ -80,7 +80,7 @@ void func(int sockfd)
 	// 	printf("%02x", Packet1->hashvalue[i]);
 
 	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
-	pushResult(&startNode, Packet1, sizeof(Packet1));
+	pushResult(&startNode, &Packet1, sizeof(Packet1));
 
 
 	// and send that buffer to client
