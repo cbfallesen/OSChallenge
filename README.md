@@ -1,4 +1,5 @@
-# os-challenge-team-5800
+# Final assignment
+## Team 5800
 
 Our repository contains 8 .c files in total.
 
@@ -6,20 +7,20 @@ Our repository contains 8 .c files in total.
  	- 3 experinment files
 	- 4 failed experiments
 
-Milestone:
+### Milestone:
 
-Our milestone file contains 
+Our milestone file contains the basic program described in the milestone assignment. We have used this as the base 
 
-Experiment 1:
+### Experiment 1:
 
-Experiment 2:
+### Experiment 2:
 
-Experiment 3:
+### Experiment 3:
 
-Old hash lookup:
+### Old hash lookup:
 
-Threading:
+### Threading:
 
-Threading 2:
+### Threading 2:
 
-Priorities:
+### Priorities:
