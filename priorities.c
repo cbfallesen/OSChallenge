@@ -159,8 +159,8 @@ int main()
 			printf("server accept the client...\n");
 		
 		char buff[MAX];
+		int n;
 		packet *Packet1;
-		printf("Packet1: \n");
 
 		bzero(buff, MAX);
 
@@ -168,14 +168,13 @@ int main()
 		read(sockfd, buff, sizeof(buff));
 		Packet1 = (packet *)buff;
 
-		printf("Packet1: \n");
-		printf("%li \n", Packet1->start);
-		printf("%li \n", Packet1->end);
-		printf("%d \n", Packet1->p);
-		for(int i = 0; i < 32; i++) {
+		// print buffer which contains the client contents
+		printf("\n\n");
+		int i;
+		for (i = 0; i < 32; i++)
 			printf("%02x", Packet1->hashvalue[i]);
-		}
-		printf("\n");
+
+		printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 		// printf("Before push\n");
 		// startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
