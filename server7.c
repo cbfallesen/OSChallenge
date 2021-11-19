@@ -83,6 +83,7 @@ void solveSha(int connfd)
 
 	while(node != NULL) {
 		if(compareHashes(node->data->hash, request->hash)){
+			printf("Found hash in results");
 			result = node->data->number;
 			resultLock = true;
 			write(connfd, &result, sizeof(result));
@@ -94,23 +95,24 @@ void solveSha(int connfd)
 	
 	if (!resultLock) {
 		for (uint64_t i = start; i < end; i++)
-	{
-		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
-		if(compareHashes(guess, request->hash))
 		{
-			uint64_t result = htobe64(i);
-			resultStruct resultStruct;
-			resultStruct.number = i;
-			memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
-			startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
-			
-			write(connfd, &result, sizeof(result));
-			write(fd[1], &resultStruct, sizeof(resultStruct));
-			close(fd[1]);
-			close(connfd);
-			break;
+			unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
+			if(compareHashes(guess, request->hash))
+			{
+				printf("Found hash");
+				uint64_t result = htobe64(i);
+				resultStruct resultStruct;
+				resultStruct.number = i;
+				memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
+				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
+				
+				write(connfd, &result, sizeof(result));
+				write(fd[1], &resultStruct, sizeof(resultStruct));
+				close(fd[1]);
+				close(connfd);
+				break;
+			}
 		}
-	}
 	}
 }
 
