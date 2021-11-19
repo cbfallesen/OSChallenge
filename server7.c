@@ -99,7 +99,7 @@ void solveSha(int connfd)
 	while(node != NULL) {
 		if(compareHashes(node->data->hash, request->hash)){
 			printf("Found hash in results\n");
-			result = hotobe64(node->data->number);
+			result = htobe64(node->data->number);
 			resultLock = true;
 			write(connfd, &result, sizeof(result));
 			close(connfd);
