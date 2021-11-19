@@ -134,10 +134,10 @@ void forkStage(int connfd) {
 		read(fd[0], &forkresult, sizeof(resultStruct));
 		close(fd[0]);
 		close(connfd);
-		printf("Received answer from child: %ld \n", forkresult.number);
-		for (int j = 0; j < 32; j++)
-				printf("%02x", forkresult.hash[j]);
-			printf("\n");
+		// printf("Received answer from child: %ld \n", forkresult.number);
+		// for (int j = 0; j < 32; j++)
+		// 		printf("%02x", forkresult.hash[j]);
+		// 	printf("\n");
 	} else {
 		//Child process
 		solveSha(connfd);
