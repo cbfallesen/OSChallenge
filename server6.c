@@ -35,6 +35,7 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 	return true;
 }
 
+//https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent
 void solveSha(int connfd)
 {
 	char buffer[MAX];
@@ -59,16 +60,21 @@ void solveSha(int connfd)
 }
 
 // Function designed for chat between client and server.
+// https://www.geeksforgeeks.org/fork-system-call/
+// https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/
 void forkStage(int connfd) {
 	pid_t pid = fork();
-	if( pid == 0 ){
-		solveSha(connfd);
-		exit(0);
-	} else if ( pid == -1){
+	if( pid  < 0) {
+		//Error
 		printf("Failed creating fork.\n");
 		exit(0);
-	} else {
+	} else if ( pid > 0 ){
+		//Parent process
 		close(connfd);
+	} else {
+		//Child process
+		solveSha(connfd);
+		exit(0);
 	}
 }
 
