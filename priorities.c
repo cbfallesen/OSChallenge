@@ -74,18 +74,9 @@ void func(int sockfd)
 	read(sockfd, buff, sizeof(buff));
 	Packet1 = (packet *)buff;
 	
-	// print buffer which contains the client contents
-	printf("\n\n");
-	int i;
-	for (i = 0; i < 32; i++)
-		printf("%02x", Packet1->hashvalue[i]);
-	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
 	startNode = pushResult(&startNode, Packet1, sizeof(buff));
 
-
-	// and send that buffer to client
-	// }
 }
 
 // Driver function
