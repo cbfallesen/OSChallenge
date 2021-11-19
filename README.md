@@ -1,6 +1,10 @@
 # Final assignment
 ## Team 5800
 
+### NB!
+We have noticed on very few occasions that the program will not bind the socket, and it will stay on **socket bind failed** when run shortly after terminating.
+This can be fixed by simply waiting a bit, then trying again. Sometimes a few attempts are needed.
+___
 Our repository contains 8 .c files in total.
 
 	- 1 milestone file
