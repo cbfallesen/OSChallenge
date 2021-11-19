@@ -50,6 +50,7 @@ struct Node *startNode = NULL;
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
+		printf("From print: \n"):
         printf("%li \n", current_node->data.start);
 		printf("%li \n", current_node->data.end);
 		printf("%d \n", current_node->data.p);
@@ -165,6 +166,15 @@ int main()
 		// read the message from client and copy it in buffer
 		read(sockfd, buff, sizeof(buff));
 		Packet1 = (packet *)buff;
+
+		printf("Packet1: \n");
+		printf("%li \n", Packet1->start);
+		printf("%li \n", Packet1->end);
+		printf("%d \n", Packet1->p);
+		for(int i = 0; i < 32; i++) {
+			printf("%02x", Packet1->hashvalue[i]);
+		}
+		printf("\n");
 
 		startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
 
