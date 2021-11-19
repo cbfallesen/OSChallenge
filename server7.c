@@ -92,7 +92,8 @@ void solveSha(int connfd)
 		node = node->next;
 	}
 	
-	for (uint64_t i = start; i < end; i++)
+	if (!resultLock) {
+		for (uint64_t i = start; i < end; i++)
 	{
 		unsigned char *guess = SHA256((unsigned char *)&i, 8, 0);
 		if(compareHashes(guess, request->hash))
@@ -109,6 +110,7 @@ void solveSha(int connfd)
 			close(connfd);
 			break;
 		}
+	}
 	}
 }
 
