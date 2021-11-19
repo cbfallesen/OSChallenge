@@ -129,7 +129,7 @@ void func(int sockfd)
 				resultData.number = x;
 				//Arrays cannot be assigned in structs, so we use memcpy
 				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
+				node = pushResult(&startNode, &resultData, sizeof(resultStruct));
 				result = x;
 				break;
 			}
