@@ -35,15 +35,14 @@ struct Node
 	struct Node *next;	
 };
 
-void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
+void pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize) {
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
 	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
 
-	for(int i = 0; i < dataSize; i++) {
-		*(char *)(newNode->data + i) = *(char *) (newData + i);
-	} 
+	newNode->data->number = newData->number;
+	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
 
 	(*refNode) = newNode;
 }
@@ -135,7 +134,7 @@ void func(int sockfd)
 				//resultData->number = x;
 				printf("Added number.\n");
 				//memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				printf("memcpy.\n");
+				printf("%ld.\n", resultData.number);
 				pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
