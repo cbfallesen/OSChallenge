@@ -63,7 +63,7 @@ void printResults(resultStruct *results, uint8_t *hash) {
 }
 
 //https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent
-void solveSha(int connfd, int pipefd)
+void solveSha(int connfd, int *pipefd)
 {
 	char buffer[MAX];
 	bzero(buffer, MAX);
@@ -83,7 +83,7 @@ void solveSha(int connfd, int pipefd)
 		{
 			uint64_t result = htobe64(i);
 			write(connfd, &result, sizeof(result));
-			write(pipefd, result, sizeof(result));
+			write(pipefd[1], result, sizeof(result));
 			close(connfd);
 			break;
 		}
@@ -108,17 +108,15 @@ void forkStage(int connfd) {
 		//Parent process
 		wait(NULL);
 		close(fd[1]);
-		char result[sizeof(uint64_t)];
-		bzero(result, sizeof(result));
+		uint64_t result;
 		read(fd[0], result, sizeof(result));
 		printf("Result address: %li\n", result);
-		printf("Result: %li\n", *result);
 		
 		close(fd[0]);
 		close(connfd);
 	} else {
 		//Child process
-		solveSha(connfd, fd[1]);
+		solveSha(connfd, fd);
 		exit(0);
 	}
 }
