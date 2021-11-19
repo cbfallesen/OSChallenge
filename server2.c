@@ -48,12 +48,11 @@ void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
 	(*refNode) = newNode;
 }
 
-void printList(struct Node *node, void (*fptr)(void *))
-{
-    while (node != NULL)
-    {
-        (*fptr)(node->data);
-        node = node->next;
+void print(struct Node *head) {
+    struct Node *current_node = head;
+   	while ( current_node != NULL) {
+        printf("%d ", current_node->data);
+        current_node = current_node->next;
     }
 }
 
@@ -103,6 +102,7 @@ void func(int sockfd)
 	struct Node *node = start;
 	result = -1;
 
+	print(start);
 	while(node != NULL) {
 		if(compareHashes(node, Packet1->hashvalue)){
 			result = x;
