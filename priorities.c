@@ -20,56 +20,48 @@ typedef struct
 	uint64_t start;
 	uint64_t end;
 	uint8_t p;
-} packetPrint;
-
-typedef struct
-{
-	uint8_t hashvalue[32];
-	uint64_t start;
-	uint64_t end;
-	uint8_t p;
 } packet;
 
 
-struct Node
-{
-	packet data;
-	struct Node *next;
-};
+// struct Node
+// {
+// 	packet data;
+// 	struct Node *next;
+// };
 
 
-void* pushRequest (struct Node **refNode, packet *newData, size_t dataSize) {
-	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+// void* pushRequest (struct Node **refNode, packet *newData, size_t dataSize) {
+// 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
-	//newNode->data = malloc(dataSize);
-	newNode->next = (*refNode);
+// 	//newNode->data = malloc(dataSize);
+// 	newNode->next = (*refNode);
 
-	newNode->data.start = newData->start;
-	newNode->data.end = newData->end;
-	newNode->data.p = newData->p;
-	memcpy(newNode->data.hashvalue, newData->hashvalue, sizeof(newData->hashvalue));
+// 	newNode->data.start = newData->start;
+// 	newNode->data.end = newData->end;
+// 	newNode->data.p = newData->p;
+// 	memcpy(newNode->data.hashvalue, newData->hashvalue, sizeof(newData->hashvalue));
 
-	//(*refNode) = newNode;
+// 	//(*refNode) = newNode;
 
-	return newNode;
-}
+// 	return newNode;
+// }
 
-struct Node *startNode = NULL;
+// struct Node *startNode = NULL;
 
-void print(struct Node *head) {
-    struct Node *current_node = head;
-   	while ( current_node != NULL) {
-		printf("From print: \n");
-        printf("%li \n", current_node->data.start);
-		printf("%li \n", current_node->data.end);
-		printf("%d \n", current_node->data.p);
-		for(int i = 0; i < 32; i++) {
-			printf("%02x", current_node->data.hashvalue[i]);
-		}
-		printf("\n");
-        current_node = current_node->next;
-    }
-}
+// void print(struct Node *head) {
+//     struct Node *current_node = head;
+//    	while ( current_node != NULL) {
+// 		printf("From print: \n");
+//         printf("%li \n", current_node->data.start);
+// 		printf("%li \n", current_node->data.end);
+// 		printf("%d \n", current_node->data.p);
+// 		for(int i = 0; i < 32; i++) {
+// 			printf("%02x", current_node->data.hashvalue[i]);
+// 		}
+// 		printf("\n");
+//         current_node = current_node->next;
+//     }
+// }
 
 
 // Driver function
