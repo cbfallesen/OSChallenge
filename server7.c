@@ -51,8 +51,8 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 
 	printf("newNode:\n");
 	for (int i = 0; i < 32; i++)
-			printf("%02x", newNode->data->resultHash[i]);
-		printf("\n\n");
+		printf("%02x", newNode->data->hash[i]);
+	printf("\n\n");
 	//(*refNode) = newNode;
 
 	return newNode;
