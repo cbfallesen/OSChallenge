@@ -13,7 +13,7 @@ We have created 3 improvements for our milestone.
 Experiment 1
 Experiment 2
 Experiment 3 (Combination of 1 and 2)
-There are two separate improvements, both are an implementation of their own idea. The third experiment is a combination of the two improvements, into one implementation. This is however not the fastest implementation, and therefore our final program is the one called experiment 2.
+There are two separate improvements, both are an implementation of their own idea. The third experiment is a combination of the two improvements, into one implementation. This is however not the fastest implementation, and therefore our final program is the one called experiment 2. All three experiments yield 100 % reliability.
 
 Some specific experiments we have done:
 Is multithreading faster than multi-processing?
@@ -51,12 +51,20 @@ We use a push function to add the result. The function takes the node to link to
 ___
 With this implementation the overall time saved is not much, but there are cases with repeats, where there is time saved, compared to the milestone. The main thought with this improvement is also, to be able to link it with other improvements.
 
+We have noticed that the first time the client requests from the server, it is slower than the second time. If we keep the server running, and then run the client again, the duplicates are found much faster. Since a seed is used, all numbers in the request are considered duplicates the second time. The issue lies within the fact that in the second run, a duplicate can be found in about 1000 microseconds, whereas the third time takes about 1000000 microseconds.
+
+We believe that this could be improved even further upon, given a bit more time, as there seems to be a bug in our implementation.
+
 ### Experiment 2:
 
 Experiment 2 was the first experiment in which we successfully implemented parallelism to handle requests. Instead of using threads, which we had unsuccessfully experimented with earlier on, we instead went with forking.
 After accepting the data packet, a new process is created through a call to the 'fork()' function. A new process is then created, which handles reading the data packet, cracking the sha encryption, and writing back to the request generator, before terminating.
 
 With this implementation, a new process would start every time a new request was generated. As such, the program solving the hashes would be pipelined, and we saw a large decrease in average solve time for the milestone test.
+
+*Our inspiration:*
+[Forking] (https://www.geeksforgeeks.org/fork-system-call/)
+[Forking and piping] (https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
 
 ### Experiment 3:
 With this experiment, we wanted to combine the two previous improvements of both having parallelism and a solutions storage. 
@@ -69,6 +77,13 @@ In this experiment, we would have the child process write the result number and 
 We figured that since there will only be a rather small number of requests, this initial check through the linked list could be run serially, with the sha cracking itself being run in parallel.
 
 This was faster than our sequential implementation, but was slower than our pure process-implementation. This is due to the fact that piping is a rather inefficient way to pass data between processes, which we would do after every request was solved.
+
+*Inspiration:*
+[Sharing data between processes] (https://stackoverflow.com/questions/49581349/how-to-get-return-value-from-child-process-to-parent)
+
+[Piping] (https://www.youtube.com/watch?v=Mqb2dVRe0uo)
+
+All other sites have been mentioned in the previous implentations.
 
 ### Old hash lookup:
 For this experiment we wanted to eliminate the need to use the SHA256 algorithm for every search for a result. The thought was to save all of the hashes together with their numeric value in a table. Our idea was to save the values as we searched for them, so after a couple of requests we would have most of the values gathered in the array.
@@ -97,8 +112,11 @@ Part of the request from the client is a priority. The idea is, that the higher 
 Our idea was that we would collect all of the requests in a linked list, before treating them in any way. Once they were collected we would search the list for the first request with the highest priority.
 Once it was found we would treat it the same as in the other implementations, and compare the hashes. In our current implementation, we have only worked with the milestone implementation. 
 Lastly, the treated requests should be removed from the linked list, and once it was empty, the program should end.
-**We have used the following, as an inspiration for our implementation.**
+
+*We have used the following, as an inspiration for our implementation.*
+
 [Deleting nodes in linked list](https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/)
+
 Previous sites used for linked lists.
 ___
 We found that a problem with our implementation is that there is no way for the server to know, when requests are no longer coming in from the client. This could be mitigated by just having the server run without end, and instead continuously push items from the request generator into 
@@ -107,31 +125,109 @@ Unfortunately, due to lack of time, we haven’t had a chance to try and impleme
 ___
 ## Runtimes
 
-####Milestone
 Every test was run 3 times. Times are averaged.
 Experiments run on an Apple computer with intel chip.
 2.3 GHz Quad-Core Intel Core i7
 16 GB 1600 MHz DDR3
 
-| #   | Are        | Milestone | Experiment 1 |
-| ----|:----------:| ---------:|  -----------:|
-| 1   | 7143775	 |1.568.877       |
-| 2   | 24345043   |6.320.648  |
-| 3   | 24113749   |10.987.591 |
-| 4   | 24345043	 |15.666.367 |
-| 5   | 2770368  	 |15.533.022 |
-| 6   | 28127708   |21.381.878 |
-| 7   | 28127708	 |27.395.682 |
-| 8   | 15466514   |30.199.002 |
-| 9   | 7143775    |30.653.338 |
-| 10  | 7909485    |32.611.391 |
-| Avg | 7909485    |19.863.844 |
+Times are in microseconds
+####Milestone
+| #   | num      | 1                | 2                    | 3                       | Avg                   |
+|-----|----------|------------------|----------------------|-------------------------|-----------------------|
+| 1   | 7143775  |    1,551,569.00  |        1,590,259.00  |           1,564,804.00  |            1,568,877  |
+| 2   | 24345043 |    6,049,385.00  |        6,500,363.00  |           6,412,195.00  |            6,320,648  |
+| 3   | 24113749 |    10,496,167.0  |      11,292,041.00   |         11,174,566.00   |          10,987,591   |
+| 4   | 24345043 |    15,005,545.0  |      16,079,256.00   |         15,914,301.00   |          15,666,367   |
+| 5   | 2770368  |    14,855,989.0  |      15,965,040.00   |         15,778,036.00   |          15,533,022   |
+| 6   | 28127708 |    20,993,965.0  |      21,655,869.00   |         21,495,801.00   |          21,381,878   |
+| 7   | 28127708 |    27,720,908.0  |      27,373,769.00   |         27,092,368.00   |          27,395,682   |
+| 8   | 15466514 |    30,518,612.0  |      30,185,383.00   |         29,893,010.00   |          30,199,002   |
+| 9   | 7143775  |    31,328,891.0  |      30,470,774.00   |         30,160,349.00   |          30,653,338   |
+| 10  | 7909485  |    32,395,767.0  |      32,884,965.00   |         32,553,441.00   |          32,611,391   |
+| Avg |          |    19,696,618.0  |      20,049,808.00   |         19,845,106.00   |          19,863,844   |
+
+####Experiment 1, reset server each time
+|     |          | 1                   | 2                   | 3                   | Avg                 |
+|-----|----------|---------------------|---------------------|---------------------|---------------------|
+| 1   | 7143775  |          1,587,849  |          1,721,409  |          1,632,100  |          1,647,119  |
+| 2   | 24345043 |          6,441,447  |          6,769,503  |          6,719,144  |          6,643,365  |
+| 3   | 24113749 |        11,238,333   |        11,588,122   |        11,622,634   |        11,483,030   |
+| 4   | 24345043 |        10,487,329   |        16,439,920   |        16,512,087   |        14,479,779   |
+| 5   | 2770368  |        10,353,987   |        16,353,767   |        16,389,894   |        14,365,883   |
+| 6   | 28127708 |        16,046,460   |        21,886,831   |        22,275,696   |        20,069,662   |
+| 7   | 28127708 |        15,295,461   |        27,418,146   |        28,044,520   |        23,586,042   |
+| 8   | 15466514 |        18,122,936   |        30,128,831   |        30,944,710   |        26,398,826   |
+| 9   | 7143775  |        19,190,717   |        30,467,789   |        31,293,357   |        26,983,954   |
+| 10  | 7909485  |        18,440,096   |        32,900,470   |        33,731,244   |        28,357,270   |
+| Avg |          |        13,364,606   |        20,244,429   |        20,588,453   |        18,065,829   |
+
+####Experiment 1, same server, new client request
+|     |          | 1              | 2    | 3    | Avg             |
+|-----|----------|----------------|------|------|-----------------|
+| 1   | 7143775  |     1,600,301  | 1046 | 887  |        534,078  |
+| 2   | 24345043 |     6,567,282  | 1143 | 1249 |     2,189,891   |
+| 3   | 24113749 |    11,404,003  | 1322 | 1312 |     3,802,212   |
+| 4   | 24345043 |    16,252,353  | 1091 | 1185 |     5,418,210   |
+| 5   | 2770368  |    16,137,653  | 1272 | 1238 |     5,380,054   |
+| 6   | 28127708 |    22,006,428  | 1059 | 1460 |     7,336,316   |
+| 7   | 28127708 |    27,717,802  | 1506 | 1171 |     9,240,160   |
+| 8   | 15466514 |    30,622,548  | 1617 | 1631 |   10,208,599    |
+| 9   | 7143775  |    30,987,145  | 1627 | 1281 |   10,330,018    |
+| 10  | 7909485  |    33,428,246  | 1395 | 1302 |   11,143,648    |
+| Avg |          |    20,329,104  | 1422 | 1396 |     6,777,307   |
+
+####Experiment 2
+|     |          | 1              | 2              | 3              | Avg                |
+|-----|----------|----------------|----------------|----------------|--------------------|
+| 1   | 7143775  |     1,565,852  |     1,579,071  |     1,607,016  |        1,583,980   |
+| 2   | 24345043 |       709,000  |       703,878  |       737,836  |           716,905  |
+| 3   | 24113749 |     7,025,832  |     7,208,940  |     7,013,039  |        7,082,604   |
+| 4   | 24345043 |     3,730,382  |     3,345,125  |     7,872,151  |        4,982,553   |
+| 5   | 2770368  |     8,752,979  |     8,534,757  |     3,623,825  |        6,970,520   |
+| 6   | 28127708 |     3,718,976  |     3,619,199  |     3,510,353  |        3,616,176   |
+| 7   | 28127708 |     8,836,501  |     8,563,188  |     8,328,334  |        8,576,008   |
+| 8   | 15466514 |     6,161,031  |     6,252,400  |     5,915,263  |        6,109,565   |
+| 9   | 7143775  |     9,120,935  |     9,014,407  |     8,704,877  |        8,946,740   |
+| 10  | 7909485  |     9,621,162  |     8,903,987  |     9,091,287  |        9,205,479   |
+| Avg |          |     6,626,848  |     6,493,389  |     6,341,702  |        6,487,313   |
+
+####Experiment 3, reset server every time
+|     |          | 1               | 2               | 3               | Avg                 |
+|-----|----------|-----------------|-----------------|-----------------|---------------------|
+| 1   | 7143775  |      1,635,481  |      1,732,218  |      1,662,727  |          1,676,809  |
+| 2   | 24345043 |      6,551,626  |      6,848,763  |      6,517,740  |          6,639,376  |
+| 3   | 24113749 |     11,374,244  |     11,823,454  |     11,289,700  |        11,495,799   |
+| 4   | 24345043 |     10,625,231  |     11,073,679  |     10,540,037  |        10,746,316   |
+| 5   | 2770368  |     10,513,714  |     11,005,164  |     10,437,663  |        10,652,180   |
+| 6   | 28127708 |     16,332,918  |     17,236,748  |     16,209,240  |        16,592,969   |
+| 7   | 28127708 |     15,583,399  |     16,487,241  |     15,459,705  |        15,843,448   |
+| 8   | 15466514 |     18,463,627  |     19,397,796  |     18,381,468  |        18,747,630   |
+| 9   | 7143775  |     18,877,092  |     19,809,693  |     18,680,329  |        19,122,371   |
+| 10  | 7909485  |     19,628,690  |     20,564,306  |     19,431,103  |        19,874,700   |
+| Avg |          |     13,613,764  |     14,282,782  |     13,512,745  |        13,803,097   |
+
+####Experiment 4, same server, new client request
+|     |          | 1            | 2            | 3        | Avg            |
+|-----|----------|--------------|--------------|----------|----------------|
+| 1   | 7143775  |   1,560,988  |       1,264  |   1,401  |       521,218  |
+| 2   | 24345043 |   6,373,631  |       1,651  |   1,748  |    2,125,677   |
+| 3   | 24113749 |  11,156,481  |       1,630  |   1,588  |    3,719,900   |
+| 4   | 24345043 |  10,408,562  |       1,340  |   1,689  |    3,470,530   |
+| 5   | 2770368  |  10,311,715  |       1,389  |   2,241  |    3,438,448   |
+| 6   | 28127708 |  16,007,719  |       1,710  |   1,589  |    5,337,006   |
+| 7   | 28127708 |  15,257,634  |       1,760  |   2,028  |    5,087,141   |
+| 8   | 15466514 |  18,076,583  |       2,060  |   2,156  |    6,026,933   |
+| 9   | 7143775  |  18,378,685  |       1,456  |   2,295  |    6,127,479   |
+| 10  | 7909485  |  19,130,044  |       1,336  |   2,440  |    6,377,940   |
+| Avg |          |  13,303,567  |       1,724  |   2,092  |    4,435,794   |
+ 
 
 ___
-## Concluding remarks on experiments
+##Concluding remarks on experiments
 **Is multithreading faster than multi-processing?**
 In our implementation multi-processing is much faster than multithreading. In our experience, it is primarily due to the sharing of data in multithreading that gives trouble with the result. In multi-processing they are run as separate processes, and can actually be run in parallel, without needing delays.
 **What sorts of pre-processing of data is feasible?**
 **Is it worth the time waste to save previous results?**
 In some cases it is worth it. In cases where the repetition is high, there is a lot of time to be saved. As can be seen in our runtimes above, we have saved some time, with just 10 requests from the client.
 **Is it possible to improve forking, by adding a result list?**
+
