@@ -50,7 +50,7 @@ struct Node *startNode = NULL;
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-		printf("From print: \n"):
+		printf("From print: \n");
         printf("%li \n", current_node->data.start);
 		printf("%li \n", current_node->data.end);
 		printf("%d \n", current_node->data.p);
