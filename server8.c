@@ -52,7 +52,7 @@ void print(struct Node *head) {
    	while ( current_node != NULL) {
         printf("%li \n", current_node->data.start);
 		printf("%li \n", current_node->data.end);
-		printf("%f \n", current_node->data.p);
+		printf("%d \n", current_node->data.p);
 		for(int i = 0; i < 32; i++) {
 			printf("%02x \n", current_node->data.hashvalue[i]);
 		}
