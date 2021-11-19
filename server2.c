@@ -99,7 +99,6 @@ void func(int sockfd)
 	// int resultCounter = -1;
 	bool resultLock = false;
 	// resultStruct *resultData;
-	struct Node *node = startNode;
 	result = -1;
 
 	printf("Before print.\n");
@@ -109,15 +108,15 @@ void func(int sockfd)
 		print(startNode);
 	}
 	printf("Before while.\n");
-	while(node != NULL) {
+	while(startNode != NULL) {
 		printf("Inside while loop.\n");
-		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
+		if(compareHashes(startNode->data->resultHash, Packet1->hashvalue)){
 			printf("Found hash in results.\n");
 			result = x;
 			resultLock = true;
 			break;
 		}
-		node = node->next;
+		startNode = startNode->next;
 	}
 
 	printf("Before resultLock.\n");
@@ -136,7 +135,7 @@ void func(int sockfd)
 				printf("Added number.\n");
 				//memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				printf("%ld.\n", resultData.number);
-				pushResult(&node, &resultData, sizeof(resultStruct));
+				pushResult(&startNode, &resultData, sizeof(resultStruct));
 				printf("Added to linked list.\n");
 				result = x;
 				resultLock = true;
