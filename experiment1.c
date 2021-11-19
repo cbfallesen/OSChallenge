@@ -92,6 +92,7 @@ void func(int sockfd)
 	while(node != NULL) {
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			result = node->data->number;
+			printf("Found hash in results");
 			resultLock = true;
 			break;
 		}
@@ -107,16 +108,19 @@ void func(int sockfd)
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
 				resultData.number = x;
+				//Arrays cannot be assigned in structs, so we use memcpy
 				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
-				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
+				node = pushResult(&startNode, &resultData, sizeof(resultStruct));
 				result = x;
 				break;
 			}
 		}
 	}
 
+	resultLock = false;
 	result = htobe64(result);
 	write(sockfd, &result, sizeof(result));
+	close(sockfd);
 }
 
 // Driver function
