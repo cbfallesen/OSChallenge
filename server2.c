@@ -103,7 +103,11 @@ void func(int sockfd)
 	result = -1;
 
 	printf("Before print.\n");
-	print(startNode);
+	if (startNode == NULL) {
+		printf("Null");
+	} else {
+		print(startNode);
+	}
 	printf("Before while.\n");
 	while(node != NULL) {
 		printf("Inside while loop.\n");
