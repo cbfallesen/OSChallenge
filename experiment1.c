@@ -92,7 +92,6 @@ void func(int sockfd)
 	while(node != NULL) {
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			result = node->data->number;
-			printf("Found hash in results");
 			resultLock = true;
 			break;
 		}
@@ -117,10 +116,8 @@ void func(int sockfd)
 		}
 	}
 
-	resultLock = false;
 	result = htobe64(result);
 	write(sockfd, &result, sizeof(result));
-	close(sockfd);
 }
 
 // Driver function
