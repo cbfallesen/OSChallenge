@@ -51,7 +51,7 @@ void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
-        printf("%d ", current_node->data);
+        printf("%d ", current_node->data->number);
         current_node = current_node->next;
     }
 }
@@ -102,7 +102,7 @@ void func(int sockfd)
 	struct Node *node = startNode;
 	result = -1;
 
-	print(start);
+	print(startNode);
 	while(node != NULL) {
 		if(compareHashes(node, Packet1->hashvalue)){
 			result = x;
