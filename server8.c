@@ -160,6 +160,7 @@ int main()
 		
 		char buff[MAX];
 		packet *Packet1;
+		printf("Packet1: \n");
 
 		bzero(buff, MAX);
 
@@ -176,8 +177,9 @@ int main()
 		}
 		printf("\n");
 
+		printf("Before push\n");
 		startNode = pushRequest(&startNode, &Packet1, sizeof(Packet1));
-
+		printf("After push\n");
 		print(startNode);
 	}
 	// Function for chatting between client and server
