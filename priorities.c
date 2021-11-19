@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 /* OpenSSL headers */
 #include <openssl/sha.h>
@@ -53,6 +54,47 @@ void* pushResult (struct Node **refNode, packet *newData, size_t dataSize) {
 	return newNode;
 }
 
+// https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/
+void* popResult(struct Node** refNode, int priority) {
+	printf("pop");
+
+	// Store head node
+    struct Node *temp = *refNode, *prev;
+ 
+    // If head node itself holds the key to be deleted
+    if (temp != NULL && temp->data->p == priority) {
+        *refNode = temp->next; // Changed head
+        free(temp); // free old head
+        return;
+    }
+ 
+    // Search for the key to be deleted, keep track of the
+    // previous node as we need to change 'prev->next'
+    while (temp != NULL && temp->data->p != priority) {
+        prev = temp;
+        temp = temp->next;
+    }
+ 
+    // If key was not present in linked list
+    if (temp == NULL)
+        return;
+ 
+    // Unlink the node from linked list
+    prev->next = temp->next;
+ 
+    free(temp); // Free memory
+
+	// struct Node *current_node = startNode;
+	// while (current_node->next->next != NULL)
+	// {
+	// 	current_node = current_node->next;
+	// }
+	// current_node->next = refNode.next;
+	// refNode.next = NULL;
+
+	// return refNode;
+}
+
 void print(struct Node *head) {
     struct Node *current_node = head;
    	while ( current_node != NULL) {
@@ -61,21 +103,54 @@ void print(struct Node *head) {
     }
 }
 
+bool compareHashes(unsigned char *guess, unsigned char *target) {
+	for (int i = 0; i < 32; i++)
+	{
+		if (guess[i] != target[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 // Function designed for chat between client and server.
-void func(int sockfd)
+void func(int sockfd, struct Node* starter)
 {
-	char buff[MAX];
-	int n;
-	packet *Packet1;
+	struct Node *node = startNode;
+	struct Node *currentNode = startNode;
+	uint64_t currentP = 0;
 
-	bzero(buff, MAX);
+	while(node != NULL) {
+		printf("Searching list\n");
+		if(node->data->p > currentP){
+			printf("found higher\n");
+			currentP = node->data->p;
+			currentNode = node;
+		}
+		node = node->next;
+	}
 
-	// read the message from client and copy it in buffer
-	read(sockfd, buff, sizeof(buff));
-	Packet1 = (packet *)buff;
-	
+	uint64_t x;
+	uint64_t result;
+	uint64_t start = be64toh(currentNode->data->start);
+	uint64_t end = be64toh(currentNode->data->end);
 
-	startNode = pushResult(&startNode, Packet1, sizeof(buff));
+	for (x = start; x < end; x++)
+	{
+		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
+
+		if (compareHashes(guess, currentNode->data->hashvalue))
+		{
+			result = x;
+			break;
+		}
+	}
+
+	startNode = popResult(&startNode, currentP);
+
+	result = htobe64(result);
+	write(sockfd, &result, sizeof(result));
 
 }
 
@@ -132,10 +207,29 @@ int main()
 		else
 			printf("server accept the client...\n");
 
-		// Function for chatting between client and server
-		func(connfd);
+		char buff[MAX];
+		int n;
+		packet *Packet1;
+		bzero(buff, MAX);// read the message from client and copy it in buffer
+		int readId = read(connfd, buff, sizeof(buff));
+		printf("%d\n", readId);
+		Packet1 = (packet *)buff;
+
+		printf("Before print.\n");
+		if (startNode == NULL) {
+		printf("Null\n");
+		} else {
+		print(startNode);
+		}
+
+		startNode = pushResult(&startNode, Packet1, sizeof(buff));
 	}
 
+	while (startNode != NULL)
+	{
+		// Function for chatting between client and server
+		func(connfd, startNode);
+	}
 	// After chatting close the socket
 	close(sockfd);
 }
