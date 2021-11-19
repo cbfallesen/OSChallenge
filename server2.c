@@ -29,6 +29,33 @@ typedef struct
 	uint8_t resultHash[32];
 } resultStruct;
 
+struct Node
+{
+	void *data;
+	struct Node *next;	
+};
+
+void pushResult (struct Node **refNode, void *newData, size_t dataSize) {
+	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+
+	newNode->data = malloc(dataSize);
+	newNode->next = (*refNode);
+
+	for(int i = 0; i < dataSize; i++) {
+		*(char *)(newNode->data + i) = *(char *) (newData + i);
+	} 
+
+	(*refNode) = newNode;
+}
+
+void printList(struct Node *node, void (*fptr)(void *))
+{
+    while (node != NULL)
+    {
+        (*fptr)(node->data);
+        node = node->next;
+    }
+}
 
 bool compareHashes(unsigned char *guess, unsigned char *target) {
 	for (int i = 0; i < 32; i++)
@@ -64,22 +91,26 @@ void func(int sockfd)
 	uint64_t result;
 	uint64_t start = be64toh(Packet1->start);
 	uint64_t end = be64toh(Packet1->end);
-	resultStruct *resultTable[1000][sizeof(end) + 32];
+	struct Node *start = NULL;
+	// resultStruct *resultTable[1000][sizeof(end) + 32];
 	// resultStruct *resultTable[1][1];
-	for(int i = 0; i < 1000; i++) {
-		bzero(resultTable[i], 32);
-	}
+	// for(int i = 0; i < 1000; i++) {
+	// 	bzero(resultTable[i], 32);
+	// }
 	int resultCounter = -1;
 	bool resultLock = false;
+	resultStruct *resultData;
 
 	result = -1;
 
+	struct Node *node = start;
 	for(int i = 0; i < resultCounter; i++) {
-		if(compareHashes(resultTable[x-start], Packet1->hashvalue)){
+		if(compareHashes(node, Packet1->hashvalue)){
 			result = x;
 			resultLock = true;
 			break;
 		}
+		node = node->next;
 	}
 
 	if (!resultLock)
@@ -90,6 +121,9 @@ void func(int sockfd)
 
 			if (compareHashes(guess, Packet1->hashvalue))
 			{
+				resultData->number = x;
+				memcpy(resultData->resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
+				pushResult(&start, &resultData, sizeof(resultStruct));
 				result = x;
 				resultLock = true;
 				break;
