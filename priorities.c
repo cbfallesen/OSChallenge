@@ -22,47 +22,58 @@ typedef struct
 	uint8_t p;
 } packet;
 
+// Function designed for chat between client and server.
+void func(int sockfd)
+{
+	char buff[MAX];
+	int n;
+	packet *Packet1;
 
-// struct Node
-// {
-// 	packet data;
-// 	struct Node *next;
-// };
+	bzero(buff, MAX);
 
+	// read the message from client and copy it in buffer
+	read(sockfd, buff, sizeof(buff));
+	Packet1 = (packet *)buff;
 
-// void* pushRequest (struct Node **refNode, packet *newData, size_t dataSize) {
-// 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+	// print buffer which contains the client contents
+	printf("\n\n");
+	int i;
+	for (i = 0; i < 32; i++)
+		printf("%02x", Packet1->hashvalue[i]);
 
-// 	//newNode->data = malloc(dataSize);
-// 	newNode->next = (*refNode);
+	printf("\nFrom start: %li end: %li priority: %d", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
 
-// 	newNode->data.start = newData->start;
-// 	newNode->data.end = newData->end;
-// 	newNode->data.p = newData->p;
-// 	memcpy(newNode->data.hashvalue, newData->hashvalue, sizeof(newData->hashvalue));
+	uint64_t x;
+	uint64_t result;
+	result = -1;
 
-// 	//(*refNode) = newNode;
+	for (x = be64toh(Packet1->start); x < be64toh(Packet1->end); x++)
+	{
+		unsigned char *guess = SHA256((unsigned char *)&x, 8, 0);
 
-// 	return newNode;
-// }
+		int equal = 1;
+		for (i = 0; i < 32; i++)
+		{
+			if (guess[i] != Packet1->hashvalue[i])
+			{
+				equal = 0;
+				break;
+			}
+		}
 
-// struct Node *startNode = NULL;
+		if (equal == 1)
+		{
+			result = x;
+			break;
+		}
+	}
 
-// void print(struct Node *head) {
-//     struct Node *current_node = head;
-//    	while ( current_node != NULL) {
-// 		printf("From print: \n");
-//         printf("%li \n", current_node->data.start);
-// 		printf("%li \n", current_node->data.end);
-// 		printf("%d \n", current_node->data.p);
-// 		for(int i = 0; i < 32; i++) {
-// 			printf("%02x", current_node->data.hashvalue[i]);
-// 		}
-// 		printf("\n");
-//         current_node = current_node->next;
-//     }
-// }
+	result = htobe64(result);
 
+	// and send that buffer to client
+	write(sockfd, &result, sizeof(result));
+	// }
+}
 
 // Driver function
 int main()
@@ -117,23 +128,8 @@ int main()
 		else
 			printf("server accept the client...\n");
 
-
-		char buff[MAX];
-		int n;
-		packet *Packet1;
-
-		bzero(buff, MAX);
-
-		// read the message from client and copy it in buffer
-		read(connfd, buff, sizeof(buff));
-		Packet1 = (packet *)buff;
 		// Function for chatting between client and server
-		printf("\n\n");
-		int i;
-		for (i = 0; i < 32; i++)
-			printf("%02x", Packet1->hashvalue[i]);
-
-		printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
+		func(connfd);
 	}
 
 	// After chatting close the socket
