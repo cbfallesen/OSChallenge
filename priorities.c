@@ -115,29 +115,11 @@ bool compareHashes(unsigned char *guess, unsigned char *target) {
 }
 
 // Function designed for chat between client and server.
-void func(int sockfd)
+void func(int sockfd, struct Node* starter)
 {
-	char buff[MAX];
-	int n;
-	packet *Packet1;
-
-	bzero(buff, MAX);
-
-	// read the message from client and copy it in buffer
-	read(sockfd, buff, sizeof(buff));
-	Packet1 = (packet *)buff;
 	struct Node *node = startNode;
 	struct Node *currentNode = startNode;
 	uint64_t currentP = 0;
-
-	printf("Before print.\n");
-	if (startNode == NULL) {
-		printf("Null\n");
-	} else {
-		print(startNode);
-	}
-
-	startNode = pushResult(&startNode, Packet1, sizeof(buff));
 
 	while(node != NULL) {
 		printf("Searching list\n");
@@ -225,10 +207,28 @@ int main()
 		else
 			printf("server accept the client...\n");
 
+		char buff[MAX];
+		int n;
+		packet *Packet1;
+		bzero(buff, MAX);// read the message from client and copy it in buffer
+		read(sockfd, buff, sizeof(buff));
+		Packet1 = (packet *)buff;
+
+		printf("Before print.\n");
+		if (startNode == NULL) {
+		printf("Null\n");
+		} else {
+		print(startNode);
+		}
+
+		startNode = pushResult(&startNode, Packet1, sizeof(buff));
 		// Function for chatting between client and server
-		func(connfd);
 	}
 
+	while (startNode != NULL)
+	{
+		func(connfd, startNode);
+	}
 	// After chatting close the socket
 	close(sockfd);
 }
