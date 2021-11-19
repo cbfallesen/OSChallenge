@@ -95,6 +95,9 @@ void forkStage(int connfd) {
 		close(fd[0]);
 		close(connfd);
 		printf("Received answer from child: %ld \n", forkresult.number);
+		for (int i = 0; i < 32; i++)
+		printf("%02x", forkresult.hash[i]);
+		printf("\n");
 	} else {
 		//Child process
 		solveSha(connfd);
