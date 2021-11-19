@@ -46,7 +46,7 @@ void* pushResult (struct Node **refNode, resultStruct *newData, size_t dataSize)
 	newNode->data->number = newData->number;
 	memcpy(newNode->data->resultHash, newData->resultHash, sizeof(newData->resultHash));
 
-	(*refNode) = newNode;
+	//(*refNode) = newNode;
 
 	return newNode;
 }
