@@ -12,7 +12,6 @@
 #include <openssl/sha.h>
 
 #define MAX 49
-#define PORT 8080
 #define SA struct sockaddr
 
 typedef struct
@@ -155,7 +154,7 @@ void func(int sockfd, struct Node* starter)
 }
 
 // Driver function
-int main()
+int main(int argc, char *argv[])
 {
 	int sockfd, connfd, len;
 	struct sockaddr_in servaddr, cli;
@@ -170,11 +169,11 @@ int main()
 	else
 		printf("Socket successfully created..\n");
 	bzero(&servaddr, sizeof(servaddr));
-
+	int port = argv[1];
 	// assign IP, PORT
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servaddr.sin_port = htons(PORT);
+	servaddr.sin_port = htons(port);
 
 	// Binding newly created socket to given IP and verification
 	if ((bind(sockfd, (SA *)&servaddr, sizeof(servaddr))) != 0)
