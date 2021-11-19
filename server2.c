@@ -100,8 +100,6 @@ void func(int sockfd)
 		if(compareHashes(node->data->resultHash, Packet1->hashvalue)){
 			result = node->data->number;
 			resultLock = true;
-			result = htobe64(result);
-			write(sockfd, &result, sizeof(result));
 			break;
 		}
 		node = node->next;
@@ -119,13 +117,13 @@ void func(int sockfd)
 				memcpy(resultData.resultHash, Packet1->hashvalue, sizeof(Packet1->hashvalue));
 				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
 				result = x;
-				result = htobe64(result);
-				write(sockfd, &result, sizeof(result));
 				break;
 			}
 		}
 	}
 
+	result = htobe64(result);
+	write(sockfd, &result, sizeof(result));
 }
 
 // Driver function
