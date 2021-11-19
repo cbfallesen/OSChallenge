@@ -34,6 +34,7 @@ void* pushResult (struct Node **refNode, packet *newData, size_t dataSize) {
 	printf("push");
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
+	newNode->data = malloc(dataSize);
 	newNode->next = (*refNode);
 
 	newNode->data->start = newData->start;
@@ -80,7 +81,7 @@ void func(int sockfd)
 	// 	printf("%02x", Packet1->hashvalue[i]);
 
 	// printf("\nFrom start: %li end: %li priority: %d\n", be64toh(Packet1->start), be64toh(Packet1->end), Packet1->p);
-	pushResult(&startNode, &Packet1, sizeof(Packet1));
+	startNode = pushResult(&startNode, &Packet1, sizeof(packet));
 
 
 	// and send that buffer to client
