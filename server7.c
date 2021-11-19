@@ -104,7 +104,7 @@ void solveSha(int connfd)
 				resultStruct resultStruct;
 				resultStruct.number = i;
 				memcpy(resultStruct.hash,request->hash, sizeof(request->hash));
-				startNode = pushResult(&startNode, &resultData, sizeof(resultStruct));
+				startNode = pushResult(&startNode, &resultStruct, sizeof(resultStruct));
 				
 				write(connfd, &result, sizeof(result));
 				write(fd[1], &resultStruct, sizeof(resultStruct));
